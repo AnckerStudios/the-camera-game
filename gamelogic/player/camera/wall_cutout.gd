@@ -197,9 +197,6 @@ func _update_enemy_rays() -> void:
 		return
 	var cones := get_tree().get_nodes_in_group(&"visibility_cones")
 	var enemies := get_tree().get_nodes_in_group(&"monster")
-	for dummy in get_tree().get_nodes_in_group(&"cutout_targets"):
-		if not enemies.has(dummy):
-			enemies.append(dummy)
 	for enemy in enemies:
 		if not enemy is Node3D or not enemy.is_visible_in_tree():
 			continue

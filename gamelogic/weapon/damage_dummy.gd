@@ -30,4 +30,3 @@ func _update_cone_visibility() -> void:
 			inside = true
 			break
 	visible = inside
->>>>>>> 3abc5c9 (добавить логику показывания персонажа и врагов через стену)
