@@ -1,0 +1,25 @@
+﻿[gd_scene format=3 uid="uid://do7ay43s8x7rt"]
+
+[ext_resource type="Script" uid="uid://on2cuhtiq5mf" path="res://gamelogic/monster/ghoul/ghoul.gd" id="1_hcbde"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iqnhg"]
+albedo_color = Color(0.82916963, 0.4944898, 1.92523e-07, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8dnhd"]
+material = SubResource("StandardMaterial3D_iqnhg")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ags3x"]
+
+[node name="Ghoul" type="CharacterBody3D" unique_id=13065505]
+script = ExtResource("1_hcbde")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1076097737]
+mesh = SubResource("BoxMesh_8dnhd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=902069789]
+shape = SubResource("BoxShape3D_ags3x")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1968156147]
+avoidance_enabled = true
+
+[connection signal="velocity_computed" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_velocity_computed"]
