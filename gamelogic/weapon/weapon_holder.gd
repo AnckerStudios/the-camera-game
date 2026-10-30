@@ -11,6 +11,8 @@ var _index := -1
 func _ready() -> void:
 	for weapon in get_weapons():
 		weapon.unequip()
+		if weapon is Firearm:
+			weapon.fired.connect(_on_weapon_fired)
 	select(0)
 
 
@@ -59,3 +61,16 @@ func select(index: int) -> void:
 		PlayerState.set_ammo(current.loaded, current.capacity, current.reserve_ammo)
 	else:
 		PlayerState.set_ammo(0, 0, 0)
+
+
+## Только успешный выстрел собственного оружия запускает тряску активной камеры.
+func _on_weapon_fired(rounds: int) -> void:
+	var camera := get_viewport().get_camera_3d()
+	if not camera:
+		return
+	var rig := camera.get_parent()
+	if not rig.has_method("shake"):
+		return
+	var followed: Node = rig.get("target")
+	if is_instance_valid(followed) and followed.is_ancestor_of(self):
+		rig.shake(sqrt(float(rounds)))

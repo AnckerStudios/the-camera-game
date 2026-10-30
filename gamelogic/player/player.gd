@@ -56,6 +56,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_update_mouse_facing(delta)
 	_reset_if_fallen()
+	_update_camera_walking()
 
 
 ## Переводит ввод в направление на плоскости земли относительно активной камеры.
@@ -172,3 +173,18 @@ func _update_mouse_facing(delta: float) -> void:
 	var direction := _mouse_target - global_position
 	direction.y = 0.0
 	_rotate_visual(direction.normalized(), delta)
+
+
+## Передаёт камере фактическую скорость ходьбы; в воздухе и при рывке покачивание затухает.
+func _update_camera_walking() -> void:
+	var camera := get_viewport().get_camera_3d()
+	if not camera:
+		return
+	var rig := camera.get_parent()
+	if not rig.has_method("set_sway_amount"):
+		return
+	var amount := 0.0
+	if is_on_floor() and _dash_remaining <= 0.0:
+		var motion := get_real_velocity()
+		amount = Vector2(motion.x, motion.z).length() / maxf(speed, 0.01)
+	rig.set_sway_amount(amount)
