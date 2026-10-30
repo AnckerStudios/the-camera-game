@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://cf044qdp2v615"]
 
-[ext_resource type="Script" path="res://gamelogic/weapon/firearm.gd" id="1_firearm"]
+[ext_resource type="Script" uid="uid://b8cch1ux05ajn" path="res://gamelogic/weapon/firearm.gd" id="1_firearm"]
 [ext_resource type="PackedScene" uid="uid://do5npr5ry1lsy" path="res://resources/model/weapons/kal_shootgun.glb" id="2_model"]
+[ext_resource type="AudioStream" uid="uid://bsv1wusib4t65" path="res://resources/music/gun.mp3" id="3_dvrv3"]
 
 [node name="WeaponDoubleShotgun" type="Node3D" unique_id=360883226]
 script = ExtResource("1_firearm")
-display_name = "ДВУХСТВОЛКА"
 damage = 12.0
 pellets = 8
 spread_degrees = 20.0
@@ -15,14 +15,19 @@ secondary_fires_all = true
 capacity = 2
 reserve_ammo = 16
 reload_time = 1.6
+display_name = "ДВУХСТВОЛКА"
 
-[node name="Model" parent="." instance=ExtResource("2_model")]
+[node name="Model" parent="." unique_id=1537325724 instance=ExtResource("2_model")]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.51, -0.56, -0.3)
 
-[node name="Muzzle" type="Marker3D" parent="."]
+[node name="Muzzle" type="Marker3D" parent="." unique_id=1561908161]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22, 0.32, -0.95)
 
-[node name="Flash" type="OmniLight3D" parent="Muzzle"]
+[node name="Flash" type="OmniLight3D" parent="Muzzle" unique_id=1132389526]
 light_color = Color(1, 0.8, 0.5, 1)
 light_energy = 4.0
 omni_range = 6.0
+
+[node name="ShootSound" type="AudioStreamPlayer3D" parent="." unique_id=286487550]
+stream = ExtResource("3_dvrv3")
+bus = &"SFX"

@@ -52,6 +52,7 @@ var _shot_shape := BoxShape3D.new()
 
 @onready var _muzzle: Node3D = $Muzzle
 @onready var _flash_light: Light3D = get_node_or_null("Muzzle/Flash")
+@onready var shoot_sound: AudioStreamPlayer3D = $ShootSound
 
 
 func _ready() -> void:
@@ -121,6 +122,7 @@ func shoot(rounds := 1) -> bool:
 	_flash()
 	fired.emit(rounds)
 	ammo_changed.emit(loaded, capacity, reserve_ammo)
+	shoot_sound.play()
 	return true
 
 

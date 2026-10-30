@@ -64,6 +64,12 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed(&"dash"):
 		dash.emit()
+		
+	if Input.is_action_just_pressed(&"optional"):
+		var scene_setting = preload("res://ui/options/options.tscn")
+		var scene =  scene_setting.instantiate()
+		add_child(scene)
+		get_tree().paused = true
 
 
 
