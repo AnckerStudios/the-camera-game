@@ -23,6 +23,15 @@ extends CharacterBody3D
 ## Максимальное время влияния удержания на подъём после начала прыжка.
 @export_range(0.0, 1.0, 0.01) var max_jump_hold_seconds: float = 0.15
 
+## Горизонтальная скорость, длительность и пауза после рывка.
+@export_range(0.1, 30.0, 0.1) var dash_speed: float = 10.0
+@export_range(0.01, 1.0, 0.01) var dash_seconds: float = 0.15
+@export_range(0.0, 5.0, 0.05) var dash_cooldown_seconds: float = 0.6
+
+var _dash_remaining: float = 0.0
+var _dash_cooldown_remaining: float = 0.0
+var _dash_direction: Vector3 = Vector3.FORWARD
+
 var _jump_hold_remaining: float = 0.0
 var _coyote_remaining: float = 0.0
 var _fall_seconds: float = 0.0
@@ -31,11 +40,16 @@ var _fall_seconds: float = 0.0
 @onready var visual: Node3D = $Visual
 
 
+func _ready() -> void:
+	controls.dash.connect(_on_dash_requested)
+
+
 func _physics_process(delta: float) -> void:
 	var direction := _get_movement_direction()
-	_update_horizontal_velocity(direction, delta)
+	_update_dash_and_movement(direction, delta)
 	_apply_gravity_and_jump(delta)
-	_rotate_visual(direction, delta)
+	if _dash_remaining <= 0.0:
+		_rotate_visual(direction, delta)
 	move_and_slide()
 	_reset_if_fallen()
 
@@ -107,7 +121,35 @@ func _reset_if_fallen() -> void:
 	if global_position.y < -15.0:
 		global_position = Vector3(0, 2, 0)
 		velocity = Vector3.ZERO
+		_dash_remaining = 0.0
+		_dash_cooldown_remaining = 0.0
 		_jump_hold_remaining = 0.0
 		_coyote_remaining = 0.0
 		_fall_seconds = 0.0
 		controls.clear_jump_buffer()
+
+
+## Фиксирует направление рывка; повторное нажатие во время перезарядки игнорируется.
+func _on_dash_requested() -> void:
+	if _dash_remaining > 0.0 or _dash_cooldown_remaining > 0.0:
+		return
+	_dash_direction = _get_movement_direction()
+	if _dash_direction.is_zero_approx():
+		_dash_direction = -visual.global_basis.z
+	_dash_direction.y = 0.0
+	_dash_direction = _dash_direction.normalized()
+	_dash_remaining = dash_seconds
+
+
+## Рывок заменяет горизонтальное движение, сохраняя прыжок и гравитацию.
+func _update_dash_and_movement(direction: Vector3, delta: float) -> void:
+	_dash_cooldown_remaining = maxf(_dash_cooldown_remaining - delta, 0.0)
+	if _dash_remaining > 0.0:
+		velocity.x = _dash_direction.x * dash_speed
+		velocity.z = _dash_direction.z * dash_speed
+		_rotate_visual(_dash_direction, delta)
+		_dash_remaining = maxf(_dash_remaining - delta, 0.0)
+		if _dash_remaining <= 0.0:
+			_dash_cooldown_remaining = dash_cooldown_seconds
+	else:
+		_update_horizontal_velocity(direction, delta)

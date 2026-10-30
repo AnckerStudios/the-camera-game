@@ -4,6 +4,9 @@ extends Node
 ## Уведомляет о нажатии прыжка. Выполнение определяется игровой логикой.
 signal jump
 
+## Запрашивает рывок при нажатии Shift.
+signal dash
+
 ## Передаёт направление движения при его изменении.
 signal movement_changed(direction: Vector2)
 
@@ -52,6 +55,9 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed(&"jump"):
 		_jump_remaining = jump_buffer_seconds
 		jump.emit()
+
+	if Input.is_action_just_pressed(&"dash"):
+		dash.emit()
 
 
 ## Возвращает текущее направление ввода.
