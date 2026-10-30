@@ -6,6 +6,8 @@ const MONSTER_GROUP = "monster"
 const PHYSICAL_WEAPONS := ["WeaponDoubleShotgun", "WeaponRevolver"]
 
 @onready var nav_agent : NavigationAgent3D = $NavigationAgent3D
+@onready var animation_tree : AnimationTree = $Rig/AnimationTree
+@onready var playback : AnimationNodeStateMachinePlayback = $Rig/AnimationTree.get("parameters/StateMachine/playback")
 
 var dimension: Dimension
 var hp: float
@@ -48,4 +50,16 @@ func take_damage(amount: float, source: Node) -> void:
 	hp -= amount * resistance
 	print("%s: -%.0f от %s, осталось %.0f" % [name, amount, source.name, hp])
 	if hp <= 0.0:
+		playback.state_finished.connect(_on_state_finished_for_death, CONNECT_ONE_SHOT)
+		playback.travel("die")
+
+
+func _on_state_finished_for_death(state_name: StringName):
+	if state_name == "die":
 		queue_free()
+	else:
+		playback.state_finished.connect(_on_state_finished_for_death, CONNECT_ONE_SHOT)
+
+func recalculate_velocity(safe_velocity: Vector3) -> void:
+	velocity = velocity.move_toward(safe_velocity, 0.5)
+	move_and_slide()
