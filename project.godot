@@ -29,6 +29,7 @@ window/stretch/aspect="expand"
 
 folder_colors={
 "res://gamelogic/input/": "pink",
+"res://gamelogic/monster/": "yellow",
 "res://gamelogic/player/": "green",
 "res://gamelogic/player/camera/": "blue",
 "res://gamelogic/player/cone/": "orange",

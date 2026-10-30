@@ -34,7 +34,7 @@ size = Vector3(3, 1, 2)
 
 [sub_resource type="CylinderMesh" id="DummyMesh"]
 
-[node name="MishaV1" type="Node3D" unique_id=1632283159]
+[node name="MishaV2" type="Node3D" unique_id=1632283159]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2136058302]
 environment = SubResource("Environment")
