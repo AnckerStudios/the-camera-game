@@ -67,6 +67,7 @@ render_target_update_mode = 4
 [node name="Camera3D" type="Camera3D" parent="Window/Layout/Preview/Viewport" unique_id=2028274951]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
 current = true
+fov = 30.0
 
 [node name="KeyLight" type="DirectionalLight3D" parent="Window/Layout/Preview/Viewport" unique_id=2053696906]
 transform = Transform3D(0.8660254, 0.25, -0.4330127, 0, 0.8660254, 0.5, 0.5, -0.4330127, 0.75, 0, 0, 0)

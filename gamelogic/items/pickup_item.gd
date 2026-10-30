@@ -6,6 +6,10 @@ signal pickup_available(item: PickupItem, receiver: Node3D)
 signal pickup_unavailable(item: PickupItem, receiver: Node3D)
 signal picked_up(item: PickupItem, receiver: Node3D)
 
+## Сцена 3D-модели (например, .tscn или импортированный .glb).
+## Если не задана, используется модель, уже находящаяся в узле Model.
+@export var model_scene: PackedScene
+
 @export_multiline var description: String = "Найденный предмет."
 @export var display_name: String = "Предмет"
 @export_range(0.1, 20.0, 0.1) var pickup_radius: float = 1.5:
@@ -32,6 +36,7 @@ func _ready() -> void:
 	add_to_group(&"pickup_items")
 	# Обводка предмета не должна заменяться шейдером вырезания стен.
 	add_to_group(&"camera_cutout_ignore")
+	_load_model_scene()
 	_update_radius()
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
@@ -103,3 +108,18 @@ func set_pickup_selected(selected: bool) -> void:
 	if _outline_material:
 		var color := selected_outline_color if selected else outline_color
 		_outline_material.set_shader_parameter("outline_color", color)
+
+
+## Сохраняет контейнер Model, используемый обводкой и окном осмотра.
+func _load_model_scene() -> void:
+	if not model_scene:
+		return
+	var instance := model_scene.instantiate()
+	if not instance is Node3D:
+		push_warning("Модель предмета должна иметь корневой узел Node3D: " + model_scene.resource_path)
+		instance.free()
+		return
+	for child in _model.get_children():
+		_model.remove_child(child)
+		child.queue_free()
+	_model.add_child(instance)

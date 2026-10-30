@@ -4,7 +4,7 @@ signal closed
 const MouseInput = preload("res://gamelogic/input/mouse_tracker.gd")
 
 ## Начальный наклон модели и длительности появления в секундах.
-@export var initial_tilt_degrees: Vector3 = Vector3(12.0, 10.0, -8.0)
+@export var initial_tilt_degrees: Vector3 = Vector3(35.0, 90.0, -25.0)
 @export_range(0.05, 1.0, 0.01) var entrance_seconds: float = 0.2
 @export_range(0.05, 1.0, 0.01) var text_fade_seconds: float = 0.15
 
@@ -129,7 +129,7 @@ func _play_entrance() -> void:
 	_pivot.position = Vector3(0.0, -half_view_height * 1.8, 0.0)
 	_entrance_tween = create_tween()
 	_entrance_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	_entrance_tween.tween_property(_pivot, "position", Vector3.ZERO, entrance_seconds).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_entrance_tween.tween_property(_pivot, "position", Vector3(0.0, 0.0, 1.7), entrance_seconds).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	_entrance_tween.tween_callback(_finish_model_entrance)
 	_entrance_tween.tween_property(_text_panel, "modulate:a", 1.0, text_fade_seconds).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
