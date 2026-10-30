@@ -14,13 +14,13 @@ config/name="TheCameraGame"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://resources/texture/icon.svg"
 
-[autoload]
-
-PlayerState="*res://gamelogic/player/player_state.gd"
-
 [audio]
 
 buses/default_bus_layout="uid://l12p7u0id6b"
+
+[autoload]
+
+PlayerState="*res://gamelogic/player/player_state.gd"
 
 [display]
 
