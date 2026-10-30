@@ -9,7 +9,7 @@ extends Node3D
 @export var cone_color := Color(1.0, 1.0, 0.85, 0.2)
 @export var cone_edge_color := Color(1.0, 1.0, 0.85, 0.5)
 
-const MouseTracker = preload("res://gamelogic/mouse_tracker.gd")
+const MouseTracker = preload("res://gamelogic/input/mouse_tracker.gd")
 
 const CONE_SEGMENTS := 32
 const CONE_FLOOR_OFFSET := 0.02
