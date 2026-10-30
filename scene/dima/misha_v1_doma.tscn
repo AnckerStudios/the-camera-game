@@ -5,8 +5,7 @@
 [ext_resource type="Script" uid="uid://depwexin4lwf1" path="res://gamelogic/player/camera/isometric_camera.gd" id="3_4r7s1"]
 [ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="4_bxor3"]
 [ext_resource type="Script" uid="uid://cmkrno3x3fyie" path="res://gamelogic/weapon/damage_dummy.gd" id="5_vqkpd"]
-[ext_resource type="PackedScene" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="6_4kfxk"]
-[ext_resource type="PackedScene" uid="uid://dwbunjtc84mc3" path="res://gamelogic/monster/ghost/ghost.tscn" id="7_fl16l"]
+[ext_resource type="PackedScene" uid="uid://w3p8l3qnm13a" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="6_4kfxk"]
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 1
@@ -41,7 +40,7 @@ albedo_color = Color(0.22, 0.29, 0.25, 1)
 [sub_resource type="BoxMesh" id="FloorMesh"]
 size = Vector3(30, 1, 30)
 
-[node name="MishaV2" type="Node3D" unique_id=1632283159]
+[node name="MishaV3" type="Node3D" unique_id=1632283159]
 script = ExtResource("1_6f04y")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2136058302]
@@ -301,6 +300,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.731076, 0.8862281, 6.913606
 
 [node name="Ghoul2" parent="." unique_id=396955178 instance=ExtResource("6_4kfxk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.096684, 1.1640177, 10.302478)
-
-[node name="Ghost" parent="." unique_id=1145615818 instance=ExtResource("7_fl16l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.178815, 1.5496058, -6.6245003)
