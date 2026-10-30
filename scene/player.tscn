@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://kmwuw8pmi1bl"]
+
+[ext_resource type="Script" uid="uid://gy7452mj1qim" path="res://gamelogic/player.gd" id="1"]
+[ext_resource type="Script" uid="uid://cujtymrprn44a" path="res://gamelogic/player_input.gd" id="2"]
+[ext_resource type="Script" uid="uid://camxira84elhg" path="res://gamelogic/mouse_tracker.gd" id="3"]
+
+[ext_resource type="Script" path="res://gamelogic/weapon/weapon_holder.gd" id="4_holder"]
+[ext_resource type="PackedScene" path="res://gamelogic/weapon/weapon_double_shotgun.tscn" id="5_shotgun"]
+[ext_resource type="PackedScene" path="res://gamelogic/weapon/weapon_revolver.tscn" id="6_revolver"]
+[ext_resource type="PackedScene" path="res://scene/view_cone.tscn" id="7_cone"]
+
+[sub_resource type="CapsuleShape3D" id="Shape"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="Material"]
+albedo_color = Color(0.15, 0.55, 0.85, 1)
+
+[sub_resource type="CapsuleMesh" id="Body"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="BoxMesh" id="Nose"]
+size = Vector3(0.2, 0.2, 0.3)
+
+[node name="Player" type="CharacterBody3D" unique_id=1577945846]
+script = ExtResource("1")
+
+[node name="PlayerInput" type="Node" parent="." unique_id=853431012]
+script = ExtResource("2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1267454963]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("Shape")
+
+[node name="Visual" type="Node3D" parent="." unique_id=1166651402]
+
+[node name="Body" type="MeshInstance3D" parent="Visual" unique_id=109602]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+material_override = SubResource("Material")
+mesh = SubResource("Body")
+
+[node name="Facing" type="MeshInstance3D" parent="Visual" unique_id=1702795845]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -0.36)
+mesh = SubResource("Nose")
+
+[node name="MouseTracker" type="Node" parent="." unique_id=2016091666 node_paths=PackedStringArray("target")]
+script = ExtResource("3")
+target = NodePath("..")
+
+[node name="WeaponHolder" type="Node3D" parent="Visual"]
+position = Vector3(0.35, 1.1, -0.15)
+script = ExtResource("4_holder")
+
+[node name="WeaponDoubleShotgun" parent="Visual/WeaponHolder" instance=ExtResource("5_shotgun")]
+
+[node name="WeaponRevolver" parent="Visual/WeaponHolder" instance=ExtResource("6_revolver")]
+
+[node name="ViewCone" parent="Visual" instance=ExtResource("7_cone")]

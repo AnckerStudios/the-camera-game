@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://tgdswhb8gsps"]
+
+[ext_resource type="Script" uid="uid://d2ljhw0bxls3" path="res://scene/weapon_test.gd" id="1_test"]
+[ext_resource type="Script" uid="uid://c5mou2inmq2ys" path="res://gamelogic/weapon/weapon_holder.gd" id="2_holder"]
+[ext_resource type="PackedScene" uid="uid://cf044qdp2v615" path="res://gamelogic/weapon/weapon_double_shotgun.tscn" id="3_shotgun"]
+[ext_resource type="PackedScene" path="res://gamelogic/weapon/weapon_revolver.tscn" id="4_revolver"]
+[ext_resource type="Script" uid="uid://cmkrno3x3fyie" path="res://gamelogic/weapon/damage_dummy.gd" id="5_dummy"]
+[ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="6_hud"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_floor"]
+size = Vector2(40, 40)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dummy"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_kdj8j"]
+
+[node name="WeaponTest" type="Node3D" unique_id=1104169286]
+script = ExtResource("1_test")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1235960158]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 14, 0)
+
+[node name="Floor" type="MeshInstance3D" parent="." unique_id=1508432540]
+mesh = SubResource("PlaneMesh_floor")
+
+[node name="WeaponHolder" type="Node3D" parent="." unique_id=1709154840]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("2_holder")
+
+[node name="WeaponDoubleShotgun" parent="WeaponHolder" unique_id=2084200034 instance=ExtResource("3_shotgun")]
+
+[node name="WeaponRevolver" parent="WeaponHolder" unique_id=557271685 instance=ExtResource("4_revolver")]
+
+[node name="Dummy1" type="StaticBody3D" parent="." unique_id=2030483613]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -5)
+script = ExtResource("5_dummy")
+
+[node name="Shape" type="CollisionShape3D" parent="Dummy1" unique_id=641108496]
+shape = SubResource("BoxShape3D_dummy")
+
+[node name="Mesh" type="MeshInstance3D" parent="Dummy1" unique_id=1436635323]
+mesh = SubResource("CylinderMesh_kdj8j")
+
+[node name="HUD" parent="." unique_id=1669555526 instance=ExtResource("6_hud")]

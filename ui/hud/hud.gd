@@ -17,7 +17,13 @@ func _ready() -> void:
 	PlayerState.hp_changed.connect(set_health)
 	set_health(PlayerState.hp, PlayerState.HP_MAX)
 	PlayerState.hp -= 50.0
-	
+
+	PlayerState.weapon_changed.connect(set_weapon)
+	if PlayerState.weapon_name:
+		set_weapon(PlayerState.weapon_name)
+	PlayerState.ammo_changed.connect(set_ammo)
+	set_ammo(PlayerState.ammo_loaded, PlayerState.ammo_capacity, PlayerState.ammo_reserve)
+
 
 
 func _process(delta: float) -> void:
@@ -44,6 +50,11 @@ func set_nodes(activated: int, total: int) -> void:
 
 func set_weapon(weapon_name: String) -> void:
 	%WeaponLabel.text = weapon_name.to_upper()
+
+
+func set_ammo(loaded: int, capacity: int, reserve: int) -> void:
+	%AmmoLabel.visible = capacity > 0
+	%AmmoLabel.text = "%d / %d" % [loaded, reserve]
 
 
 func play_flash() -> void:
