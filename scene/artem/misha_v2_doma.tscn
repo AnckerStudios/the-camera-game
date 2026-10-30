@@ -9,7 +9,7 @@
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 1
-background_color = Color(0.015, 0.02, 0.03, 1)
+background_color = Color(0.011362166, 0.014203824, 0.022729527, 1)
 ambient_light_source = 3
 ambient_light_color = Color(0.35, 0.42, 0.6, 1)
 ambient_light_energy = 0.15

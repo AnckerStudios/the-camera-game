@@ -1,0 +1,42 @@
+[gd_resource type="AnimationNodeBlendTree" format=3]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_idle"]
+animation = &"move/idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_walk"]
+animation = &"move/walk"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_walk_back"]
+animation = &"move/walk_back"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_strafe_left"]
+animation = &"move/strafe_left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_strafe_right"]
+animation = &"move/strafe_right"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_move"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_idle")
+blend_point_0/pos = Vector2(0, 0)
+blend_point_0/name = &"idle"
+blend_point_1/node = SubResource("AnimationNodeAnimation_walk")
+blend_point_1/pos = Vector2(0, 1)
+blend_point_1/name = &"walk"
+blend_point_2/node = SubResource("AnimationNodeAnimation_walk_back")
+blend_point_2/pos = Vector2(0, -1)
+blend_point_2/name = &"walk_back"
+blend_point_3/node = SubResource("AnimationNodeAnimation_strafe_right")
+blend_point_3/pos = Vector2(1, 0)
+blend_point_3/name = &"strafe_right"
+blend_point_4/node = SubResource("AnimationNodeAnimation_strafe_left")
+blend_point_4/pos = Vector2(-1, 0)
+blend_point_4/name = &"strafe_left"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_speed"]
+
+[resource]
+nodes/Move/node = SubResource("AnimationNodeBlendSpace2D_move")
+nodes/Move/position = Vector2(-300, 0)
+nodes/Speed/node = SubResource("AnimationNodeTimeScale_speed")
+nodes/Speed/position = Vector2(-100, 0)
+node_connections = [&"Speed", 0, &"Move", &"output", 0, &"Speed"]

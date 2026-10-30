@@ -1,0 +1,16 @@
+[gd_resource type="AnimationLibrary" format=3]
+
+[ext_resource type="Animation" path="res://resources/animation/player/idle.anim" id="1_idle"]
+[ext_resource type="Animation" path="res://resources/animation/player/walk.anim" id="2_walk"]
+[ext_resource type="Animation" path="res://resources/animation/player/walk_back.anim" id="3_walk_back"]
+[ext_resource type="Animation" path="res://resources/animation/player/strafe_left.anim" id="4_strafe_left"]
+[ext_resource type="Animation" path="res://resources/animation/player/strafe_right.anim" id="5_strafe_right"]
+
+[resource]
+_data = {
+&"idle": ExtResource("1_idle"),
+&"strafe_left": ExtResource("4_strafe_left"),
+&"strafe_right": ExtResource("5_strafe_right"),
+&"walk": ExtResource("2_walk"),
+&"walk_back": ExtResource("3_walk_back")
+}
