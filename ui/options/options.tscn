@@ -21,6 +21,7 @@ interpolation_mode = 2
 colors = PackedColorArray(1, 1, 1, 0, 1, 0.2627451, 0.63529414, 0.69803923)
 
 [node name="Options" type="Control" unique_id=575043248]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
