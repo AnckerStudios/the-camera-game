@@ -4,3 +4,21 @@
 
 [node name="ViewCone" type="Node3D" unique_id=1286140958]
 script = ExtResource("1_grni2")
+cone_color = Color(1, 1, 0.8509804, 0)
+cone_edge_color = Color(1, 1, 0.8509804, 0)
+
+[node name="Flashlight" type="SpotLight3D" parent="." unique_id=1863092743]
+transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.25881904, 0, -0.25881904, 0.9659258, 0, 1.1, -0.4)
+light_color = Color(1, 0.95, 0.85, 1)
+light_energy = 2.5
+shadow_enabled = true
+spot_range = 13.5
+spot_attenuation = 0.3
+spot_angle = 34.0
+spot_angle_attenuation = 3.0
+
+[node name="PeripheralLight" type="OmniLight3D" parent="." unique_id=166883826]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+light_color = Color(0.75, 0.8, 0.95, 1)
+light_energy = 0.8
+omni_range = 2.0

@@ -1,0 +1,301 @@
+[gd_scene format=3 uid="uid://dlgavp8rr1djy"]
+
+[ext_resource type="Script" uid="uid://djumrh3554s1" path="res://scene/dima/test_level_dima_script.gd" id="1_l4rdr"]
+[ext_resource type="PackedScene" uid="uid://kmwuw8pmi1bl" path="res://gamelogic/player/player.tscn" id="2_p72od"]
+[ext_resource type="Script" uid="uid://depwexin4lwf1" path="res://gamelogic/player/camera/isometric_camera.gd" id="3_kbvua"]
+[ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="4_s1bv7"]
+[ext_resource type="Script" uid="uid://cmkrno3x3fyie" path="res://gamelogic/weapon/damage_dummy.gd" id="5_5egmh"]
+[ext_resource type="PackedScene" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="6_4ackd"]
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 1
+background_color = Color(0.015, 0.02, 0.03, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.35, 0.42, 0.6, 1)
+ambient_light_energy = 0.15
+
+[sub_resource type="BoxShape3D" id="DummyShape"]
+
+[sub_resource type="CylinderMesh" id="DummyMesh"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_8dnhd"]
+vertices = PackedVector3Array(-10, 0.5, 8.75, -8, 0.5, 8.5, -8, 0.5, 7.75, -10, 0.5, 7.5, -14.5, 0.5, 14.5, -10, 0.5, 4.75, -10, 0.5, 3.5, -10, 0.5, -3.25, -8, 0.5, -3.5, -8, 0.5, -4.25, -10, 0.5, -4.5, -14.5, 0.5, -14.5, -10.25, 0.5, 14.5, -10, 0.5, 11.5, -9.75, 0.5, -7.5, -3.75, 0.5, -7.5, -3.75, 0.5, -8.25, -10, 0.5, -8.5, -10, 0.5, -0.5, -10, 0.5, 0.75, -9.75, 0.5, -11.5, -4.5, 0.5, -11.5, -4.5, 0.5, -14.5, -2.25, 0.5, -8.75, -1.75, 0.5, -7.25, -1.25, 0.5, -3.25, -1, 0.5, 0.5, -0.75, 0.5, 2.25, 14.5, 0.5, 2, -1.75, 0.5, -4.75, -3.25, 0.5, -4.25, -3.25, 0.5, -3.5, 14.5, 0.5, -14.5, -1.25, 0.5, -1, -2.25, 0.5, -11.25, -9, 1.5, -10.5, -9, 1.5, -9.25, -6.75, 1.5, -9.25, -6.75, 1.5, -10.5, -5.5, 1.5, -10.5, -5.5, 1.5, -9.25, -3.25, 1.5, -9.25, -3.25, 1.5, -10.5, -9, 1.5, -6.5, -9, 1.5, -5.25, -6.75, 1.5, -5.25, -6.75, 1.5, -6.5, -5, 1.5, -6.5, -5, 1.5, -5.25, -2.75, 1.5, -5.25, -2.75, 1.5, -6.5, -0.5, 0.5, 4.5, -0.75, 0.5, 3, -1.25, 0.5, 3.75, -1.75, 0.5, -0.25, -6.25, 0.5, 7.75, -5.75, 0.5, 8.75, -6.25, 0.5, -0.25, -5.75, 0.5, 0.75, -4.75, 0.5, 0.5, -5.5, 0.5, -0.5, -5.75, 0.5, -0.75, -5.75, 0.5, 7.25, -4, 0.5, 8.75, -4.5, 0.5, 7.5, -5.75, 0.5, -3.25, -5.5, 0.5, -3.25, -1.75, 0.5, 8.5, -1.75, 0.5, 7.75, -4.5, 0.5, 4.75, -5, 0.5, 3.5, -6.25, 0.5, 3.75, -5.75, 0.5, 4.75, -6, 0.5, 11.5, -4, 0.5, 11.5, -5.75, 0.5, 3.25, -9, 1.5, -2.5, -9, 1.5, -1.25, -6.75, 1.5, -1.25, -6.75, 1.5, -2.5, -4.5, 1.5, -2.5, -4.5, 1.5, -1.25, -2.25, 1.5, -1.25, -2.25, 1.5, -2.5, -9, 1.5, 1.5, -9, 1.5, 2.75, -6.75, 1.5, 2.75, -6.75, 1.5, 1.5, -4, 1.5, 1.5, -4, 1.5, 2.75, -1.75, 1.5, 2.75, -1.75, 1.5, 1.5, -0.25, 0.5, 7.25, 0.25, 0.5, 8.75, 0.25, 0.5, 11.25, 0.25, 0.5, 14.5, 14.5, 0.5, 14.5, -9, 1.5, 5.5, -9, 1.5, 6.75, -6.75, 1.5, 6.75, -6.75, 1.5, 5.5, -3.5, 1.5, 5.5, -3.5, 1.5, 6.75, -1.25, 1.5, 6.75, -1.25, 1.5, 5.5, -9, 1.5, 9.5, -9, 1.5, 10.75, -6.75, 1.5, 10.75, -6.75, 1.5, 9.5, -3, 1.5, 9.5, -3, 1.5, 10.75, -0.75, 1.5, 10.75, -0.75, 1.5, 9.5, -0.25, 0.5, 11.75)
+polygons = [PackedInt32Array(1, 0, 2), PackedInt32Array(2, 0, 3), PackedInt32Array(6, 5, 4), PackedInt32Array(8, 7, 9), PackedInt32Array(9, 7, 10), PackedInt32Array(11, 10, 7), PackedInt32Array(13, 12, 0), PackedInt32Array(0, 12, 4), PackedInt32Array(15, 14, 16), PackedInt32Array(16, 14, 17), PackedInt32Array(19, 4, 18), PackedInt32Array(18, 4, 11), PackedInt32Array(14, 10, 17), PackedInt32Array(17, 10, 11), PackedInt32Array(21, 20, 22), PackedInt32Array(22, 20, 11), PackedInt32Array(18, 11, 7), PackedInt32Array(19, 6, 4), PackedInt32Array(20, 17, 11), PackedInt32Array(3, 0, 4), PackedInt32Array(5, 3, 4), PackedInt32Array(16, 23, 15), PackedInt32Array(15, 23, 24), PackedInt32Array(26, 25, 27), PackedInt32Array(27, 25, 28), PackedInt32Array(30, 29, 31), PackedInt32Array(31, 29, 25), PackedInt32Array(29, 24, 25), PackedInt32Array(25, 24, 28), PackedInt32Array(28, 24, 32), PackedInt32Array(26, 33, 25), PackedInt32Array(21, 22, 34), PackedInt32Array(34, 22, 32), PackedInt32Array(23, 34, 24), PackedInt32Array(24, 34, 32), PackedInt32Array(38, 37, 35), PackedInt32Array(35, 37, 36), PackedInt32Array(42, 41, 39), PackedInt32Array(39, 41, 40), PackedInt32Array(46, 45, 43), PackedInt32Array(43, 45, 44), PackedInt32Array(50, 49, 47), PackedInt32Array(47, 49, 48), PackedInt32Array(53, 52, 51), PackedInt32Array(54, 33, 26), PackedInt32Array(2, 55, 1), PackedInt32Array(1, 55, 56), PackedInt32Array(61, 60, 57), PackedInt32Array(57, 60, 58), PackedInt32Array(58, 60, 59), PackedInt32Array(55, 62, 56), PackedInt32Array(56, 62, 64), PackedInt32Array(56, 64, 63), PackedInt32Array(65, 8, 66), PackedInt32Array(66, 8, 9), PackedInt32Array(66, 9, 31), PackedInt32Array(31, 9, 30), PackedInt32Array(67, 63, 68), PackedInt32Array(68, 63, 64), PackedInt32Array(71, 70, 72), PackedInt32Array(72, 70, 69), PackedInt32Array(69, 70, 53), PackedInt32Array(69, 53, 51), PackedInt32Array(63, 74, 56), PackedInt32Array(56, 74, 73), PackedInt32Array(71, 75, 70), PackedInt32Array(6, 71, 5), PackedInt32Array(5, 71, 72), PackedInt32Array(65, 66, 61), PackedInt32Array(61, 66, 60), PackedInt32Array(18, 57, 19), PackedInt32Array(19, 57, 58), PackedInt32Array(72, 69, 62), PackedInt32Array(62, 69, 64), PackedInt32Array(26, 59, 54), PackedInt32Array(54, 59, 60), PackedInt32Array(75, 58, 70), PackedInt32Array(70, 58, 59), PackedInt32Array(79, 78, 76), PackedInt32Array(76, 78, 77), PackedInt32Array(83, 82, 80), PackedInt32Array(80, 82, 81), PackedInt32Array(87, 86, 84), PackedInt32Array(84, 86, 85), PackedInt32Array(91, 90, 88), PackedInt32Array(88, 90, 89), PackedInt32Array(68, 92, 67), PackedInt32Array(67, 92, 93), PackedInt32Array(96, 95, 94), PackedInt32Array(52, 27, 51), PackedInt32Array(51, 27, 93), PackedInt32Array(93, 27, 28), PackedInt32Array(93, 28, 96), PackedInt32Array(93, 92, 51), PackedInt32Array(96, 94, 93), PackedInt32Array(100, 99, 97), PackedInt32Array(97, 99, 98), PackedInt32Array(104, 103, 101), PackedInt32Array(101, 103, 102), PackedInt32Array(108, 107, 105), PackedInt32Array(105, 107, 106), PackedInt32Array(112, 111, 109), PackedInt32Array(109, 111, 110), PackedInt32Array(113, 94, 95), PackedInt32Array(12, 13, 73), PackedInt32Array(74, 113, 73), PackedInt32Array(73, 113, 95), PackedInt32Array(73, 95, 12)]
+
+[sub_resource type="BoxShape3D" id="TestPlatformShape"]
+size = Vector3(3, 1, 2)
+
+[sub_resource type="StandardMaterial3D" id="TestPlatformMaterial"]
+albedo_color = Color(0.9, 0.55, 0.18, 1)
+
+[sub_resource type="BoxMesh" id="TestPlatformMesh"]
+size = Vector3(3, 1, 2)
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(30, 1, 30)
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.22, 0.29, 0.25, 1)
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+size = Vector3(30, 1, 30)
+
+[node name="MishaV1" type="Node3D" unique_id=1632283159]
+script = ExtResource("1_l4rdr")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2136058302]
+environment = SubResource("Environment")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=638653937]
+transform = Transform3D(0.8660254, 0.40957603, -0.28678823, 0, 0.57357645, 0.81915206, 0.5, -0.7094065, 0.49673176, 0, 0, 0)
+light_color = Color(0.55, 0.65, 0.9, 1)
+light_energy = 0.2
+shadow_enabled = true
+
+[node name="Player" parent="." unique_id=1732594493 instance=ExtResource("2_p72od")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+jump_speed = 6.0
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=735580897 node_paths=PackedStringArray("target")]
+script = ExtResource("3_kbvua")
+target = NodePath("../Player")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=110096493]
+transform = Transform3D(0.70710677, -0.40824828, 0.57735026, 0, 0.8164966, 0.57735026, -0.70710677, -0.40824828, 0.57735026, 10, 10, 10)
+projection = 1
+current = true
+size = 16.0
+
+[node name="HUD" parent="." unique_id=1458729086 instance=ExtResource("4_s1bv7")]
+
+[node name="Dummy1" type="StaticBody3D" parent="." unique_id=1316338027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -5)
+script = ExtResource("5_5egmh")
+
+[node name="Shape" type="CollisionShape3D" parent="Dummy1" unique_id=830365736]
+shape = SubResource("DummyShape")
+
+[node name="Mesh" type="MeshInstance3D" parent="Dummy1" unique_id=1282717430]
+mesh = SubResource("DummyMesh")
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=908089932]
+navigation_mesh = SubResource("NavigationMesh_8dnhd")
+
+[node name="JumpTests" type="Node3D" parent="NavigationRegion3D" unique_id=1169049902]
+
+[node name="Gap0" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=334930556]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.5, -10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Gap0" unique_id=1443573462]
+shape = SubResource("TestPlatformShape")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Gap0" unique_id=1423078383]
+material_override = SubResource("TestPlatformMaterial")
+mesh = SubResource("TestPlatformMesh")
+
+[node name="Label" type="Label3D" parent="NavigationRegion3D/JumpTests/Gap0" unique_id=1698081519]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+pixel_size = 0.01
+billboard = 1
+text = "Gap: 0.5 m"
+font_size = 48
+
+[node name="Start0" type="Label3D" parent="NavigationRegion3D/JumpTests" unique_id=1735665522]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.8, -10)
+pixel_size = 0.01
+billboard = 1
+text = "0.5 m ->"
+font_size = 40
+
+[node name="Gap1" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=1897542372]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.5, -6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Gap1" unique_id=1985851638]
+shape = SubResource("TestPlatformShape")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Gap1" unique_id=622308066]
+material_override = SubResource("TestPlatformMaterial")
+mesh = SubResource("TestPlatformMesh")
+
+[node name="Label" type="Label3D" parent="NavigationRegion3D/JumpTests/Gap1" unique_id=939353854]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+pixel_size = 0.01
+billboard = 1
+text = "Gap: 1.0 m"
+font_size = 48
+
+[node name="Start1" type="Label3D" parent="NavigationRegion3D/JumpTests" unique_id=439414798]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.8, -6)
+pixel_size = 0.01
+billboard = 1
+text = "1.0 m ->"
+font_size = 40
+
+[node name="Gap2" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=973060432]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0.5, -2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Gap2" unique_id=142174265]
+shape = SubResource("TestPlatformShape")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Gap2" unique_id=1285729956]
+material_override = SubResource("TestPlatformMaterial")
+mesh = SubResource("TestPlatformMesh")
+
+[node name="Label" type="Label3D" parent="NavigationRegion3D/JumpTests/Gap2" unique_id=340424708]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+pixel_size = 0.01
+billboard = 1
+text = "Gap: 1.5 m"
+font_size = 48
+
+[node name="Start2" type="Label3D" parent="NavigationRegion3D/JumpTests" unique_id=627517820]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.8, -2)
+pixel_size = 0.01
+billboard = 1
+text = "1.5 m ->"
+font_size = 40
+
+[node name="Gap3" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=933158379]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.5, 2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Gap3" unique_id=1412282044]
+shape = SubResource("TestPlatformShape")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Gap3" unique_id=1221569663]
+material_override = SubResource("TestPlatformMaterial")
+mesh = SubResource("TestPlatformMesh")
+
+[node name="Label" type="Label3D" parent="NavigationRegion3D/JumpTests/Gap3" unique_id=133707185]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+pixel_size = 0.01
+billboard = 1
+text = "Gap: 2.0 m"
+font_size = 48
+
+[node name="Start3" type="Label3D" parent="NavigationRegion3D/JumpTests" unique_id=746506302]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.8, 2)
+pixel_size = 0.01
+billboard = 1
+text = "2.0 m ->"
+font_size = 40
+
+[node name="Gap4" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=1228820377]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.5, 6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Gap4" unique_id=718033421]
+shape = SubResource("TestPlatformShape")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Gap4" unique_id=1919043276]
+material_override = SubResource("TestPlatformMaterial")
+mesh = SubResource("TestPlatformMesh")
+
+[node name="Label" type="Label3D" parent="NavigationRegion3D/JumpTests/Gap4" unique_id=1443455696]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+pixel_size = 0.01
+billboard = 1
+text = "Gap: 2.5 m"
+font_size = 48
+
+[node name="Start4" type="Label3D" parent="NavigationRegion3D/JumpTests" unique_id=135313232]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.8, 6)
+pixel_size = 0.01
+billboard = 1
+text = "2.5 m ->"
+font_size = 40
+
+[node name="Gap5" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=1865360654]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, 10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Gap5" unique_id=4335497]
+shape = SubResource("TestPlatformShape")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Gap5" unique_id=1906253667]
+material_override = SubResource("TestPlatformMaterial")
+mesh = SubResource("TestPlatformMesh")
+
+[node name="Label" type="Label3D" parent="NavigationRegion3D/JumpTests/Gap5" unique_id=767269511]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+pixel_size = 0.01
+billboard = 1
+text = "Gap: 3.0 m"
+font_size = 48
+
+[node name="Start5" type="Label3D" parent="NavigationRegion3D/JumpTests" unique_id=26597017]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.8, 10)
+pixel_size = 0.01
+billboard = 1
+text = "3.0 m ->"
+font_size = 40
+
+[node name="Launch0" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=469367811]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, -10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Launch0" unique_id=1993545616]
+shape = SubResource("TestPlatformShape")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Launch0" unique_id=1034969857]
+material_override = SubResource("TestPlatformMaterial")
+mesh = SubResource("TestPlatformMesh")
+
+[node name="Launch1" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=861851847]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, -6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Launch1" unique_id=346125009]
+shape = SubResource("TestPlatformShape")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Launch1" unique_id=1323769487]
+material_override = SubResource("TestPlatformMaterial")
+mesh = SubResource("TestPlatformMesh")
+
+[node name="Launch2" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=779503699]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, -2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Launch2" unique_id=862779002]
+shape = SubResource("TestPlatformShape")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Launch2" unique_id=1091214413]
+material_override = SubResource("TestPlatformMaterial")
+mesh = SubResource("TestPlatformMesh")
+
+[node name="Launch3" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=855473699]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, 2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Launch3" unique_id=1150668713]
+shape = SubResource("TestPlatformShape")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Launch3" unique_id=440168289]
+material_override = SubResource("TestPlatformMaterial")
+mesh = SubResource("TestPlatformMesh")
+
+[node name="Launch4" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=1673789659]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, 6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Launch4" unique_id=1275315303]
+shape = SubResource("TestPlatformShape")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Launch4" unique_id=990739063]
+material_override = SubResource("TestPlatformMaterial")
+mesh = SubResource("TestPlatformMesh")
+
+[node name="Launch5" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=1091050299]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, 10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Launch5" unique_id=1976311437]
+shape = SubResource("TestPlatformShape")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Launch5" unique_id=1522260372]
+material_override = SubResource("TestPlatformMaterial")
+mesh = SubResource("TestPlatformMesh")
+
+[node name="Ground" type="StaticBody3D" parent="NavigationRegion3D" unique_id=67163204]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Ground" unique_id=1151707973]
+shape = SubResource("FloorShape")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/Ground" unique_id=323519160]
+material_override = SubResource("FloorMaterial")
+mesh = SubResource("FloorMesh")
+
+[node name="Ghoul" parent="." unique_id=13065505 instance=ExtResource("6_4ackd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.731076, 0.8862281, 6.9136066)

@@ -5,14 +5,25 @@ extends Node3D
 @export var cone_range := 12.0
 @export var cone_color := Color(1.0, 1.0, 0.85, 0.2)
 @export var cone_edge_color := Color(1.0, 1.0, 0.85, 0.5)
+## Периферийное зрение
+@export var peripheral_radius := 1.8
 
 const CONE_SEGMENTS := 32
 const CONE_FLOOR_OFFSET := 0.02
 
+
+const FLASHLIGHT_ANGLE_MARGIN := 3.0
+const FLASHLIGHT_RANGE_MARGIN := 1.5
+
+const PERIPHERAL_LIGHT_RANGE_MARGIN := 1.0
+
+@onready var _flashlight: SpotLight3D = $Flashlight
+@onready var _peripheral_light: OmniLight3D = $PeripheralLight
+
 func _ready() -> void:
 	add_to_group(&"visibility_cones")
 	add_child(_create_cone_mesh())
-	add_child(_create_cone_light())
+	_fit_flashlight()
 
 func _create_cone_mesh() -> MeshInstance3D:
 	var y := CONE_FLOOR_OFFSET
@@ -54,23 +65,19 @@ func _create_cone_mesh() -> MeshInstance3D:
 	return cone
 
 
-## Свет камеры в пределах конуса: видно, что попадает в кадр, и препятствия отбрасывают тени.
-func _create_cone_light() -> SpotLight3D:
-	var light := SpotLight3D.new()
-	light.name = "ViewConeLight"
-	light.position.y = 1.1
-	light.spot_angle = cone_angle / 2.0
-	light.spot_range = cone_range
-	light.spot_attenuation = 0.5
-	light.light_energy = 3.0
-	light.shadow_enabled = true
-	return light
+func _fit_flashlight() -> void:
+	_flashlight.spot_angle = cone_angle / 2.0 + FLASHLIGHT_ANGLE_MARGIN
+	_flashlight.spot_range = cone_range + FLASHLIGHT_RANGE_MARGIN
+	_peripheral_light.omni_range = peripheral_radius + PERIPHERAL_LIGHT_RANGE_MARGIN
 
 
 ## Проверяет дальность и угол относительно направления взгляда на плоскости земли.
+## Вблизи персонажа (peripheral_radius) точка видна в любом направлении.
 func contains_world_point(world_position: Vector3) -> bool:
 	var direction := world_position - global_position
 	direction.y = 0.0
+	if direction.length_squared() <= peripheral_radius * peripheral_radius:
+		return true
 	if direction.length_squared() > cone_range * cone_range:
 		return false
 	if direction.is_zero_approx():
