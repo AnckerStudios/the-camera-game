@@ -1,0 +1,113 @@
+[gd_scene format=3 uid="uid://cmrqfw2vi6a3d"]
+
+[ext_resource type="Script" uid="uid://b28rq7mvixnc5" path="res://ui/item_inspection/item_inspection.gd" id="1"]
+[ext_resource type="Shader" uid="uid://cxkinbhodd0q8" path="res://ui/item_inspection/background_blur.gdshader" id="2"]
+
+[sub_resource type="ShaderMaterial" id="Blur"]
+shader = ExtResource("2")
+shader_parameter/blur_strength = 2.5
+
+[sub_resource type="StyleBoxFlat" id="TextBackground"]
+bg_color = Color(0.045, 0.055, 0.075, 0.92)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="ItemInspection" type="CanvasLayer" unique_id=812647978]
+process_mode = 3
+layer = 50
+script = ExtResource("1")
+
+[node name="Window" type="Control" parent="." unique_id=958835158]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="Window" unique_id=1001884264]
+material = SubResource("Blur")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Layout" type="VBoxContainer" parent="Window" unique_id=1618189550]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.15
+anchor_top = 0.05
+anchor_right = 0.85
+anchor_bottom = 0.95
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Preview" type="SubViewportContainer" parent="Window/Layout" unique_id=1527522982]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+stretch = true
+
+[node name="Viewport" type="SubViewport" parent="Window/Layout/Preview" unique_id=1633416452]
+own_world_3d = true
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(806, 388)
+render_target_update_mode = 4
+
+[node name="Pivot" type="Node3D" parent="Window/Layout/Preview/Viewport" unique_id=1373442249]
+
+[node name="Camera3D" type="Camera3D" parent="Window/Layout/Preview/Viewport" unique_id=2028274951]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+current = true
+
+[node name="KeyLight" type="DirectionalLight3D" parent="Window/Layout/Preview/Viewport" unique_id=2053696906]
+transform = Transform3D(0.8660254, 0.25, -0.4330127, 0, 0.8660254, 0.5, 0.5, -0.4330127, 0.75, 0, 0, 0)
+light_energy = 1.8
+
+[node name="FillLight" type="OmniLight3D" parent="Window/Layout/Preview/Viewport" unique_id=1867357874]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, 2)
+light_energy = 0.6
+omni_range = 10.0
+
+[node name="TextPanel" type="PanelContainer" parent="Window/Layout" unique_id=901571234]
+layout_mode = 2
+theme_override_styles/panel = SubResource("TextBackground")
+
+[node name="Margin" type="MarginContainer" parent="Window/Layout/TextPanel" unique_id=1570299261]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="Text" type="VBoxContainer" parent="Window/Layout/TextPanel/Margin" unique_id=1037754098]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Window/Layout/TextPanel/Margin/Text" unique_id=1982231716]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Предмет"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Description" type="Label" parent="Window/Layout/TextPanel/Margin/Text" unique_id=2006008430]
+layout_mode = 2
+text = "Описание предмета"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Hint" type="Label" parent="Window/Layout/TextPanel/Margin/Text" unique_id=323141591]
+layout_mode = 2
+text = "Зажмите ЛКМ и двигайте мышью, чтобы вращать предмет
+E — закрыть"
+horizontal_alignment = 1
+autowrap_mode = 3

@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="4_s1bv7"]
 [ext_resource type="Script" uid="uid://cmkrno3x3fyie" path="res://gamelogic/weapon/damage_dummy.gd" id="5_5egmh"]
 [ext_resource type="PackedScene" uid="uid://w3p8l3qnm13a" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="6_4ackd"]
-[ext_resource type="PackedScene" path="res://gamelogic/items/pickup_item.tscn" id="7_pickup_item"]
+[ext_resource type="PackedScene" uid="uid://by6ubidcpixtr" path="res://gamelogic/items/pickup_item.tscn" id="7_pickup_item"]
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 1
@@ -306,5 +306,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5189924, 0.39750087, -0.105
 display_name = "Тестовый предмет"
 
 [node name="TestPickupItem" parent="." unique_id=464021308 instance=ExtResource("7_pickup_item")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2107819, 0.5, -0.08076906)
 display_name = "Тестовый предмет"

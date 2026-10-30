@@ -41,6 +41,9 @@ var _jump_hold_remaining: float = 0.0
 var _coyote_remaining: float = 0.0
 var _fall_seconds: float = 0.0
 
+const INSPECTION_SCENE = preload("res://ui/item_inspection/item_inspection.tscn")
+var _inspection
+
 var _selected_pickup: PickupItem
 
 var _mouse_target: Vector3
@@ -51,12 +54,16 @@ var _has_mouse_target: bool = false
 
 
 func _ready() -> void:
+	_inspection = INSPECTION_SCENE.instantiate()
+	add_child(_inspection)
 	controls.dash.connect(_on_dash_requested)
 	controls.interaction.connect(_on_interaction_requested)
 	$MouseTracker.target_changed.connect(_on_mouse_target_changed)
 
 
 func _physics_process(delta: float) -> void:
+	if get_tree().paused:
+		return
 	var direction := _get_movement_direction()
 	_update_dash_and_movement(direction, delta)
 	_apply_gravity_and_jump(delta)
@@ -214,11 +221,19 @@ func _update_camera_walking() -> void:
 
 ## Одно нажатие E подбирает ближайший доступный предмет, совпадающий с подсветкой.
 func _on_interaction_requested() -> void:
+	if _inspection.is_open:
+		_inspection.close()
+		return
 	_update_pickup_selection()
-	if is_instance_valid(_selected_pickup) and _selected_pickup.try_pick_up(self):
+	if not is_instance_valid(_selected_pickup):
+		return
+	# Снимок модели создаётся до удаления предмета из мира.
+	_inspection.prepare(_selected_pickup)
+	if _selected_pickup.try_pick_up(self):
 		_set_selected_pickup(null)
-		_update_pickup_selection()
-
+		velocity = Vector3.ZERO
+		_dash_remaining = 0.0
+		_inspection.open(controls)
 
 ## Выбор обновляется при движении даже без нажатия кнопки взаимодействия.
 func _update_pickup_selection() -> void:

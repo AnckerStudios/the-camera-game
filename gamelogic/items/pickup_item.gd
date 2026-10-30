@@ -6,6 +6,7 @@ signal pickup_available(item: PickupItem, receiver: Node3D)
 signal pickup_unavailable(item: PickupItem, receiver: Node3D)
 signal picked_up(item: PickupItem, receiver: Node3D)
 
+@export_multiline var description: String = "Найденный предмет."
 @export var display_name: String = "Предмет"
 @export_range(0.1, 20.0, 0.1) var pickup_radius: float = 1.5:
 	set(value):
