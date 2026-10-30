@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://bxdcha54yasv4"]
 
-[ext_resource type="PackedScene" path="res://scene/player.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://kmwuw8pmi1bl" path="res://scene/player.tscn" id="1"]
 [ext_resource type="Script" uid="uid://depwexin4lwf1" path="res://gamelogic/isometric_camera.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="7_hud"]
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 1
@@ -266,3 +267,5 @@ shape = SubResource("TestPlatformShape")
 [node name="Mesh" type="MeshInstance3D" parent="JumpTests/Launch5" unique_id=1522260372]
 material_override = SubResource("TestPlatformMaterial")
 mesh = SubResource("TestPlatformMesh")
+
+[node name="HUD" parent="." unique_id=1458729086 instance=ExtResource("7_hud")]

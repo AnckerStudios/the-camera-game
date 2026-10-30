@@ -9,25 +9,30 @@ extends Node3D
 @export var cone_color := Color(1.0, 1.0, 0.85, 0.2)
 @export var cone_edge_color := Color(1.0, 1.0, 0.85, 0.5)
 
+const MouseTracker = preload("res://gamelogic/mouse_tracker.gd")
+
 const CONE_SEGMENTS := 32
 const CONE_FLOOR_OFFSET := 0.02
 
-@onready var _camera: Camera3D = $Camera3D
 @onready var _holder: Node3D = $WeaponHolder
 
 
 func _ready() -> void:
+	var tracker := MouseTracker.new()
+	tracker.name = &"MouseTracker"
+	tracker.target = _holder
+	tracker.target_changed.connect(_on_mouse_target_changed)
+	add_child(tracker)
 	_holder.add_child(_create_cone_mesh())
 	_holder.add_child(_create_cone_light())
 
 
-func _process(_delta: float) -> void:
-	var mouse := get_viewport().get_mouse_position()
-	var floor_plane := Plane(Vector3.UP, _holder.global_position.y)
-	var point = floor_plane.intersects_ray(_camera.project_ray_origin(mouse), _camera.project_ray_normal(mouse))
-	if point != null and not _holder.global_position.is_equal_approx(point):
-		_holder.look_at(point, Vector3.UP)
-
+## Получает мировую точку от общего адаптера курсора.
+func _on_mouse_target_changed(world_position: Vector3) -> void:
+	var direction := world_position - _holder.global_position
+	direction.y = 0.0
+	if direction.length_squared() > 0.0001:
+		_holder.look_at(_holder.global_position + direction, Vector3.UP)
 
 ## Плоский сектор на полу: полупрозрачная заливка и контур. Смотрит вдоль -Z держателя.
 func _create_cone_mesh() -> MeshInstance3D:

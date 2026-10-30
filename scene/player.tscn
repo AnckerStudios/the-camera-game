@@ -4,6 +4,11 @@
 [ext_resource type="Script" uid="uid://cujtymrprn44a" path="res://gamelogic/player_input.gd" id="2"]
 [ext_resource type="Script" uid="uid://camxira84elhg" path="res://gamelogic/mouse_tracker.gd" id="3"]
 
+[ext_resource type="Script" path="res://gamelogic/weapon/weapon_holder.gd" id="4_holder"]
+[ext_resource type="PackedScene" path="res://gamelogic/weapon/weapon_double_shotgun.tscn" id="5_shotgun"]
+[ext_resource type="PackedScene" path="res://gamelogic/weapon/weapon_revolver.tscn" id="6_revolver"]
+[ext_resource type="PackedScene" path="res://scene/view_cone.tscn" id="7_cone"]
+
 [sub_resource type="CapsuleShape3D" id="Shape"]
 radius = 0.35
 height = 1.8
@@ -42,3 +47,13 @@ mesh = SubResource("Nose")
 [node name="MouseTracker" type="Node" parent="." unique_id=2016091666 node_paths=PackedStringArray("target")]
 script = ExtResource("3")
 target = NodePath("..")
+
+[node name="WeaponHolder" type="Node3D" parent="Visual"]
+position = Vector3(0.35, 1.1, -0.15)
+script = ExtResource("4_holder")
+
+[node name="WeaponDoubleShotgun" parent="Visual/WeaponHolder" instance=ExtResource("5_shotgun")]
+
+[node name="WeaponRevolver" parent="Visual/WeaponHolder" instance=ExtResource("6_revolver")]
+
+[node name="ViewCone" parent="Visual" instance=ExtResource("7_cone")]
