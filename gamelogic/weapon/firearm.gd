@@ -28,6 +28,12 @@ const FLASH_DURATION := 0.05
 ## Альтернативная атака выпускает все заряженные патроны разом (дуплет).
 @export var secondary_fires_all := false
 @export_flags_3d_physics var hit_mask := 1
+## Вид сверху: игрок целится только по плоскости, поэтому пуля задевает всё
+## в вертикальной полосе вокруг дула - и низких пауков, и высоких призраков.
+@export var hit_band_below := 1.0
+@export var hit_band_above := 0.5
+## Толщина пули/дробины.
+@export var hit_width := 0.1
 
 @export_group("Патроны")
 @export var capacity := 6
@@ -42,6 +48,7 @@ var is_reloading := false
 
 var _cooldown := 0.0
 var _reload_timer := 0.0
+var _shot_shape := BoxShape3D.new()
 
 @onready var _muzzle: Node3D = $Muzzle
 @onready var _flash_light: Light3D = get_node_or_null("Muzzle/Flash")
@@ -129,23 +136,38 @@ func _load_rounds(count: int) -> void:
 	ammo_changed.emit(loaded, capacity, reserve_ammo)
 
 
+## Направление выстрела в плоскости пола.
 func _spread_direction() -> Vector3:
 	var half := deg_to_rad(spread_degrees) / 2.0
-	return (-_muzzle.global_basis.z).rotated(Vector3.UP, randf_range(-half, half))
+	var forward := -_muzzle.global_basis.z
+	forward.y = 0.0
+	return forward.normalized().rotated(Vector3.UP, randf_range(-half, half))
 
 
+## Протягивает вертикальную полосу высотой hit_band_below + hit_band_above от дула
+## и бьёт первое, во что она упрётся.
 func _fire_ray(direction: Vector3) -> void:
 	var from := _muzzle.global_position
-	var to := from + direction * max_range
-	var query := PhysicsRayQueryParameters3D.create(from, to, hit_mask, _exclude())
+	_shot_shape.size = Vector3(hit_width, hit_band_below + hit_band_above, hit_width)
+
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = _shot_shape
+	query.transform = Transform3D(Basis.looking_at(direction),
+		from + Vector3.UP * (hit_band_above - hit_band_below) / 2.0)
+	query.motion = direction * max_range
+	query.collision_mask = hit_mask
 	query.collide_with_areas = true
-	var hit := get_world_3d().direct_space_state.intersect_ray(query)
-	if hit:
-		to = hit.position
-		var target: Object = hit.collider
-		if target.has_method("take_damage"):
+	query.exclude = _exclude()
+
+	var space := get_world_3d().direct_space_state
+	var travel := space.cast_motion(query)[1]
+	if travel < 1.0:
+		query.transform.origin += query.motion * travel
+		var hit := space.get_rest_info(query)
+		var target := instance_from_id(hit.collider_id) if hit else null
+		if target and target.has_method("take_damage"):
 			target.take_damage(damage, self)
-	Tracer.spawn(self, from, to)
+	Tracer.spawn(self, from, from + query.motion * travel)
 
 
 ## Не попадать в того, кто держит оружие.

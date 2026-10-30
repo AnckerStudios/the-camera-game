@@ -10,7 +10,7 @@
 [sub_resource type="PlaneMesh" id="PlaneMesh_floor"]
 size = Vector2(40, 40)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_dummy"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_dummy"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_kdj8j"]
 
@@ -32,11 +32,11 @@ script = ExtResource("2_holder")
 [node name="WeaponRevolver" parent="WeaponHolder" unique_id=557271685 instance=ExtResource("4_revolver")]
 
 [node name="Dummy1" type="StaticBody3D" parent="." unique_id=2030483613]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -5)
 script = ExtResource("5_dummy")
 
 [node name="Shape" type="CollisionShape3D" parent="Dummy1" unique_id=641108496]
-shape = SubResource("BoxShape3D_dummy")
+shape = SubResource("CylinderShape3D_dummy")
 
 [node name="Mesh" type="MeshInstance3D" parent="Dummy1" unique_id=1436635323]
 mesh = SubResource("CylinderMesh_kdj8j")
