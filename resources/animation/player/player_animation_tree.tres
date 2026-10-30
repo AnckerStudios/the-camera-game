@@ -34,9 +34,24 @@ blend_point_4/name = &"strafe_left"
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_speed"]
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_roll"]
+animation = &"move/roll"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_roll_speed"]
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_roll"]
+fadein_time = 0.08
+fadeout_time = 0.25
+
 [resource]
 nodes/Move/node = SubResource("AnimationNodeBlendSpace2D_move")
 nodes/Move/position = Vector2(-300, 0)
 nodes/Speed/node = SubResource("AnimationNodeTimeScale_speed")
 nodes/Speed/position = Vector2(-100, 0)
-node_connections = [&"Speed", 0, &"Move", &"output", 0, &"Speed"]
+nodes/RollAnimation/node = SubResource("AnimationNodeAnimation_roll")
+nodes/RollAnimation/position = Vector2(-300, 200)
+nodes/RollSpeed/node = SubResource("AnimationNodeTimeScale_roll_speed")
+nodes/RollSpeed/position = Vector2(-100, 200)
+nodes/Roll/node = SubResource("AnimationNodeOneShot_roll")
+nodes/Roll/position = Vector2(100, 0)
+node_connections = [&"Speed", 0, &"Move", &"RollSpeed", 0, &"RollAnimation", &"Roll", 0, &"Speed", &"Roll", 1, &"RollSpeed", &"output", 0, &"Roll"]
