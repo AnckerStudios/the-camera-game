@@ -160,7 +160,7 @@ theme_override_font_sizes/font_size = 22
 text = "МОНТИРОВКА"
 horizontal_alignment = 2
 
-[node name="AmmoLabel" type="Label" parent="Margin/Layout/BottomRow/Info"]
+[node name="AmmoLabel" type="Label" parent="Margin/Layout/BottomRow/Info" unique_id=1575901502]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_tabular")
