@@ -17,10 +17,10 @@ reload_time = 0.45
 reload_per_round = true
 
 [node name="Model" parent="." instance=ExtResource("2_model")]
-transform = Transform3D(-0.075, 0, 0, 0, 0.075, 0, 0, 0, -0.075, -0.19, 0.1975, -0.27)
+transform = Transform3D(-0.075, 0, 0, 0, 0.075, 0, 0, 0, -0.075, -0.19, 0.2475, -0.22)
 
 [node name="Muzzle" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.19, 0.28, -0.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.19, 0.33, -0.4)
 
 [node name="Flash" type="OmniLight3D" parent="Muzzle"]
 light_color = Color(1, 0.8, 0.5, 1)
