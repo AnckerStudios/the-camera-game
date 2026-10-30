@@ -41,6 +41,11 @@ var _jump_hold_remaining: float = 0.0
 var _coyote_remaining: float = 0.0
 var _fall_seconds: float = 0.0
 
+const INSPECTION_SCENE = preload("res://ui/item_inspection/item_inspection.tscn")
+var _inspection
+
+var _selected_pickup: PickupItem
+
 var _mouse_target: Vector3
 var _has_mouse_target: bool = false
 
@@ -49,11 +54,16 @@ var _has_mouse_target: bool = false
 
 
 func _ready() -> void:
+	_inspection = INSPECTION_SCENE.instantiate()
+	add_child(_inspection)
 	controls.dash.connect(_on_dash_requested)
+	controls.interaction.connect(_on_interaction_requested)
 	$MouseTracker.target_changed.connect(_on_mouse_target_changed)
 
 
 func _physics_process(delta: float) -> void:
+	if get_tree().paused:
+		return
 	var direction := _get_movement_direction()
 	_update_dash_and_movement(direction, delta)
 	_apply_gravity_and_jump(delta)
@@ -62,6 +72,7 @@ func _physics_process(delta: float) -> void:
 	_update_mouse_facing(delta)
 	_reset_if_fallen()
 	_update_camera_walking()
+	_update_pickup_selection()
 
 
 ## Переводит ввод в направление на плоскости земли относительно активной камеры.
@@ -206,3 +217,49 @@ func _update_camera_walking() -> void:
 		var motion := get_real_velocity()
 		amount = Vector2(motion.x, motion.z).length() / maxf(speed, 0.01)
 	rig.set_sway_amount(amount)
+
+
+## Одно нажатие E подбирает ближайший доступный предмет, совпадающий с подсветкой.
+func _on_interaction_requested() -> void:
+	if _inspection.is_open:
+		_inspection.close()
+		return
+	_update_pickup_selection()
+	if not is_instance_valid(_selected_pickup):
+		return
+	# Снимок модели создаётся до удаления предмета из мира.
+	_inspection.prepare(_selected_pickup)
+	if _selected_pickup.try_pick_up(self):
+		_set_selected_pickup(null)
+		velocity = Vector3.ZERO
+		_dash_remaining = 0.0
+		_inspection.open(controls)
+
+## Выбор обновляется при движении даже без нажатия кнопки взаимодействия.
+func _update_pickup_selection() -> void:
+	var nearest: PickupItem = null
+	var nearest_distance := INF
+	for node in get_tree().get_nodes_in_group(&"pickup_items"):
+		if not node is PickupItem or node.is_queued_for_deletion() or not node.can_pick_up(self):
+			continue
+		var distance_squared := global_position.distance_squared_to(node.global_position)
+		if distance_squared < nearest_distance:
+			nearest_distance = distance_squared
+			nearest = node
+	_set_selected_pickup(nearest)
+
+
+## При смене цели возвращает прежнему предмету его обычный цвет.
+func _set_selected_pickup(item: PickupItem) -> void:
+	if is_instance_valid(_selected_pickup) and _selected_pickup == item:
+		return
+	if is_instance_valid(_selected_pickup):
+		_selected_pickup.set_pickup_selected(false)
+	_selected_pickup = item
+	if is_instance_valid(_selected_pickup):
+		_selected_pickup.set_pickup_selected(true)
+
+
+func _exit_tree() -> void:
+	if is_instance_valid(_selected_pickup):
+		_selected_pickup.set_pickup_selected(false)

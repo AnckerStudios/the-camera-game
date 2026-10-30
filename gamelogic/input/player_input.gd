@@ -7,6 +7,9 @@ signal jump
 ## Запрашивает рывок при нажатии Shift.
 signal dash
 
+## Запрашивает взаимодействие при нажатии E.
+signal interaction
+
 ## Передаёт направление движения при его изменении.
 signal movement_changed(direction: Vector2)
 
@@ -40,6 +43,9 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	_jump_remaining = maxf(_jump_remaining - delta, 0.0)
 
+	if Input.is_action_just_pressed(&"interaction"):
+		interaction.emit()
+
 	if not hardware_enabled:
 		return
 
@@ -58,6 +64,7 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed(&"dash"):
 		dash.emit()
+
 
 
 ## Возвращает текущее направление ввода.
