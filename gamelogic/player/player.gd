@@ -143,8 +143,8 @@ func _reset_if_fallen() -> void:
 func _on_dash_requested() -> void:
 	if _dash_remaining > 0.0 or _dash_cooldown_remaining > 0.0:
 		return
-	
-	_dash_direction = _calc_facing_direction()
+
+	_dash_direction = _get_movement_direction()
 	if _dash_direction.is_zero_approx():
 		_dash_direction = -visual.global_basis.z
 	_dash_direction.y = 0.0
@@ -167,6 +167,7 @@ func _update_dash_and_movement(direction: Vector3, delta: float) -> void:
 
 		if _dash_remaining <= 0.0:
 			_dash_cooldown_remaining = dash_cooldown_seconds
+			_dash_remaining = 0.0
 	else:
 		_update_horizontal_velocity(direction, delta)
 
@@ -188,13 +189,9 @@ func _on_mouse_target_changed(world_position: Vector3) -> void:
 func _update_mouse_facing(delta: float) -> void:
 	if not _has_mouse_target:
 		return
-
-	_rotate_visual(_calc_facing_direction(), delta)
-
-func _calc_facing_direction() -> Vector3:
 	var direction := _mouse_target - global_position
 	direction.y = 0.0
-	return direction.normalized()
+	_rotate_visual(direction.normalized(), delta)
 
 ## Передаёт камере фактическую скорость ходьбы; в воздухе и при рывке покачивание затухает.
 func _update_camera_walking() -> void:
