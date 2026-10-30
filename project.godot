@@ -14,6 +14,10 @@ config/name="TheCameraGame"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://resources/texture/icon.svg"
 
+[autoload]
+
+PlayerState="*res://gamelogic/player_state.gd"
+
 [display]
 
 window/stretch/mode="canvas_items"
