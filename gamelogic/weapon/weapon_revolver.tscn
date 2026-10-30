@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://gamelogic/weapon/firearm.gd" id="1_firearm"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_barrel"]
+size = Vector3(0.08, 0.1, 0.45)
+
+[node name="WeaponRevolver" type="Node3D"]
+script = ExtResource("1_firearm")
+display_name = "РЕВОЛЬВЕР"
+damage = 35.0
+spread_degrees = 2.0
+max_range = 30.0
+fire_interval = 0.35
+capacity = 6
+reserve_ammo = 30
+reload_time = 0.45
+reload_per_round = true
+
+[node name="Model" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.22)
+mesh = SubResource("BoxMesh_barrel")
+
+[node name="Muzzle" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+
+[node name="Flash" type="OmniLight3D" parent="Muzzle"]
+light_color = Color(1, 0.8, 0.5, 1)
+light_energy = 3.0
+omni_range = 5.0

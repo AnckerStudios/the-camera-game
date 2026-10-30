@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dwbunjtc84mc3"]
+
+[ext_resource type="Script" uid="uid://ch3iewkgkswix" path="res://gamelogic/monster/ghost/ghost.gd" id="1_ydf7n"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ykubr"]
+albedo_color = Color(1, 0.18039216, 1, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_6f04y"]
+material = SubResource("StandardMaterial3D_ykubr")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_b2wx1"]
+
+[node name="Ghost" type="CharacterBody3D" unique_id=1145615818]
+script = ExtResource("1_ydf7n")
+metadata/_custom_type_script = "uid://bejwj8l45jw17"
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=200973457]
+avoidance_enabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=210942479]
+mesh = SubResource("CapsuleMesh_6f04y")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=301303193]
+shape = SubResource("CapsuleShape3D_b2wx1")
+
+[connection signal="velocity_computed" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_velocity_computed"]
