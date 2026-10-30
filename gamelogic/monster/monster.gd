@@ -30,6 +30,12 @@ func _physics_process(delta: float) -> void:
 
 func update_target_location(target_location: Vector3) -> void:
 	nav_agent.target_position = target_location
+	pass
+
+func recalculate_velocity(safe_velocity: Vector3) -> void:
+	velocity = velocity.move_toward(safe_velocity, 0.5)
+	move_and_slide()
+
 
 func take_damage(amount: float, source: Node) -> void:
 	var resistance: float
@@ -43,7 +49,3 @@ func take_damage(amount: float, source: Node) -> void:
 	print("%s: -%.0f от %s, осталось %.0f" % [name, amount, source.name, hp])
 	if hp <= 0.0:
 		queue_free()
-
-func recalculate_velocity(safe_velocity: Vector3) -> void:
-	velocity = velocity.move_toward(safe_velocity, 0.5)
-	move_and_slide()

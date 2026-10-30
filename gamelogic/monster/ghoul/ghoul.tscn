@@ -1,4 +1,4 @@
-﻿[gd_scene format=3 uid="uid://cjuq8g0mbb8h8"]
+[gd_scene format=3 uid="uid://cjuq8g0mbb8h8"]
 
 [ext_resource type="Script" uid="uid://on2cuhtiq5mf" path="res://gamelogic/monster/ghoul/ghoul.gd" id="1_hcbde"]
 
