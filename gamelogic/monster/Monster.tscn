@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dbftc64g7jv7x"]
+
+[ext_resource type="Script" uid="uid://bejwj8l45jw17" path="res://gamelogic/monster/monster.gd" id="1_m5p37"]
+
+[node name="Monster" type="CharacterBody3D" unique_id=1987555245]
+script = ExtResource("1_m5p37")
