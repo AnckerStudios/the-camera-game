@@ -15,6 +15,14 @@
 radius = 0.35
 height = 1.8
 
+[sub_resource type="StandardMaterial3D" id="Material_flashlight"]
+albedo_color = Color(0.05, 0.05, 0.05, 1)
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_flashlight"]
+material = SubResource("Material_flashlight")
+size = Vector3(0.035, 0.035, 0.13)
+
 [node name="Player" type="CharacterBody3D" unique_id=1577945846]
 script = ExtResource("1")
 
@@ -30,14 +38,19 @@ shape = SubResource("Shape")
 [node name="PlayerModel" parent="Visual" node_paths=PackedStringArray("body") instance=ExtResource("8_model")]
 body = NodePath("../..")
 
-[node name="WeaponHolder" type="Node3D" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/RightHandGrip" unique_id=1611209214 node_paths=PackedStringArray("aim")]
+[node name="WeaponHolder" type="Node3D" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/RightHandGrip" unique_id=1611209214 node_paths=PackedStringArray("aim", "off_hand")]
 transform = Transform3D(0.61163926, 0.77173275, -0.1132051, -0.1943444, 0.011461118, -0.9718994, -0.755392, 0.6219218, 0.15838495, -0.064754605, -0.10527697, -0.26346976)
 script = ExtResource("4_holder")
 aim = NodePath("../../../../../..")
+off_hand = NodePath("../../LeftHandGrip/Flashlight")
 
 [node name="WeaponDoubleShotgun" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/RightHandGrip/WeaponHolder" unique_id=1504881159 instance=ExtResource("5_shotgun")]
 
 [node name="WeaponRevolver" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/RightHandGrip/WeaponHolder" unique_id=1816449901 instance=ExtResource("6_revolver")]
+
+[node name="Flashlight" type="MeshInstance3D" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/LeftHandGrip"]
+transform = Transform3D(0.71220434, 0.0065567405, 0.68935585, 0.6893651, -0.014705395, -0.71207404, 0.0055167656, 0.99107563, -0.015126121, 0, 0.08, 0.03)
+mesh = SubResource("BoxMesh_flashlight")
 
 [node name="ViewCone" parent="Visual" unique_id=2048807598 instance=ExtResource("7_cone")]
 

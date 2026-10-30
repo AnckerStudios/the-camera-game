@@ -6,6 +6,8 @@ extends Node3D
 ## Узел, вдоль -Z которого целится оружие. Держатель может сидеть на кисти и качаться
 ## вместе с анимацией, а стрелять нужно туда, куда смотрит персонаж. Без узла - сам держатель.
 @export var aim: Node3D
+## Предмет во второй руке; виден только с одноручным оружием.
+@export var off_hand: Node3D
 
 var current: Weapon
 
@@ -63,6 +65,8 @@ func select(index: int) -> void:
 	_index = index
 	current = weapons[index]
 	current.equip()
+	if off_hand:
+		off_hand.visible = current.one_handed
 	PlayerState.weapon_name = current.display_name
 	if current is Firearm:
 		current.ammo_changed.connect(PlayerState.set_ammo)
