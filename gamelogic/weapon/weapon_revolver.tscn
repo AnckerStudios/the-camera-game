@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://gamelogic/weapon/firearm.gd" id="1_firearm"]
 [ext_resource type="PackedScene" uid="uid://csxbjx0mh82b6" path="res://resources/model/weapons/weapon_rev.glb" id="2_model"]
+[ext_resource type="AudioStream" uid="uid://bsv1wusib4t65" path="res://resources/music/gun.mp3" id="2_xyevx"]
 
 [node name="WeaponRevolver" type="Node3D"]
 script = ExtResource("1_firearm")
@@ -26,3 +27,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.19, 0.33, -0.4)
 light_color = Color(1, 0.8, 0.5, 1)
 light_energy = 3.0
 omni_range = 5.0
+
+[node name="ShootSound" type="AudioStreamPlayer3D" parent="." unique_id=902234618]
+stream = ExtResource("2_xyevx")
+bus = &"SFX"
