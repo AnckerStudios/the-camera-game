@@ -12,11 +12,9 @@ var _flash_tween: Tween
 func _ready() -> void:
 	PlayerState.battery_changed.connect(set_battery)
 	set_battery(PlayerState.battery, PlayerState.BATTERY_MAX)
-	PlayerState.battery -= 75.0
 
 	PlayerState.hp_changed.connect(set_health)
 	set_health(PlayerState.hp, PlayerState.HP_MAX)
-	PlayerState.hp -= 50.0
 
 	PlayerState.weapon_changed.connect(set_weapon)
 	if PlayerState.weapon_name:
