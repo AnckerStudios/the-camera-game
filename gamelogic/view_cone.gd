@@ -10,6 +10,7 @@ const CONE_SEGMENTS := 32
 const CONE_FLOOR_OFFSET := 0.02
 
 func _ready() -> void:
+	add_to_group(&"visibility_cones")
 	add_child(_create_cone_mesh())
 	add_child(_create_cone_light())
 
@@ -64,3 +65,16 @@ func _create_cone_light() -> SpotLight3D:
 	light.light_energy = 3.0
 	light.shadow_enabled = true
 	return light
+
+
+## Проверяет дальность и угол относительно направления взгляда на плоскости земли.
+func contains_world_point(world_position: Vector3) -> bool:
+	var direction := world_position - global_position
+	direction.y = 0.0
+	if direction.length_squared() > cone_range * cone_range:
+		return false
+	if direction.is_zero_approx():
+		return true
+	var forward := -global_basis.z
+	forward.y = 0.0
+	return forward.normalized().dot(direction.normalized()) >= cos(deg_to_rad(cone_angle * 0.5))
