@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cquasyawaifv"]
+
+[ext_resource type="Script" uid="uid://dmc0jr8tfjtxu" path="res://gamelogic/player/cone/view_cone.gd" id="1_grni2"]
+
+[node name="ViewCone" type="Node3D" unique_id=1286140958]
+script = ExtResource("1_grni2")

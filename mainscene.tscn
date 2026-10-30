@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://0w4ctxupnojf"]
 
-[ext_resource type="PackedScene" path="res://scene/player.tscn" id="1"]
-[ext_resource type="Script" uid="uid://depwexin4lwf1" path="res://gamelogic/isometric_camera.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://kmwuw8pmi1bl" path="res://gamelogic/player/player.tscn" id="1"]
+[ext_resource type="Script" uid="uid://depwexin4lwf1" path="res://gamelogic/player/camera/isometric_camera.gd" id="2"]
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 1
