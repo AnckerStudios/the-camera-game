@@ -7,7 +7,7 @@ extends Node
 @export_range(0.0, 100.0, 1.0) var edge_softness_pixels: float = 16.0
 @export_range(10.0, 300.0, 1.0) var radius_pixels: float = 0.0
 ## Максимальный радиус и расстояние за стеной для его достижения.
-@export_range(10.0, 600.0, 1.0) var max_radius_pixels: float = 80.0
+@export_range(10.0, 600.0, 1.0) var max_radius_pixels: float = 120.0
 @export_range(0.01, 20.0, 0.1) var radius_max_distance: float = 3.0
 
 ## Скорость плавного изменения радиуса: меньше — медленнее.

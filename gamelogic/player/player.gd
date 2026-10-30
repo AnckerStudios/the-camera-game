@@ -4,13 +4,13 @@ extends CharacterBody3D
 signal dashed(direction: Vector3, duration: float)
 
 ## Максимальная скорость движения по земле.
-@export var speed: float = 3.0
+@export var speed: float = 2.5
 ## Скорость разгона и торможения.
-@export var acceleration: float = 32.0
+@export var acceleration: float = 25.0
 ## Начальная вертикальная скорость прыжка.
 @export var jump_speed: float = 4.0
 ## Скорость плавного поворота модели к направлению движения.
-@export var turn_speed: float = 8.0
+@export var turn_speed: float = 5.0
 
 ## Допустимое время прыжка после схода с края.
 @export_range(0.0, 0.5, 0.01) var coyote_seconds: float = 0.12
