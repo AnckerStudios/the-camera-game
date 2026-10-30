@@ -1,0 +1,163 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/hud/hud.gd" id="1_hud"]
+[ext_resource type="Script" path="res://ui/hud/viewfinder.gd" id="2_viewfinder"]
+[ext_resource type="Script" path="res://ui/hud/battery_indicator.gd" id="3_battery"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_bg"]
+bg_color = Color(0, 0, 0, 0.5)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.4)
+
+[sub_resource type="FontVariation" id="FontVariation_tabular"]
+opentype_features = {
+"tnum": 1
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health"]
+bg_color = Color(0.75, 0.1, 0.1, 1)
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="FlashOverlay" type="ColorRect" parent="."]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Viewfinder" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_viewfinder")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 40
+
+[node name="Layout" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TopRow" type="HBoxContainer" parent="Margin/Layout"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Rec" type="HBoxContainer" parent="Margin/Layout/TopRow"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="RecDot" type="Label" parent="Margin/Layout/TopRow/Rec"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.1, 0.1, 1)
+theme_override_font_sizes/font_size = 22
+text = "●"
+
+[node name="RecText" type="Label" parent="Margin/Layout/TopRow/Rec"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "REC"
+
+[node name="RecTime" type="Label" parent="Margin/Layout/TopRow/Rec"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_tabular")
+theme_override_font_sizes/font_size = 22
+text = "00:00"
+
+[node name="TopSpacer" type="Control" parent="Margin/Layout/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Battery" type="HBoxContainer" parent="Margin/Layout/TopRow"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="BatteryPercent" type="Label" parent="Margin/Layout/TopRow/Battery"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "100%"
+
+[node name="BatteryIndicator" type="Control" parent="Margin/Layout/TopRow/Battery"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 26)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("3_battery")
+
+[node name="MiddleSpacer" type="Control" parent="Margin/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="BottomRow" type="HBoxContainer" parent="Margin/Layout"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Health" type="HBoxContainer" parent="Margin/Layout/BottomRow"]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="HealthCaption" type="Label" parent="Margin/Layout/BottomRow/Health"]
+layout_mode = 2
+text = "ЗДОРОВЬЕ"
+
+[node name="HealthBar" type="ProgressBar" parent="Margin/Layout/BottomRow/Health"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 14)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_bar_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_health")
+value = 100.0
+show_percentage = false
+
+[node name="BottomSpacer" type="Control" parent="Margin/Layout/BottomRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Info" type="VBoxContainer" parent="Margin/Layout/BottomRow"]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+
+[node name="WeaponLabel" type="Label" parent="Margin/Layout/BottomRow/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "МОНТИРОВКА"
+horizontal_alignment = 2
