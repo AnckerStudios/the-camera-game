@@ -1,5 +1,20 @@
 [gd_scene format=3 uid="uid://dkfij74x60580"]
 
+[ext_resource type="Theme" uid="uid://bodj5wrou7dgu" path="res://resources/theme/menu_theme.tres" id="1_77h3e"]
+[ext_resource type="PackedScene" uid="uid://dm1q2hktewkrd" path="res://ui/buttons/play_button.tscn" id="1_v6ljw"]
+[ext_resource type="Script" uid="uid://ca14rusxr3ce0" path="res://ui/menu/menu.gd" id="2_vlit4"]
+[ext_resource type="AudioStream" uid="uid://do0a23et02008" path="res://resources/music/background5.mp3" id="4_pjjyy"]
+[ext_resource type="Texture2D" uid="uid://c7ncshdb7uwaj" path="res://resources/asset/Magi v jame png (2).png" id="5_vlit4"]
+[ext_resource type="Script" uid="uid://cn41jx7qxfb2f" path="res://ui/menu/tail_cursore.gd" id="7_pjjyy"]
+
+[sub_resource type="Curve" id="Curve_pjjyy"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.4044944), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_wtxek"]
+interpolation_mode = 2
+colors = PackedColorArray(1, 1, 1, 0, 1, 0.2627451, 0.63529414, 0.69803923)
+
 [node name="Menu" type="Control" unique_id=1931055831]
 layout_mode = 3
 anchors_preset = 15
@@ -7,3 +22,87 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_77h3e")
+script = ExtResource("2_vlit4")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=468303120]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=527204240]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Title" type="RichTextLabel" parent="PanelContainer/VBoxContainer" unique_id=44358181]
+layout_mode = 2
+theme_type_variation = &"RichTextLabelTitle"
+bbcode_enabled = true
+text = "[wave]Название игры"
+fit_content = true
+autowrap_mode = 0
+
+[node name="PlayButton" parent="PanelContainer/VBoxContainer" unique_id=1564832545 instance=ExtResource("1_v6ljw")]
+custom_minimum_size = Vector2(250, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="OptionsButton" parent="PanelContainer/VBoxContainer" unique_id=2132115146 instance=ExtResource("1_v6ljw")]
+custom_minimum_size = Vector2(250, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Настройки"
+
+[node name="QuitButton" parent="PanelContainer/VBoxContainer" unique_id=948422038 instance=ExtResource("1_v6ljw")]
+custom_minimum_size = Vector2(250, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Выход"
+
+[node name="Music" type="AudioStreamPlayer2D" parent="." unique_id=545957457]
+stream = ExtResource("4_pjjyy")
+autoplay = true
+bus = &"Music"
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=377714364]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -153.0
+offset_right = 157.0
+offset_bottom = -11.0
+grow_vertical = 0
+texture = ExtResource("5_vlit4")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="." unique_id=82503454]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 147.0
+offset_top = -34.0
+offset_right = 296.0
+offset_bottom = -22.0
+grow_vertical = 0
+text = "By Маги в джеме"
+
+[node name="TailCursor" type="Line2D" parent="." unique_id=1699455466]
+width_curve = SubResource("Curve_pjjyy")
+default_color = Color(1, 0.27450982, 0.43529412, 0.69411767)
+gradient = SubResource("Gradient_wtxek")
+begin_cap_mode = 2
+script = ExtResource("7_pjjyy")
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/OptionsButton" to="PanelContainer/VBoxContainer/OptionsButton" method="_on_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/QuitButton" to="PanelContainer/VBoxContainer/QuitButton" method="_on_pressed"]

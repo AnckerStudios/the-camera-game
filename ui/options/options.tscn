@@ -1,0 +1,139 @@
+[gd_scene format=3 uid="uid://b4y23lfljnid0"]
+
+[ext_resource type="Theme" uid="uid://cmv6w0rmt8n1v" path="res://resources/theme/option_theme.tres" id="1_2j2dl"]
+[ext_resource type="PackedScene" uid="uid://dm1q2hktewkrd" path="res://ui/buttons/play_button.tscn" id="1_gsckh"]
+[ext_resource type="Script" uid="uid://d0xwaq46e6rip" path="res://ui/options/options.gd" id="2_3baf4"]
+[ext_resource type="Script" uid="uid://dcx6ntt32u81f" path="res://ui/options/master_mute.gd" id="3_f75v3"]
+[ext_resource type="Script" uid="uid://bv42ivcic00al" path="res://ui/options/music_controller.gd" id="3_lpsnn"]
+[ext_resource type="Script" uid="uid://73gelk3qs5gw" path="res://ui/options/master_controller.gd" id="4_2j2dl"]
+[ext_resource type="Script" uid="uid://cckfr3i0owjb7" path="res://ui/options/sfx_controller.gd" id="4_f75v3"]
+[ext_resource type="Script" uid="uid://bju5yek66ghmd" path="res://ui/options/music_mute.gd" id="5_m4e3p"]
+[ext_resource type="Script" uid="uid://c32tnwgcfyj4" path="res://ui/options/sfx_mute.gd" id="7_xoydh"]
+[ext_resource type="Texture2D" uid="uid://c7ncshdb7uwaj" path="res://resources/asset/Magi v jame png (2).png" id="10_xoydh"]
+[ext_resource type="Script" uid="uid://cn41jx7qxfb2f" path="res://ui/menu/tail_cursore.gd" id="11_2rgm2"]
+
+[sub_resource type="Curve" id="Curve_3w8j7"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.4044944), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_7srqt"]
+interpolation_mode = 2
+colors = PackedColorArray(1, 1, 1, 0, 1, 0.2627451, 0.63529414, 0.69803923)
+
+[node name="Options" type="Control" unique_id=575043248]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_2j2dl")
+script = ExtResource("2_3baf4")
+
+[node name="Options" type="PanelContainer" parent="." unique_id=84731277]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Options" unique_id=939484361]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Title" type="RichTextLabel" parent="Options/VBoxContainer" unique_id=1919284401]
+layout_mode = 2
+theme_type_variation = &"RichTextLabelTitle"
+bbcode_enabled = true
+text = "[wave]настройки"
+fit_content = true
+autowrap_mode = 0
+
+[node name="MasterMute" type="CheckBox" parent="Options/VBoxContainer" unique_id=549911436]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "общая громкость "
+script = ExtResource("3_f75v3")
+
+[node name="MasterController" type="HSlider" parent="Options/VBoxContainer" unique_id=1369975821]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+script = ExtResource("4_2j2dl")
+
+[node name="MusicMute" type="CheckBox" parent="Options/VBoxContainer" unique_id=317630113]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "громкость музыки"
+script = ExtResource("5_m4e3p")
+
+[node name="MusicController" type="HSlider" parent="Options/VBoxContainer" unique_id=527179811]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+script = ExtResource("3_lpsnn")
+
+[node name="SFXMute" type="CheckBox" parent="Options/VBoxContainer" unique_id=1321403412]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "громкость эффектов"
+script = ExtResource("7_xoydh")
+
+[node name="SFXController" type="HSlider" parent="Options/VBoxContainer" unique_id=275510658]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+script = ExtResource("4_f75v3")
+
+[node name="Back" parent="Options/VBoxContainer" unique_id=498921403 instance=ExtResource("1_gsckh")]
+custom_minimum_size = Vector2(250, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Назад"
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=834713519]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -153.0
+offset_right = 157.0
+offset_bottom = -11.0
+grow_vertical = 0
+texture = ExtResource("10_xoydh")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="." unique_id=1139239212]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 147.0
+offset_top = -34.0
+offset_right = 296.0
+offset_bottom = -22.0
+grow_vertical = 0
+text = "By Маги в джеме"
+
+[node name="Line2D" type="Line2D" parent="." unique_id=1342678673]
+width_curve = SubResource("Curve_3w8j7")
+default_color = Color(1, 0.27450982, 0.43529412, 0.69411767)
+gradient = SubResource("Gradient_7srqt")
+begin_cap_mode = 2
+script = ExtResource("11_2rgm2")
+
+[connection signal="pressed" from="Options/VBoxContainer/MasterMute" to="Options/VBoxContainer/MasterMute" method="_on_pressed"]
+[connection signal="value_changed" from="Options/VBoxContainer/MasterController" to="." method="_on_music_controller_value_changed"]
+[connection signal="value_changed" from="Options/VBoxContainer/MasterController" to="Options/VBoxContainer/MasterController" method="_on_value_changed"]
+[connection signal="pressed" from="Options/VBoxContainer/MusicMute" to="Options/VBoxContainer/MusicMute" method="_on_pressed"]
+[connection signal="value_changed" from="Options/VBoxContainer/MusicController" to="." method="_on_music_controller_value_changed"]
+[connection signal="value_changed" from="Options/VBoxContainer/MusicController" to="Options/VBoxContainer/MusicController" method="_on_value_changed"]
+[connection signal="pressed" from="Options/VBoxContainer/SFXMute" to="Options/VBoxContainer/SFXMute" method="_on_pressed"]
+[connection signal="value_changed" from="Options/VBoxContainer/SFXController" to="." method="_on_music_controller_value_changed"]
+[connection signal="value_changed" from="Options/VBoxContainer/SFXController" to="Options/VBoxContainer/SFXController" method="_on_value_changed"]
+[connection signal="pressed" from="Options/VBoxContainer/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Options/VBoxContainer/Back" to="Options/VBoxContainer/Back" method="_on_pressed"]

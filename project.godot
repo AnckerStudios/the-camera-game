@@ -11,8 +11,13 @@ config_version=5
 [application]
 
 config/name="TheCameraGame"
+run/main_scene="uid://dkfij74x60580"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://resources/texture/icon.svg"
+
+[audio]
+
+buses/default_bus_layout="uid://l12p7u0id6b"
 
 [display]
 
