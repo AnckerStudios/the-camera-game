@@ -74,6 +74,7 @@ func _get_cursor_offset() -> Vector3:
 
 ## Задаёт интенсивность покачивания: 0 — выключено, 1 — полная амплитуда.
 ## Параметры действуют до следующего вызова; пропущенные используют значения аргументов по умолчанию.
+
 func set_sway_amount(amount: float = 1.0, amplitude: float = 0.0, frequency: float = 0.6, smoothing: float = 10.0) -> void:
 	_active_sway_amplitude = maxf(amplitude, 0.0)
 	_active_sway_frequency = maxf(frequency, 0.0)

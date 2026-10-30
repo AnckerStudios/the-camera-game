@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" path="res://gamelogic/weapon/weapon_revolver.tscn" id="6_revolver"]
 [ext_resource type="PackedScene" uid="uid://cquasyawaifv" path="res://gamelogic/player/cone/view_cone.tscn" id="7_cone"]
 
+[ext_resource type="Script" path="res://gamelogic/player/camera/wall_cutout.gd" id="20_cutout"]
+
 [sub_resource type="CapsuleShape3D" id="Shape"]
 radius = 0.35
 height = 1.8
@@ -56,3 +58,6 @@ script = ExtResource("4_holder")
 [node name="MouseTracker" type="Node" parent="." unique_id=2016091666 node_paths=PackedStringArray("target")]
 script = ExtResource("3")
 target = NodePath("..")
+
+[node name="WallCutout" type="Node" parent="."]
+script = ExtResource("20_cutout")
