@@ -36,21 +36,25 @@ var _jump_hold_remaining: float = 0.0
 var _coyote_remaining: float = 0.0
 var _fall_seconds: float = 0.0
 
+var _mouse_target: Vector3
+var _has_mouse_target: bool = false
+
 @onready var controls = $PlayerInput
 @onready var visual: Node3D = $Visual
 
 
 func _ready() -> void:
 	controls.dash.connect(_on_dash_requested)
+	$MouseTracker.target_changed.connect(_on_mouse_target_changed)
 
 
 func _physics_process(delta: float) -> void:
 	var direction := _get_movement_direction()
 	_update_dash_and_movement(direction, delta)
 	_apply_gravity_and_jump(delta)
-	if _dash_remaining <= 0.0:
-		_rotate_visual(direction, delta)
+
 	move_and_slide()
+	_update_mouse_facing(delta)
 	_reset_if_fallen()
 
 
@@ -147,9 +151,24 @@ func _update_dash_and_movement(direction: Vector3, delta: float) -> void:
 	if _dash_remaining > 0.0:
 		velocity.x = _dash_direction.x * dash_speed
 		velocity.z = _dash_direction.z * dash_speed
-		_rotate_visual(_dash_direction, delta)
+
 		_dash_remaining = maxf(_dash_remaining - delta, 0.0)
 		if _dash_remaining <= 0.0:
 			_dash_cooldown_remaining = dash_cooldown_seconds
 	else:
 		_update_horizontal_velocity(direction, delta)
+
+
+## Получает цель от отдельного узла слежения за курсором.
+func _on_mouse_target_changed(world_position: Vector3) -> void:
+	_mouse_target = world_position
+	_has_mouse_target = true
+
+
+## Направление взгляда не зависит от клавиш движения и рывка.
+func _update_mouse_facing(delta: float) -> void:
+	if not _has_mouse_target:
+		return
+	var direction := _mouse_target - global_position
+	direction.y = 0.0
+	_rotate_visual(direction.normalized(), delta)
