@@ -15,11 +15,10 @@ var resistance_physical: float
 var resistance_energetic: float
 
 func _ready() -> void:
-	_update_cone_visibility()
+	add_child(ConeVisibility.new())
 	add_to_group(MONSTER_GROUP)
 
 func _physics_process(delta: float) -> void:
-	_update_cone_visibility()
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
@@ -31,16 +30,6 @@ func _physics_process(delta: float) -> void:
 
 func update_target_location(target_location: Vector3) -> void:
 	nav_agent.target_position = target_location
-
-func _update_cone_visibility() -> void:
-	var cones := get_tree().get_nodes_in_group(&"visibility_cones")
-	# Сцены без конуса сохраняют обычное отображение мишени.
-	var inside := cones.is_empty()
-	for cone in cones:
-		if cone.contains_world_point(global_position):
-			inside = true
-			break
-	visible = inside
 
 func take_damage(amount: float, source: Node) -> void:
 	var resistance: float
