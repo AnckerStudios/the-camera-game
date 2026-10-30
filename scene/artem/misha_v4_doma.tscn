@@ -5,8 +5,9 @@
 [ext_resource type="Script" uid="uid://depwexin4lwf1" path="res://gamelogic/player/camera/isometric_camera.gd" id="3_kbvua"]
 [ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="4_s1bv7"]
 [ext_resource type="Script" uid="uid://cmkrno3x3fyie" path="res://gamelogic/weapon/damage_dummy.gd" id="5_5egmh"]
-[ext_resource type="PackedScene" uid="uid://w3p8l3qnm13a" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="6_4ackd"]
+[ext_resource type="PackedScene" uid="uid://cjuq8g0mbb8h8" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="6_4ackd"]
 [ext_resource type="PackedScene" uid="uid://by6ubidcpixtr" path="res://gamelogic/items/pickup_item.tscn" id="7_pickup_item"]
+[ext_resource type="PackedScene" uid="uid://c2g4ugy8n7yeu" path="res://resources/model/world/barrel.glb" id="8_barrel"]
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 1
@@ -15,9 +16,9 @@ ambient_light_source = 3
 ambient_light_color = Color(0.35, 0.42, 0.6, 1)
 ambient_light_energy = 0.15
 
-[sub_resource type="BoxShape3D" id="DummyShape"]
-
-[sub_resource type="CylinderMesh" id="DummyMesh"]
+[sub_resource type="CylinderShape3D" id="DummyShape"]
+height = 1.0
+radius = 0.275
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_8dnhd"]
 vertices = PackedVector3Array(-10, 0.5, 8.75, -8, 0.5, 8.5, -8, 0.5, 7.75, -10, 0.5, 7.5, -14.5, 0.5, 14.5, -10, 0.5, 4.75, -10, 0.5, 3.5, -10, 0.5, -3.25, -8, 0.5, -3.5, -8, 0.5, -4.25, -10, 0.5, -4.5, -14.5, 0.5, -14.5, -10.25, 0.5, 14.5, -10, 0.5, 11.5, -9.75, 0.5, -7.5, -3.75, 0.5, -7.5, -3.75, 0.5, -8.25, -10, 0.5, -8.5, -10, 0.5, -0.5, -10, 0.5, 0.75, -9.75, 0.5, -11.5, -4.5, 0.5, -11.5, -4.5, 0.5, -14.5, -2.25, 0.5, -8.75, -1.75, 0.5, -7.25, -1.25, 0.5, -3.25, -1, 0.5, 0.5, -0.75, 0.5, 2.25, 14.5, 0.5, 2, -1.75, 0.5, -4.75, -3.25, 0.5, -4.25, -3.25, 0.5, -3.5, 14.5, 0.5, -14.5, -1.25, 0.5, -1, -2.25, 0.5, -11.25, -9, 1.5, -10.5, -9, 1.5, -9.25, -6.75, 1.5, -9.25, -6.75, 1.5, -10.5, -5.5, 1.5, -10.5, -5.5, 1.5, -9.25, -3.25, 1.5, -9.25, -3.25, 1.5, -10.5, -9, 1.5, -6.5, -9, 1.5, -5.25, -6.75, 1.5, -5.25, -6.75, 1.5, -6.5, -5, 1.5, -6.5, -5, 1.5, -5.25, -2.75, 1.5, -5.25, -2.75, 1.5, -6.5, -0.5, 0.5, 4.5, -0.75, 0.5, 3, -1.25, 0.5, 3.75, -1.75, 0.5, -0.25, -6.25, 0.5, 7.75, -5.75, 0.5, 8.75, -6.25, 0.5, -0.25, -5.75, 0.5, 0.75, -4.75, 0.5, 0.5, -5.5, 0.5, -0.5, -5.75, 0.5, -0.75, -5.75, 0.5, 7.25, -4, 0.5, 8.75, -4.5, 0.5, 7.5, -5.75, 0.5, -3.25, -5.5, 0.5, -3.25, -1.75, 0.5, 8.5, -1.75, 0.5, 7.75, -4.5, 0.5, 4.75, -5, 0.5, 3.5, -6.25, 0.5, 3.75, -5.75, 0.5, 4.75, -6, 0.5, 11.5, -4, 0.5, 11.5, -5.75, 0.5, 3.25, -9, 1.5, -2.5, -9, 1.5, -1.25, -6.75, 1.5, -1.25, -6.75, 1.5, -2.5, -4.5, 1.5, -2.5, -4.5, 1.5, -1.25, -2.25, 1.5, -1.25, -2.25, 1.5, -2.5, -9, 1.5, 1.5, -9, 1.5, 2.75, -6.75, 1.5, 2.75, -6.75, 1.5, 1.5, -4, 1.5, 1.5, -4, 1.5, 2.75, -1.75, 1.5, 2.75, -1.75, 1.5, 1.5, -0.25, 0.5, 7.25, 0.25, 0.5, 8.75, 0.25, 0.5, 11.25, 0.25, 0.5, 14.5, 14.5, 0.5, 14.5, -9, 1.5, 5.5, -9, 1.5, 6.75, -6.75, 1.5, 6.75, -6.75, 1.5, 5.5, -3.5, 1.5, 5.5, -3.5, 1.5, 6.75, -1.25, 1.5, 6.75, -1.25, 1.5, 5.5, -9, 1.5, 9.5, -9, 1.5, 10.75, -6.75, 1.5, 10.75, -6.75, 1.5, 9.5, -3, 1.5, 9.5, -3, 1.5, 10.75, -0.75, 1.5, 10.75, -0.75, 1.5, 9.5, -0.25, 0.5, 11.75)
@@ -76,8 +77,8 @@ script = ExtResource("5_5egmh")
 [node name="Shape" type="CollisionShape3D" parent="Dummy1" unique_id=830365736]
 shape = SubResource("DummyShape")
 
-[node name="Mesh" type="MeshInstance3D" parent="Dummy1" unique_id=1282717430]
-mesh = SubResource("DummyMesh")
+[node name="Mesh" parent="Dummy1" unique_id=1282717430 instance=ExtResource("8_barrel")]
+transform = Transform3D(0.27, 0, 0, 0, 0.27, 0, 0, 0, 0.27, 0, -0.0171, 0)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=908089932]
 navigation_mesh = SubResource("NavigationMesh_8dnhd")
@@ -290,6 +291,8 @@ mesh = SubResource("TestPlatformMesh")
 
 [node name="Ground" type="StaticBody3D" parent="NavigationRegion3D" unique_id=67163204]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Ground" unique_id=1151707973]
 shape = SubResource("FloorShape")
