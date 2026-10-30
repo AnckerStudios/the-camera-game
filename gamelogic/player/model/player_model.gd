@@ -14,7 +14,7 @@ extends Node3D
 ## Плавность смены направления в смешивании.
 @export var blend_smoothing := 10.0
 ## Скорость возврата модели к направлению взгляда после кувырка.
-@export var face_back_speed := 12.0
+@export var face_back_speed := 6.0
 
 const ROLL_ANIMATION := &"move/roll"
 
@@ -60,7 +60,7 @@ func _on_body_dashed(direction: Vector3, duration: float) -> void:
 ## Во время кувырка модель смотрит туда, куда катится, а не на курсор;
 ## родитель (взгляд) продолжает поворачиваться, поэтому направление держится в мировых осях.
 func _update_facing(delta: float) -> void:
-	if _roll_remaining > 0.0:
+	if _roll_remaining > 0.5:
 		_roll_remaining -= delta
 		global_rotation.y = _roll_yaw
 	else:
