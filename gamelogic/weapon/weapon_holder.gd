@@ -3,6 +3,10 @@ extends Node3D
 
 ## Держатель оружия игрока: дочерние Weapon, переключение, ввод и проброс состояния в PlayerState.
 
+## Узел, вдоль -Z которого целится оружие. Держатель может сидеть на кисти и качаться
+## вместе с анимацией, а стрелять нужно туда, куда смотрит персонаж. Без узла - сам держатель.
+@export var aim: Node3D
+
 var current: Weapon
 
 var _index := -1
@@ -37,6 +41,10 @@ func get_weapons() -> Array[Weapon]:
 		if child is Weapon:
 			result.append(child)
 	return result
+
+
+func get_aim_direction() -> Vector3:
+	return -(aim if aim else self).global_basis.z
 
 
 func select(index: int) -> void:

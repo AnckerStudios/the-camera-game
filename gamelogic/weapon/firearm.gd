@@ -136,10 +136,14 @@ func _load_rounds(count: int) -> void:
 	ammo_changed.emit(loaded, capacity, reserve_ammo)
 
 
-## Направление выстрела в плоскости пола.
+## Направление выстрела в плоскости пола. В держателе - по его прицелу, а не по дулу,
+## которое качается вместе с анимацией рук.
 func _spread_direction() -> Vector3:
 	var half := deg_to_rad(spread_degrees) / 2.0
 	var forward := -_muzzle.global_basis.z
+	var holder := get_parent() as WeaponHolder
+	if holder:
+		forward = holder.get_aim_direction()
 	forward.y = 0.0
 	return forward.normalized().rotated(Vector3.UP, randf_range(-half, half))
 

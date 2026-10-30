@@ -30,13 +30,14 @@ shape = SubResource("Shape")
 [node name="PlayerModel" parent="Visual" node_paths=PackedStringArray("body") instance=ExtResource("8_model")]
 body = NodePath("../..")
 
-[node name="WeaponHolder" type="Node3D" parent="Visual" unique_id=1611209214]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 1.1, -0.15)
+[node name="WeaponHolder" type="Node3D" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/RightHandGrip" unique_id=1611209214 node_paths=PackedStringArray("aim")]
+transform = Transform3D(0.61163926, 0.77173275, -0.1132051, -0.1943444, 0.011461118, -0.9718994, -0.755392, 0.6219218, 0.15838495, -0.064754605, -0.10527697, -0.26346976)
 script = ExtResource("4_holder")
+aim = NodePath("../../../../../..")
 
-[node name="WeaponDoubleShotgun" parent="Visual/WeaponHolder" unique_id=1504881159 instance=ExtResource("5_shotgun")]
+[node name="WeaponDoubleShotgun" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/RightHandGrip/WeaponHolder" unique_id=1504881159 instance=ExtResource("5_shotgun")]
 
-[node name="WeaponRevolver" parent="Visual/WeaponHolder" unique_id=1816449901 instance=ExtResource("6_revolver")]
+[node name="WeaponRevolver" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/RightHandGrip/WeaponHolder" unique_id=1816449901 instance=ExtResource("6_revolver")]
 
 [node name="ViewCone" parent="Visual" unique_id=2048807598 instance=ExtResource("7_cone")]
 
