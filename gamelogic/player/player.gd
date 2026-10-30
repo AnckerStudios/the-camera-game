@@ -1,6 +1,8 @@
 extends CharacterBody3D
 ## Управляет движением персонажа относительно камеры, прыжком и поворотом модели.
 
+signal dashed(direction: Vector3, duration: float)
+
 ## Максимальная скорость движения по земле.
 @export var speed: float = 3.0
 ## Скорость разгона и торможения.
@@ -23,10 +25,13 @@ extends CharacterBody3D
 ## Максимальное время влияния удержания на подъём после начала прыжка.
 @export_range(0.0, 1.0, 0.01) var max_jump_hold_seconds: float = 0.15
 
-## Горизонтальная скорость, длительность и пауза после рывка.
-@export_range(0.1, 30.0, 0.1) var dash_speed: float = 10.0
-@export_range(0.01, 1.0, 0.01) var dash_seconds: float = 0.15
-@export_range(0.0, 5.0, 0.05) var dash_cooldown_seconds: float = 0.6
+## Дистанция, длительность и пауза после рывка.
+@export_range(0.1, 10.0, 0.1) var dash_distance: float = 2.9
+@export_range(0.01, 2.0, 0.01) var dash_seconds: float = 0.9
+@export_range(0.0, 5.0, 0.05) var dash_cooldown_seconds: float = 0.4
+## Профиль рывка: x - доля времени, y - доля пройденной дистанции.
+## Повторяет смещение бёдер в анимации кувырка, чтобы ноги не скользили. Без кривой - равномерно.
+@export var dash_curve: Curve = preload("res://resources/animation/player/roll_motion.tres")
 
 var _dash_remaining: float = 0.0
 var _dash_cooldown_remaining: float = 0.0
@@ -138,26 +143,39 @@ func _reset_if_fallen() -> void:
 func _on_dash_requested() -> void:
 	if _dash_remaining > 0.0 or _dash_cooldown_remaining > 0.0:
 		return
-	_dash_direction = _get_movement_direction()
+	
+	_dash_direction = _calc_facing_direction()
 	if _dash_direction.is_zero_approx():
 		_dash_direction = -visual.global_basis.z
 	_dash_direction.y = 0.0
 	_dash_direction = _dash_direction.normalized()
 	_dash_remaining = dash_seconds
+	dashed.emit(_dash_direction, dash_seconds)
 
 
 ## Рывок заменяет горизонтальное движение, сохраняя прыжок и гравитацию.
+## Скорость берётся из профиля: путь за этот кадр, делённый на его длительность.
 func _update_dash_and_movement(direction: Vector3, delta: float) -> void:
 	_dash_cooldown_remaining = maxf(_dash_cooldown_remaining - delta, 0.0)
 	if _dash_remaining > 0.0:
+		var from := _dash_progress(1.0 - _dash_remaining / dash_seconds)
+		_dash_remaining = maxf(_dash_remaining - delta, 0.0)
+		var to := _dash_progress(1.0 - _dash_remaining / dash_seconds)
+		var dash_speed := (to - from) * dash_distance / delta
 		velocity.x = _dash_direction.x * dash_speed
 		velocity.z = _dash_direction.z * dash_speed
 
-		_dash_remaining = maxf(_dash_remaining - delta, 0.0)
 		if _dash_remaining <= 0.0:
 			_dash_cooldown_remaining = dash_cooldown_seconds
 	else:
 		_update_horizontal_velocity(direction, delta)
+
+
+## Доля пройденной дистанции рывка к доле прошедшего времени.
+func _dash_progress(time_fraction: float) -> float:
+	if dash_curve:
+		return dash_curve.sample(clampf(time_fraction, 0.0, 1.0))
+	return time_fraction
 
 
 ## Получает цель от отдельного узла слежения за курсором.
@@ -170,10 +188,13 @@ func _on_mouse_target_changed(world_position: Vector3) -> void:
 func _update_mouse_facing(delta: float) -> void:
 	if not _has_mouse_target:
 		return
+
+	_rotate_visual(_calc_facing_direction(), delta)
+
+func _calc_facing_direction() -> Vector3:
 	var direction := _mouse_target - global_position
 	direction.y = 0.0
-	_rotate_visual(direction.normalized(), delta)
-
+	return direction.normalized()
 
 ## Передаёт камере фактическую скорость ходьбы; в воздухе и при рывке покачивание затухает.
 func _update_camera_walking() -> void:

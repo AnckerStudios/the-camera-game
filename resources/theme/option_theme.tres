@@ -1,0 +1,71 @@
+[gd_resource type="Theme" format=3 uid="uid://cmv6w0rmt8n1v"]
+
+[ext_resource type="StyleBox" uid="uid://dxfolwbf76n3m" path="res://resources/theme/panel_container_box_flat.tres" id="1_66n65"]
+[ext_resource type="Texture2D" uid="uid://bd6rcwwagttw8" path="res://resources/asset/mute.png" id="2_mxknm"]
+[ext_resource type="FontFile" uid="uid://f6pajsoy2ud2" path="res://resources/font/Univermag-Regular.otf" id="2_rlwcv"]
+[ext_resource type="Texture2D" uid="uid://cw6bp8snbqm6g" path="res://resources/asset/unmute.png" id="3_di31a"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ses6b"]
+bg_color = Color(0.7294118, 0.23137255, 0.4, 0.99607843)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 0.99607843)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u5fl6"]
+bg_color = Color(0.7294118, 0.23137255, 0.4, 0.99607843)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 0.99607843)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_77h3e"]
+bg_color = Color(1, 0.5764706, 0.3882353, 0.99607843)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m4e3p"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7oucm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hrjyy"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_khnfd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f75v3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s7pb1"]
+
+[resource]
+default_font = ExtResource("2_rlwcv")
+default_font_size = 0
+Button/colors/font_pressed_color = Color(0, 0, 0, 0.99607843)
+Button/font_sizes/font_size = 32
+Button/styles/focus = SubResource("StyleBoxFlat_ses6b")
+Button/styles/hover = SubResource("StyleBoxFlat_u5fl6")
+Button/styles/normal = ExtResource("1_66n65")
+Button/styles/pressed = SubResource("StyleBoxFlat_77h3e")
+CheckBox/colors/checkbox_checked_color = Color(1, 1, 1, 1)
+CheckBox/colors/checkbox_unchecked_color = Color(1, 1, 1, 1)
+CheckBox/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+CheckBox/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
+CheckBox/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+CheckBox/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+CheckBox/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+CheckBox/colors/font_outline_color = Color(1, 1, 1, 0.99607843)
+CheckBox/colors/font_pressed_color = Color(1, 1, 1, 1)
+CheckBox/constants/h_separation = 10
+CheckBox/constants/line_spacing = 0
+CheckBox/icons/checked = ExtResource("2_mxknm")
+CheckBox/icons/unchecked = ExtResource("3_di31a")
+CheckBox/styles/focus = SubResource("StyleBoxEmpty_m4e3p")
+CheckBox/styles/hover = SubResource("StyleBoxEmpty_7oucm")
+CheckBox/styles/hover_pressed = SubResource("StyleBoxEmpty_hrjyy")
+CheckBox/styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_khnfd")
+CheckBox/styles/normal = SubResource("StyleBoxEmpty_f75v3")
+CheckBox/styles/pressed = SubResource("StyleBoxEmpty_s7pb1")
+PanelContainer/styles/panel = ExtResource("1_66n65")
+RichTextLabel/colors/default_color = Color(1, 1, 1, 0.99607843)
+RichTextLabelTitle/base_type = &"RichTextLabel"
+RichTextLabelTitle/font_sizes/normal_font_size = 90
+VBoxContainer/constants/separation = 20

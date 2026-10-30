@@ -19,6 +19,6 @@ spot_angle_attenuation = 3.0
 
 [node name="PeripheralLight" type="OmniLight3D" parent="." unique_id=166883826]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
-light_color = Color(0.75, 0.8, 0.95, 1)
+light_color = Color(1, 0.95, 0.85, 1)
 light_energy = 0.8
 omni_range = 2.0
