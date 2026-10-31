@@ -4,8 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://kmwuw8pmi1bl" path="res://gamelogic/player/player.tscn" id="2_lntd3"]
 [ext_resource type="Script" uid="uid://depwexin4lwf1" path="res://gamelogic/player/camera/isometric_camera.gd" id="3_wemht"]
 [ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="4_si8ks"]
-[ext_resource type="Script" uid="uid://d2h6j804pc4gd" path="res://gamelogic/environment/damage_dummy.gd" id="5_4d73h"]
+[ext_resource type="Script" uid="uid://cj0kaua4ww26t" path="res://gamelogic/environment/explosive_barrel.gd" id="5_j7vhw"]
 [ext_resource type="PackedScene" uid="uid://c2g4ugy8n7yeu" path="res://resources/model/world/barrel.glb" id="6_ca088"]
+[ext_resource type="AudioStream" uid="uid://bsv1wusib4t65" path="res://resources/music/gun.mp3" id="6_t2knu"]
 [ext_resource type="PackedScene" uid="uid://dhn6j3uin8x8b" path="res://gamelogic/props/pines/pine_1.tscn" id="7_4cm51"]
 [ext_resource type="PackedScene" uid="uid://w3p8l3qnm13a" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="7_fvh2d"]
 [ext_resource type="PackedScene" uid="uid://b27riekc87kn0" path="res://gamelogic/props/pines/pine_2.tscn" id="8_om8af"]
@@ -90,7 +91,8 @@ size = 9.0
 
 [node name="Dummy2" type="StaticBody3D" parent="." unique_id=1147076394]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4581802, 1.5, 3.1996922)
-script = ExtResource("5_4d73h")
+script = ExtResource("5_j7vhw")
+explosion_sound = ExtResource("6_t2knu")
 
 [node name="Shape" type="CollisionShape3D" parent="Dummy2" unique_id=1064016809]
 shape = SubResource("DummyShape")
@@ -100,7 +102,8 @@ transform = Transform3D(0.27, 0, 0, 0, 0.27, 0, 0, 0, 0.27, 0, -0.0171, 0)
 
 [node name="Dummy1" type="StaticBody3D" parent="." unique_id=1316338027]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.8939977, 0.5, 1.6000023)
-script = ExtResource("5_4d73h")
+script = ExtResource("5_j7vhw")
+explosion_sound = ExtResource("6_t2knu")
 
 [node name="Shape" type="CollisionShape3D" parent="Dummy1" unique_id=830365736]
 shape = SubResource("DummyShape")
