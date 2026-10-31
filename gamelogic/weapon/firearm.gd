@@ -43,6 +43,12 @@ const FLASH_DURATION := 0.05
 ## Заряжать по одному патрону; выстрел прерывает перезарядку.
 @export var reload_per_round := false
 
+@export_group("Анимация")
+## Плеер анимаций
+@export var animator: AnimationPlayer
+## Анимация под reload_time. потом в методе растягиваем анимацию
+@export var reload_animation: StringName
+
 var loaded := 0
 var is_reloading := false
 
@@ -93,11 +99,13 @@ func reload() -> void:
 		return
 	is_reloading = true
 	_reload_timer = reload_time
+	_play_reload_animation()
 	reload_started.emit()
 
 
 func unequip() -> void:
 	is_reloading = false
+	_reset_animation()
 	super()
 
 
@@ -113,6 +121,7 @@ func shoot(rounds := 1) -> bool:
 		if not reload_per_round:
 			return false
 		is_reloading = false
+		_reset_animation()
 
 	rounds = clampi(rounds, 1, loaded)
 	loaded -= rounds
@@ -184,6 +193,20 @@ func _exclude() -> Array[RID]:
 			return [node.get_rid()]
 		node = node.get_parent()
 	return []
+
+
+## метод для растягивания анимации оружия под reload 
+func _play_reload_animation() -> void:
+	if not animator or not animator.has_animation(reload_animation):
+		return
+	var length := animator.get_animation(reload_animation).length
+	animator.play(reload_animation, -1.0, length / maxf(reload_time, 0.01))
+
+
+func _reset_animation() -> void:
+	if animator and animator.is_playing():
+		animator.seek(0.0, true)
+		animator.stop()
 
 
 func _flash() -> void:

@@ -4,8 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://do5npr5ry1lsy" path="res://resources/model/weapons/kal_shootgun.glb" id="2_model"]
 [ext_resource type="AudioStream" uid="uid://bsv1wusib4t65" path="res://resources/music/gun.mp3" id="3_dvrv3"]
 
-[node name="WeaponDoubleShotgun" type="Node3D" unique_id=360883226]
+[node name="WeaponDoubleShotgun" type="Node3D" unique_id=360883226 node_paths=PackedStringArray("animator")]
 script = ExtResource("1_firearm")
+animator = NodePath("Model/AnimationPlayer")
+reload_animation = &"Reload_002"
 damage = 12.0
 pellets = 8
 spread_degrees = 20.0
