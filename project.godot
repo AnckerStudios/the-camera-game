@@ -148,6 +148,10 @@ lights_and_shadows/positional_shadow/atlas_size.web=2048
 
 [shader_globals]
 
+grass_player_position={
+"type": "vec3",
+"value": Vector3(0, -1000, 0)
+}
 wall_cutout_target_uv={
 "type": "vec2",
 "value": Vector2(-10, -10)

@@ -300,10 +300,9 @@ func _exit_tree() -> void:
 	if is_instance_valid(_selected_pickup):
 		_selected_pickup.set_pickup_selected(false)
 
+## Трава приминается вокруг игрока; один глобальный параметр на все чанки травы.
 func _update_shader_parametrs() -> void:
-	if (get_tree().current_scene.has_node("MultiMeshInstance3D")):
-		var grass_node = get_tree().current_scene.get_node("MultiMeshInstance3D")
-		grass_node.set_deferred("instance_shader_parameters/player_position", position + Vector3(0, -0.1, 0))
+	RenderingServer.global_shader_parameter_set(&"grass_player_position", global_position + Vector3(0, -0.1, 0))
 
 func _on_hp_changed(value: float, max_value: float) -> void:
 	if value <= 0.0:
