@@ -1,5 +1,4 @@
 extends Control
-@onready var h_slider: HSlider = $Options/VBoxContainer/HSlider
 @onready var back: Button = $Options/VBoxContainer/Back
 @onready var label: Label = $Label
 

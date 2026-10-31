@@ -45,3 +45,7 @@ func set_ammo(loaded: int, capacity: int, reserve: int) -> void:
 	ammo_capacity = capacity
 	ammo_reserve = reserve
 	ammo_changed.emit(loaded, capacity, reserve)
+
+func reset() -> void:
+	battery = BATTERY_MAX
+	hp = HP_MAX

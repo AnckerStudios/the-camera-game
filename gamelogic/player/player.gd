@@ -54,11 +54,13 @@ var _has_mouse_target: bool = false
 
 
 func _ready() -> void:
+	PlayerState.reset()
 	_inspection = INSPECTION_SCENE.instantiate()
 	add_child(_inspection)
 	controls.dash.connect(_on_dash_requested)
 	controls.interaction.connect(_on_interaction_requested)
 	$MouseTracker.target_changed.connect(_on_mouse_target_changed)
+	PlayerState.hp_changed.connect(_on_hp_changed)
 
 
 func _physics_process(delta: float) -> void:
@@ -266,6 +268,13 @@ func _exit_tree() -> void:
 		_selected_pickup.set_pickup_selected(false)
 
 func _update_shader_parametrs() -> void:
-	var grass_node = get_tree().current_scene.get_node("MultiMeshInstance3D")
-	if (grass_node != null):
+	if (get_tree().current_scene.has_node("MultiMeshInstance3D")):
+		var grass_node = get_tree().current_scene.get_node("MultiMeshInstance3D")
 		grass_node.set_deferred("instance_shader_parameters/player_position", position + Vector3(0, -0.1, 0))
+
+func _on_hp_changed(value: float, max_value: float) -> void:
+	if value <= 0.0:
+		var scene_setting = preload("res://ui/dead/dead.tscn")
+		var scene =  scene_setting.instantiate()
+		add_child(scene)
+		get_tree().paused = true
