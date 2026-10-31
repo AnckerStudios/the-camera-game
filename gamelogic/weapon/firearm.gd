@@ -16,6 +16,7 @@ signal reload_started
 signal reload_finished
 
 const FLASH_DURATION := 0.05
+const ShotAudio = preload("res://gamelogic/weapon/spatial_shot_audio.gd")
 
 @export_group("Стрельба")
 ## Урон одной пули или дробины.
@@ -137,7 +138,7 @@ func shoot(rounds := 1) -> bool:
 	_flash()
 	fired.emit(rounds)
 	ammo_changed.emit(loaded, capacity, reserve_ammo)
-	shoot_sound.play()
+	ShotAudio.play(shoot_sound, _muzzle.global_position)
 	return true
 
 

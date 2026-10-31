@@ -1,33 +1,33 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cdfc88ww24to0"]
 
-[ext_resource type="Script" path="res://gamelogic/weapon/firearm.gd" id="1_firearm"]
+[ext_resource type="Script" uid="uid://b8cch1ux05ajn" path="res://gamelogic/weapon/firearm.gd" id="1_firearm"]
 [ext_resource type="PackedScene" uid="uid://csxbjx0mh82b6" path="res://resources/model/weapons/weapon_rev.glb" id="2_model"]
 [ext_resource type="AudioStream" uid="uid://bsv1wusib4t65" path="res://resources/music/gun.mp3" id="2_xyevx"]
 
-[node name="WeaponRevolver" type="Node3D"]
+[node name="WeaponRevolver" type="Node3D" unique_id=415486123]
 script = ExtResource("1_firearm")
-display_name = "РЕВОЛЬВЕР"
-one_handed = true
 damage = 35.0
 spread_degrees = 2.0
-max_range = 30.0
 fire_interval = 0.35
-capacity = 6
 reserve_ammo = 30
 reload_time = 0.45
 reload_per_round = true
+display_name = "РЕВОЛЬВЕР"
+one_handed = true
 
-[node name="Model" parent="." instance=ExtResource("2_model")]
+[node name="Model" parent="." unique_id=548983202 instance=ExtResource("2_model")]
 transform = Transform3D(-0.075, 0, 0, 0, 0.075, 0, 0, 0, -0.075, -0.19, 0.2475, -0.22)
 
-[node name="Muzzle" type="Marker3D" parent="."]
+[node name="Muzzle" type="Marker3D" parent="." unique_id=1089161438]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.19, 0.33, -0.4)
 
-[node name="Flash" type="OmniLight3D" parent="Muzzle"]
+[node name="Flash" type="OmniLight3D" parent="Muzzle" unique_id=2117685233]
 light_color = Color(1, 0.8, 0.5, 1)
 light_energy = 3.0
-omni_range = 5.0
 
 [node name="ShootSound" type="AudioStreamPlayer3D" parent="." unique_id=902234618]
 stream = ExtResource("2_xyevx")
+unit_size = 6.0
+max_distance = 55.0
+max_polyphony = 5
 bus = &"SFX"

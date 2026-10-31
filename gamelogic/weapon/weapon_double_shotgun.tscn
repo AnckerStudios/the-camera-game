@@ -6,8 +6,6 @@
 
 [node name="WeaponDoubleShotgun" type="Node3D" unique_id=360883226 node_paths=PackedStringArray("animator")]
 script = ExtResource("1_firearm")
-animator = NodePath("Model/AnimationPlayer")
-reload_animation = &"Reload_002"
 damage = 12.0
 pellets = 8
 spread_degrees = 20.0
@@ -17,6 +15,8 @@ secondary_fires_all = true
 capacity = 2
 reserve_ammo = 16
 reload_time = 1.6
+animator = NodePath("Model/AnimationPlayer")
+reload_animation = &"Reload_002"
 display_name = "ДВУХСТВОЛКА"
 
 [node name="Model" parent="." unique_id=1537325724 instance=ExtResource("2_model")]
@@ -32,4 +32,7 @@ omni_range = 6.0
 
 [node name="ShootSound" type="AudioStreamPlayer3D" parent="." unique_id=286487550]
 stream = ExtResource("3_dvrv3")
+unit_size = 6.0
+max_distance = 55.0
+max_polyphony = 5
 bus = &"SFX"
