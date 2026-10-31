@@ -1,0 +1,6 @@
+﻿[gd_scene format=3 uid="uid://bbmi88liihgep"]
+
+[ext_resource type="Script" uid="uid://bakm8eu10vhag" path="res://gamelogic/monster/monster_state.gd" id="1_poa18"]
+
+[node name="MonsterState" type="Node" unique_id=400886042]
+script = ExtResource("1_poa18")
