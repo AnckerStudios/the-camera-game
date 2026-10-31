@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://cqodli31gp8yb"]
+
+[ext_resource type="Theme" uid="uid://cmv6w0rmt8n1v" path="res://resources/theme/option_theme.tres" id="1_o43wt"]
+[ext_resource type="Script" uid="uid://bihq8c51q83fw" path="res://ui/dead/dead.gd" id="2_b14hx"]
+[ext_resource type="PackedScene" uid="uid://dm1q2hktewkrd" path="res://ui/buttons/play_button.tscn" id="3_htr5m"]
+
+[sub_resource type="Theme" id="Theme_bag0u"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b5gw4"]
+bg_color = Color(0, 0, 0, 0.4392157)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 0.99607843)
+
+[node name="Dead" type="Control" unique_id=797633045]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_o43wt")
+script = ExtResource("2_b14hx")
+
+[node name="Dead" type="PanelContainer" parent="." unique_id=1277942918]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_bag0u")
+theme_override_styles/panel = SubResource("StyleBoxFlat_b5gw4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Dead" unique_id=2076561857]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 60
+
+[node name="Title" type="RichTextLabel" parent="Dead/VBoxContainer" unique_id=505194685]
+layout_mode = 2
+theme_type_variation = &"RichTextLabelTitle"
+bbcode_enabled = true
+text = "[wave]ты умер"
+fit_content = true
+autowrap_mode = 0
+
+[node name="Back" parent="Dead/VBoxContainer" unique_id=1564832545 instance=ExtResource("3_htr5m")]
+custom_minimum_size = Vector2(250, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "в меню"
+
+[connection signal="pressed" from="Dead/VBoxContainer/Back" to="." method="_on_back_pressed"]
