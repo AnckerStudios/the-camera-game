@@ -121,7 +121,10 @@ func prepare_shot(origin: Vector3, max_distance: float, excluded: Array[RID]) ->
 			shooter = node
 			break
 		node = node.get_parent()
-	_shot_target = _target_lock.acquire(origin, max_distance, excluded, shooter)
+	_shot_target = null
+	var acquired = _target_lock.acquire(origin, max_distance, excluded, shooter)
+	if is_instance_valid(acquired) and not acquired.is_queued_for_deletion():
+		_shot_target = acquired
 	if is_instance_valid(_shot_target):
 		_shot_direction = _target_lock.get_target_point(_shot_target) - origin
 
@@ -142,6 +145,10 @@ func has_shot_lock() -> bool:
 
 ## Обновляется после анимации руки, сохраняя наведение на движущуюся цель.
 func _process(delta: float) -> void:
+	if not is_instance_valid(_shot_target):
+		_shot_target = null
+	elif _shot_target.is_queued_for_deletion():
+		_shot_target = null
 	if _visual_lock_remaining > 0.0 and is_instance_valid(_shot_target) and not _shot_target.is_queued_for_deletion():
 		_visual_lock_remaining = maxf(_visual_lock_remaining - delta, 0.0)
 		_apply_visual_aim()

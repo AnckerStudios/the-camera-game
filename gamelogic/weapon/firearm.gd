@@ -33,12 +33,8 @@ const FLASH_DURATION := 0.05
 ## Альтернативная атака выпускает все заряженные патроны разом (дуплет).
 @export var secondary_fires_all := false
 @export_flags_3d_physics var hit_mask := 1
-## Вид сверху: игрок целится только по плоскости, поэтому пуля задевает всё
-## в вертикальной полосе вокруг дула - и низких пауков, и высоких призраков.
-@export var hit_band_below := 1.0
-@export var hit_band_above := 0.5
-## Толщина пули/дробины.
-@export var hit_width := 0.1
+## Области-триггеры по умолчанию не останавливают пули.
+@export var hit_areas: bool = false
 
 @export_group("Патроны")
 @export var capacity := 6
@@ -171,8 +167,8 @@ func _spread_direction() -> Vector3:
 	return forward.normalized().rotated(Vector3.UP, randf_range(-half, half))
 
 
-## Протягивает вертикальную полосу высотой hit_band_below + hit_band_above от дула
-## и бьёт первое, во что она упрётся.
+## Каждая пуля проверяется отдельно из центра персонажа; трассер начинается у дула.
+## Первое пересечённое препятствие останавливает пулю.
 func _fire_ray(direction: Vector3, pellet_damage: float = -1.0) -> void:
 	if direction.is_zero_approx() or max_range <= 0.0:
 		return
@@ -202,47 +198,43 @@ func _get_shot_origin() -> Vector3:
 	return holder.global_position if holder else global_position
 
 
-## Независимое первое попадание каждой дробины с сохранением допуска по высоте.
+## Точный луч: пол и декорации останавливают пулю только при реальном пересечении
+## её траектории. Точка и объект попадания получаются одним физическим запросом.
 func _trace_pellet(origin: Vector3, direction: Vector3) -> Dictionary:
-	var shape := BoxShape3D.new()
-	shape.size = Vector3(maxf(hit_width, 0.001),
-		maxf(hit_band_below + hit_band_above, 0.001), maxf(hit_width, 0.001))
-	var query := PhysicsShapeQueryParameters3D.new()
-	query.shape = shape
-	query.transform = Transform3D(Basis.looking_at(direction),
-		origin + Vector3.UP * (hit_band_above - hit_band_below) * 0.5)
-	query.collision_mask = hit_mask
-	query.collide_with_areas = true
-	query.exclude = _exclude()
-	query.margin = 0.001
-	var space := get_world_3d().direct_space_state
-	var hit := space.get_rest_info(query)
-	var travel := 0.0
+	var endpoint := origin + direction * max_range
+	var query := PhysicsRayQueryParameters3D.create(origin, endpoint, hit_mask, _exclude())
+	query.collide_with_areas = hit_areas
+	query.collide_with_bodies = true
+	query.hit_from_inside = true
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
 	if hit.is_empty():
-		query.motion = direction * max_range
-		var fractions := space.cast_motion(query)
-		if fractions[0] >= 1.0:
-			return {"endpoint": origin + direction * max_range, "target": null}
-		travel = clampf(fractions[1], 0.0, 1.0) * max_range
-		# Запрос контакта выполняется неподвижной формой в точке столкновения.
-		query.transform.origin += direction * (travel + 0.002)
-		query.motion = Vector3.ZERO
-		hit = space.get_rest_info(query)
-	var target: Object = null
-	if not hit.is_empty():
-		target = instance_from_id(hit.collider_id)
-	return {"endpoint": origin + direction * travel, "target": target}
+		return {"endpoint": endpoint, "target": null}
+	var collider: Node = hit.collider
+	return {"endpoint": hit.position, "target": _get_damage_receiver(collider)}
 
 
-## Исключает коллизию владельца из всех запросов отдельной дробины.
+## Коллизия может находиться в дочернем узле, а здоровье — в скрипте самого врага.
+func _get_damage_receiver(collider: Node) -> Node:
+	var node := collider
+	while is_instance_valid(node):
+		if node.has_method("take_damage"):
+			return node
+		node = node.get_parent()
+	return null
+
+
+## Исключает владельца и все его дочерние коллизии, включая экипировку.
 func _exclude() -> Array[RID]:
+	var excluded: Array[RID] = []
 	var node := get_parent()
 	while node:
 		if node is CollisionObject3D:
-			return [node.get_rid()]
+			excluded.append(node.get_rid())
+			for child in node.find_children("*", "CollisionObject3D", true, false):
+				excluded.append(child.get_rid())
+			break
 		node = node.get_parent()
-	return []
-
+	return excluded
 
 ## метод для растягивания анимации оружия под reload 
 func _play_reload_animation() -> void:
