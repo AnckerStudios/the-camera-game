@@ -94,6 +94,22 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "Назад"
 
+[node name="HBoxContainer" type="HBoxContainer" parent="Options/VBoxContainer" unique_id=1802759120]
+layout_mode = 2
+theme_override_constants/separation = 67
+
+[node name="BackPause" parent="Options/VBoxContainer/HBoxContainer" unique_id=1564832545 instance=ExtResource("1_gsckh")]
+custom_minimum_size = Vector2(250, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Назад"
+
+[node name="BackMenu" parent="Options/VBoxContainer/HBoxContainer" unique_id=740710589 instance=ExtResource("1_gsckh")]
+custom_minimum_size = Vector2(250, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "в Меню"
+
 [node name="TextureRect" type="TextureRect" parent="." unique_id=834713519]
 layout_mode = 1
 anchors_preset = 2
@@ -138,3 +154,5 @@ script = ExtResource("11_2rgm2")
 [connection signal="value_changed" from="Options/VBoxContainer/SFXController" to="." method="_on_music_controller_value_changed"]
 [connection signal="value_changed" from="Options/VBoxContainer/SFXController" to="Options/VBoxContainer/SFXController" method="_on_value_changed"]
 [connection signal="pressed" from="Options/VBoxContainer/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Options/VBoxContainer/HBoxContainer/BackPause" to="." method="_on_back_pause_pressed"]
+[connection signal="pressed" from="Options/VBoxContainer/HBoxContainer/BackMenu" to="." method="_on_back_menu_pressed"]
