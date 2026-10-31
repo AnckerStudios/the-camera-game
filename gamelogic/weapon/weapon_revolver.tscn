@@ -9,7 +9,6 @@ script = ExtResource("1_firearm")
 damage = 35.0
 spread_degrees = 2.0
 fire_interval = 0.35
-reserve_ammo = 30
 reload_time = 0.45
 reload_per_round = true
 display_name = "РЕВОЛЬВЕР"

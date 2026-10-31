@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://djumrh3554s1" path="res://scene/dima/test_level_dima_script.gd" id="1_l4sg3"]
 [ext_resource type="PackedScene" uid="uid://kmwuw8pmi1bl" path="res://gamelogic/player/player.tscn" id="2_lntd3"]
-[ext_resource type="Curve" path="res://resources/animation/player/roll_motion.tres" id="3_u8q8r"]
 [ext_resource type="Script" uid="uid://depwexin4lwf1" path="res://gamelogic/player/camera/isometric_camera.gd" id="3_wemht"]
 [ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="4_si8ks"]
 [ext_resource type="Script" uid="uid://cj0kaua4ww26t" path="res://gamelogic/environment/explosive_barrel.gd" id="5_j7vhw"]
@@ -77,20 +76,7 @@ shadow_enabled = true
 
 [node name="Player" parent="." unique_id=1732594493 instance=ExtResource("2_lntd3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
-speed = 2.5
-acceleration = 25.0
 jump_speed = 6.0
-turn_speed = 5.0
-coyote_seconds = 0.12
-fall_gravity_multiplier = 1.8
-fall_gravity_growth = 3.0
-max_fall_multiplier = 4.0
-released_jump_multiplier = 3.0
-max_jump_hold_seconds = 0.15
-dash_distance = 2.9
-dash_seconds = 0.9
-dash_cooldown_seconds = 0.4
-dash_curve = ExtResource("3_u8q8r")
 
 [node name="CameraRig" type="Node3D" parent="." unique_id=735580897 node_paths=PackedStringArray("target")]
 script = ExtResource("3_wemht")
