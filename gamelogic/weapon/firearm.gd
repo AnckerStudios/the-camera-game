@@ -39,7 +39,13 @@ const ShotAudio = preload("res://gamelogic/weapon/spatial_shot_audio.gd")
 
 @export_group("Патроны")
 @export var capacity := 6
-@export var reserve_ammo := 24
+## Запас хранится в инвентаре; само оружие содержит только магазин.
+var reserve_ammo: int:
+	get:
+		var inventory := _get_ammo_inventory()
+		return inventory.get_ammo_count(_ammo_id) if inventory else 0
+var _ammo_inventory: WeakRef
+var _ammo_id: StringName
 ## Время полной перезарядки или одного патрона, если reload_per_round.
 @export var reload_time := 1.5
 ## Заряжать по одному патрону; выстрел прерывает перезарядку.
@@ -137,20 +143,40 @@ func shoot(rounds := 1) -> bool:
 	return true
 
 
-func add_ammo(amount: int) -> void:
-	reserve_ammo += amount
+## Подключает общий запас патронов. WeakRef не удерживает удалённый инвентарь.
+func bind_ammo_inventory(inventory: Node, weapon_id: StringName = &"") -> void:
+	var previous := _get_ammo_inventory()
+	if previous and previous.changed.is_connected(_on_inventory_ammo_changed):
+		previous.changed.disconnect(_on_inventory_ammo_changed)
+	_ammo_inventory = weakref(inventory) if is_instance_valid(inventory) else null
+	_ammo_id = weapon_id
+	if is_instance_valid(inventory):
+		inventory.changed.connect(_on_inventory_ammo_changed)
+	_on_inventory_ammo_changed()
+
+
+func get_ammo_id() -> StringName:
+	return _ammo_id
+
+
+func _get_ammo_inventory() -> Node:
+	return _ammo_inventory.get_ref() as Node if _ammo_inventory else null
+
+
+func _on_inventory_ammo_changed() -> void:
 	ammo_changed.emit(loaded, capacity, reserve_ammo)
 
 
+## Патроны списываются при завершении перезарядки, для дробовика/револьвера — по одному.
 func _load_rounds(count: int) -> void:
-	count = mini(count, reserve_ammo)
-	loaded += count
-	reserve_ammo -= count
+	var inventory := _get_ammo_inventory()
+	if not inventory:
+		return
+	count = clampi(count, 0, capacity - loaded)
+	loaded += inventory.consume_ammo(_ammo_id, count)
 	ammo_changed.emit(loaded, capacity, reserve_ammo)
 
 
-## Направление выстрела в плоскости пола. В держателе - по его прицелу, а не по дулу,
-## которое качается вместе с анимацией рук.
 func _spread_direction() -> Vector3:
 	var half := deg_to_rad(spread_degrees) / 2.0
 	var forward := -_muzzle.global_basis.z

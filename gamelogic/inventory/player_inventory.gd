@@ -67,6 +67,8 @@ func equip_weapon(entry: InventoryEntry, slot: int) -> bool:
 		entry.weapon = _holder.create_inventory_weapon(entry.item.weapon_scene)
 		if not entry.weapon:
 			return false
+	if entry.weapon is Firearm:
+		entry.weapon.bind_ammo_inventory(self, entry.item.weapon_id)
 	for index in weapons.size():
 		if weapons[index] == entry:
 			weapons[index] = null
@@ -97,12 +99,44 @@ func use_item(entry: InventoryEntry) -> bool:
 		_consume(entry, 1)
 		return true
 	if entry.item.kind == InventoryItem.Kind.AMMO:
-		for candidate in entries:
-			if candidate.weapon is Firearm and candidate.item.weapon_id == entry.item.weapon_id:
-				candidate.weapon.add_ammo(entry.quantity)
-				_consume(entry, entry.quantity)
-				return true
+		# «Применить» запускает перезарядку совместимого оружия в руках.
+		if is_instance_valid(_holder) and _holder.current is Firearm:
+			var firearm := _holder.current as Firearm
+			if firearm.get_ammo_id() == entry.item.weapon_id:
+				firearm.reload()
+				return firearm.is_reloading
 	return false
+
+## Общий запас подходящих патронов во всех стопках инвентаря.
+func get_ammo_count(weapon_id: StringName) -> int:
+	if weapon_id.is_empty():
+		return 0
+	var total := 0
+	for entry in entries:
+		if entry.item.kind == InventoryItem.Kind.AMMO and entry.item.weapon_id == weapon_id:
+			total += entry.quantity
+	return total
+
+
+## Списание только реально загруженных патронов; пустые стопки удаляются.
+func consume_ammo(weapon_id: StringName, amount: int) -> int:
+	var remaining := maxi(amount, 0)
+	for index in range(entries.size() - 1, -1, -1):
+		var entry := entries[index]
+		if remaining == 0:
+			break
+		if weapon_id.is_empty() or entry.item.kind != InventoryItem.Kind.AMMO or entry.item.weapon_id != weapon_id:
+			continue
+		var count := mini(remaining, entry.quantity)
+		entry.quantity -= count
+		remaining -= count
+		if entry.quantity == 0:
+			entries.remove_at(index)
+	var consumed := maxi(amount, 0) - remaining
+	if consumed > 0:
+		changed.emit()
+	return consumed
+
 
 func _consume(entry: InventoryEntry, quantity: int) -> void:
 	entry.quantity -= quantity
@@ -158,6 +192,8 @@ func drop_item(entry: InventoryEntry, player: Node3D) -> bool:
 	_sync_weapons()
 	if is_instance_valid(entry.weapon):
 		entry.weapon.unequip()
+		if entry.weapon is Firearm:
+			entry.weapon.bind_ammo_inventory(null)
 		entry.weapon.get_parent().remove_child(entry.weapon)
 		pickup.add_child(entry.weapon)
 	get_tree().current_scene.add_child(pickup)
@@ -175,6 +211,8 @@ func restore_entry(entry: InventoryEntry) -> bool:
 		entry.weapon.unequip()
 		if entry.weapon is Firearm and not entry.weapon.fired.is_connected(_holder._on_weapon_fired):
 			entry.weapon.fired.connect(_holder._on_weapon_fired)
+		if entry.weapon is Firearm:
+			entry.weapon.bind_ammo_inventory(self, entry.item.weapon_id)
 	entries.append(entry)
 	changed.emit()
 	return true
