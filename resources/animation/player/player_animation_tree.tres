@@ -44,7 +44,7 @@ animation = &"move/roll"
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_speed"]
 
 [resource]
-graph_offset = Vector2(-429.52228, -65.97951)
+graph_offset = Vector2(-444.0354, -132.74147)
 nodes/output/position = Vector2(420, 140)
 nodes/Move/node = SubResource("AnimationNodeBlendSpace2D_move")
 nodes/Move/position = Vector2(-300, 0)

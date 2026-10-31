@@ -1,16 +1,18 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dxyic46837yws"]
 
-[ext_resource type="Script" path="res://gamelogic/weapon/melee_weapon.gd" id="1_melee"]
+[ext_resource type="Script" uid="uid://bjnx4gkjdrulk" path="res://gamelogic/weapon/melee_weapon.gd" id="1_melee"]
 [ext_resource type="PackedScene" uid="uid://clxtn48knmpue" path="res://resources/model/weapons/axe.glb" id="2_model"]
 
-[node name="WeaponAxe" type="Node3D" node_paths=PackedStringArray("swing_pivot")]
+[node name="WeaponAxe" type="Node3D" unique_id=1736492483 node_paths=PackedStringArray("swing_pivot")]
 script = ExtResource("1_melee")
+swing_pivot = NodePath("Pivot")
 display_name = "ТОПОР"
 one_handed = true
-swing_pivot = NodePath("Pivot")
 
-[node name="Pivot" type="Node3D" parent="."]
+[node name="Pivot" type="Node3D" parent="." unique_id=1381339606]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.19, 0.24, -0.1)
 
-[node name="Model" parent="Pivot" instance=ExtResource("2_model")]
+[node name="Model" parent="Pivot" unique_id=28725474 instance=ExtResource("2_model")]
 transform = Transform3D(-0.18, 0, 0, 0, 0.18, 0, 0, 0, -0.18, 0, 0.288, 0.009)
+
+[editable path="Pivot/Model"]
