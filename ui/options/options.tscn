@@ -99,10 +99,10 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 12.0
-offset_top = -153.0
-offset_right = 157.0
-offset_bottom = -11.0
+offset_left = 30.0
+offset_top = -168.0
+offset_right = 175.0
+offset_bottom = -26.0
 grow_vertical = 0
 texture = ExtResource("10_xoydh")
 expand_mode = 2
@@ -113,11 +113,12 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 147.0
-offset_top = -34.0
-offset_right = 296.0
-offset_bottom = -22.0
+offset_left = 174.0
+offset_top = -52.0
+offset_right = 323.0
+offset_bottom = -40.0
 grow_vertical = 0
+theme_override_font_sizes/font_size = 40
 text = "By Маги в джеме"
 
 [node name="Line2D" type="Line2D" parent="." unique_id=1342678673]
@@ -137,4 +138,3 @@ script = ExtResource("11_2rgm2")
 [connection signal="value_changed" from="Options/VBoxContainer/SFXController" to="." method="_on_music_controller_value_changed"]
 [connection signal="value_changed" from="Options/VBoxContainer/SFXController" to="Options/VBoxContainer/SFXController" method="_on_value_changed"]
 [connection signal="pressed" from="Options/VBoxContainer/Back" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="Options/VBoxContainer/Back" to="Options/VBoxContainer/Back" method="_on_pressed"]

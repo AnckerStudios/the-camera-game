@@ -7,7 +7,13 @@ const FLASH_DURATION := 0.4
 
 var _rec_time := 0.0
 var _flash_tween: Tween
-
+@onready var rec_dot: Label = %RecDot
+@onready var rec_text: Label = $Margin/Layout/TopRow/Rec/RecText
+@onready var pause_text: Label = $Margin/Layout/TopRow/Rec/PauseText
+@onready var pause_sing: Label = %PauseSing
+@onready var bottom_row: HBoxContainer = $Margin/Layout/BottomRow
+@onready var back_x: Button = $BackX
+@onready var options: Control = $Options
 
 func _ready() -> void:
 	PlayerState.battery_changed.connect(set_battery)
@@ -61,3 +67,26 @@ func play_flash() -> void:
 	%FlashOverlay.modulate.a = 1.0
 	_flash_tween = create_tween()
 	_flash_tween.tween_property(%FlashOverlay, "modulate:a", 0.0, FLASH_DURATION)
+	
+func optional():
+	rec_dot.visible = false
+	rec_text.visible = false
+	bottom_row.visible = false
+	pause_text.visible = true
+	pause_sing.visible = true
+	options.visible = true
+	back_x.visible = true
+	options.pause()
+
+func from_optional():
+	rec_dot.visible = true
+	rec_text.visible = true
+	bottom_row.visible = true
+	pause_text.visible = false
+	pause_sing.visible = false
+	options.visible = false
+	back_x.visible = false
+	get_tree().paused = false
+
+func _on_back_x_pressed() -> void:
+	from_optional()
