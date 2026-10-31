@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="4_s1bv7"]
 [ext_resource type="Script" uid="uid://cmkrno3x3fyie" path="res://gamelogic/weapon/damage_dummy.gd" id="5_5egmh"]
 [ext_resource type="PackedScene" uid="uid://cjuq8g0mbb8h8" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="6_4ackd"]
+[ext_resource type="AudioStream" uid="uid://dwq3cjmfwggkk" path="res://resources/music/play_background.mp3" id="7_7fbaa"]
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 1
@@ -301,3 +302,10 @@ mesh = SubResource("FloorMesh")
 
 [node name="Ghoul" parent="." unique_id=13065505 instance=ExtResource("6_4ackd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.731076, 0.8862281, 6.9136066)
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1872788724]
+process_mode = 3
+stream = ExtResource("7_7fbaa")
+volume_db = -20.0
+autoplay = true
+bus = &"Music"
