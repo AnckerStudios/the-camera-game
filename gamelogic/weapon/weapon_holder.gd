@@ -8,14 +8,11 @@ extends Node3D
 @export var aim: Node3D
 ## Предмет во второй руке; виден только с одноручным оружием.
 @export var off_hand: Node3D
-@export_range(0.1, 30.0, 0.1) var aim_return_speed: float = 12.0
 
 const TargetLockScript = preload("res://gamelogic/weapon/target_lock.gd")
 var _target_lock: Node
 var _aim_direction: Vector3 = Vector3.ZERO
 var _aim_target: Node3D
-var _rest_basis: Basis
-var _visual_aim_active: bool = false
 
 var current: Weapon
 
@@ -25,7 +22,6 @@ var _index := -1
 func _ready() -> void:
 	# После адаптера ввода, перед физическим обновлением игрока.
 	process_physics_priority = -50
-	_rest_basis = basis
 	_target_lock = get_node_or_null("TargetLock")
 	if not _target_lock:
 		_target_lock = TargetLockScript.new()
@@ -70,9 +66,6 @@ func get_aim_direction() -> Vector3:
 func select(index: int) -> void:
 	_aim_target = null
 	_aim_direction = Vector3.ZERO
-	if _visual_aim_active:
-		basis = _rest_basis
-		_visual_aim_active = false
 	var weapons := get_weapons()
 	if weapons.is_empty():
 		return
@@ -133,36 +126,3 @@ func _physics_process(_delta: float) -> void:
 
 func has_target_lock() -> bool:
 	return is_instance_valid(_aim_target) and not _aim_target.is_queued_for_deletion() and not _aim_direction.is_zero_approx()
-
-
-## Визуальное наведение обновляется каждый кадр; без цели оружие плавно возвращается.
-func _process(delta: float) -> void:
-	if has_target_lock():
-		_visual_aim_active = true
-		_apply_visual_aim()
-	elif _visual_aim_active:
-		var weight := 1.0 - exp(-aim_return_speed * delta)
-		var rotation_from := basis.orthonormalized().get_rotation_quaternion()
-		var rotation_to := _rest_basis.orthonormalized().get_rotation_quaternion()
-		basis = Basis(rotation_from.slerp(rotation_to, weight)).scaled(_rest_basis.get_scale())
-		if rotation_from.angle_to(rotation_to) < 0.001:
-			basis = _rest_basis
-			_visual_aim_active = false
-
-## Ориентирует оружие по всем трём осям, не наклоняя тело персонажа.
-func _apply_visual_aim() -> void:
-	if not is_instance_valid(current) or not is_instance_valid(_aim_target):
-		return
-	var muzzle := current.get_node_or_null("Muzzle") as Node3D
-	if not muzzle:
-		return
-	var point: Vector3 = _target_lock.get_target_point(_aim_target)
-	# Два уточнения компенсируют смещение самого дула при повороте держателя.
-	for iteration in 2:
-		var direction := point - muzzle.global_position
-		if direction.is_zero_approx():
-			return
-		direction = direction.normalized()
-		var up := Vector3.FORWARD if absf(direction.dot(Vector3.UP)) > 0.999 else Vector3.UP
-		var scale_before := global_basis.get_scale()
-		global_basis = Basis.looking_at(direction, up).scaled(scale_before)

@@ -1,5 +1,7 @@
-[gd_resource type="Resource" script_class="VisionProfile" load_steps=2 format=3]
-[ext_resource type="Script" path="res://gamelogic/filters/vision_profile.gd" id="1"]
+[gd_resource type="Resource" script_class="VisionProfile" format=3 uid="uid://cnngdgie2anlj"]
+
+[ext_resource type="Script" uid="uid://bvtg4t2n2rh1y" path="res://gamelogic/filters/vision_profile.gd" id="1"]
+
 [resource]
 script = ExtResource("1")
 active_object = true
