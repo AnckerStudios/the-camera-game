@@ -3,13 +3,11 @@ extends Node
 ## Узлы группы camera_cutout_ignore и их потомки не изменяются.
 
 @export var enabled: bool = true
-## Доля пикселей стены в центре: 0 — пусто, 1 — стена полностью видима.
-@export_range(0.0, 1.0, 0.01) var interior_visibility: float = 0.02
-## Больше 1 — сильное вырезание распространяется дальше от центра.
-@export_range(0.1, 8.0, 0.1) var dither_curve_power: float = 2.0
+## Степень дизеринга: больше 1 — прозрачная область шире, меньше 1 — стена плотнее.
+@export_range(0.01, 8.0, 0.01) var interior_visibility: float = 4.0
 @export_range(10.0, 300.0, 1.0) var radius_pixels: float = 0.0
 ## Максимальный радиус и расстояние за стеной для его достижения.
-@export_range(10.0, 600.0, 1.0) var max_radius_pixels: float = 120.0
+@export_range(10.0, 600.0, 1.0) var max_radius_pixels: float = 200.0
 @export_range(0.01, 20.0, 0.1) var radius_max_distance: float = 3.0
 
 ## Скорость плавного изменения радиуса: меньше — медленнее.
@@ -66,7 +64,6 @@ func _prepare_mesh(node: MeshInstance3D) -> void:
 		var material := ShaderMaterial.new()
 		material.shader = CUTOUT_SHADER
 		material.set_shader_parameter("interior_visibility", interior_visibility)
-		material.set_shader_parameter("dither_curve_power", dither_curve_power)
 		if original is StandardMaterial3D:
 			material.set_shader_parameter("base_color", original.albedo_color)
 			material.set_shader_parameter("base_roughness", original.roughness)
@@ -114,7 +111,6 @@ func _process(delta: float) -> void:
 		_current_radii[material] = current_radius
 		material.set_shader_parameter("cutout_enabled", enabled and current_radius > 0.0)
 		material.set_shader_parameter("interior_visibility", interior_visibility)
-		material.set_shader_parameter("dither_curve_power", dither_curve_power)
 		material.set_shader_parameter("target_uv", screen_position / size)
 		material.set_shader_parameter("viewport_size", size)
 		material.set_shader_parameter("radius_pixels", current_radius)
