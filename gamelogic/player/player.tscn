@@ -3,33 +3,32 @@
 [ext_resource type="Script" uid="uid://gy7452mj1qim" path="res://gamelogic/player/player.gd" id="1"]
 [ext_resource type="Script" uid="uid://cujtymrprn44a" path="res://gamelogic/input/player_input.gd" id="2"]
 [ext_resource type="Script" uid="uid://camxira84elhg" path="res://gamelogic/input/mouse_tracker.gd" id="3"]
-[ext_resource type="Script" uid="uid://c5mou2inmq2ys" path="res://gamelogic/weapon/weapon_holder.gd" id="4_holder"]
-[ext_resource type="PackedScene" uid="uid://cf044qdp2v615" path="res://gamelogic/weapon/weapon_double_shotgun.tscn" id="5_shotgun"]
-[ext_resource type="PackedScene" path="res://gamelogic/weapon/weapon_revolver.tscn" id="6_revolver"]
+[ext_resource type="PackedScene" uid="uid://gmto2netdfsk" path="res://gamelogic/player/model/player_model_v2.tscn" id="3_6mbak"]
 [ext_resource type="PackedScene" uid="uid://cquasyawaifv" path="res://gamelogic/player/cone/view_cone.tscn" id="7_cone"]
-[ext_resource type="PackedScene" path="res://gamelogic/player/model/player_model.tscn" id="8_model"]
-[ext_resource type="PackedScene" path="res://gamelogic/weapon/weapon_axe.tscn" id="9_axe"]
-
-[ext_resource type="Script" path="res://gamelogic/player/camera/wall_cutout.gd" id="20_cutout"]
-
-[ext_resource type="Script" path="res://gamelogic/weapon/target_lock.gd" id="21_lock"]
+[ext_resource type="Script" uid="uid://gltw66fqtyyp" path="res://gamelogic/player/camera/wall_cutout.gd" id="20_cutout"]
 
 [sub_resource type="CapsuleShape3D" id="Shape"]
 radius = 0.35
 height = 1.8
 
-[sub_resource type="StandardMaterial3D" id="Material_flashlight"]
-albedo_color = Color(0.05, 0.05, 0.05, 1)
-roughness = 0.6
-
-[sub_resource type="BoxMesh" id="BoxMesh_flashlight"]
-material = SubResource("Material_flashlight")
-size = Vector3(0.035, 0.035, 0.13)
-
 [node name="Player" type="CharacterBody3D" unique_id=1577945846]
 collision_layer = 9
 collision_mask = 9
 script = ExtResource("1")
+speed = null
+acceleration = null
+jump_speed = null
+turn_speed = null
+coyote_seconds = null
+fall_gravity_multiplier = null
+fall_gravity_growth = null
+max_fall_multiplier = null
+released_jump_multiplier = null
+max_jump_hold_seconds = null
+dash_distance = null
+dash_seconds = null
+dash_cooldown_seconds = null
+dash_curve = null
 
 [node name="PlayerInput" type="Node" parent="." unique_id=853431012]
 script = ExtResource("2")
@@ -40,24 +39,8 @@ shape = SubResource("Shape")
 
 [node name="Visual" type="Node3D" parent="." unique_id=1166651402]
 
-[node name="PlayerModel" parent="Visual" node_paths=PackedStringArray("body") instance=ExtResource("8_model")]
+[node name="PlayerModel" parent="Visual" unique_id=64339324 node_paths=PackedStringArray("body") instance=ExtResource("3_6mbak")]
 body = NodePath("../..")
-
-[node name="WeaponHolder" type="Node3D" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/RightHandGrip" unique_id=1611209214 node_paths=PackedStringArray("aim", "off_hand")]
-transform = Transform3D(0.61163926, 0.77173275, -0.1132051, -0.1943444, 0.011461118, -0.9718994, -0.755392, 0.6219218, 0.15838495, -0.064754605, -0.10527697, -0.26346976)
-script = ExtResource("4_holder")
-aim = NodePath("../../../../../..")
-off_hand = NodePath("../../LeftHandGrip/Flashlight")
-
-[node name="WeaponDoubleShotgun" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/RightHandGrip/WeaponHolder" unique_id=1504881159 instance=ExtResource("5_shotgun")]
-
-[node name="WeaponRevolver" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/RightHandGrip/WeaponHolder" unique_id=1816449901 instance=ExtResource("6_revolver")]
-
-[node name="WeaponAxe" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/RightHandGrip/WeaponHolder" instance=ExtResource("9_axe")]
-
-[node name="Flashlight" type="MeshInstance3D" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/LeftHandGrip"]
-transform = Transform3D(0.71220434, 0.0065567405, 0.68935585, 0.6893651, -0.014705395, -0.71207404, 0.0055167656, 0.99107563, -0.015126121, 0, 0.08, 0.03)
-mesh = SubResource("BoxMesh_flashlight")
 
 [node name="ViewCone" parent="Visual" unique_id=2048807598 instance=ExtResource("7_cone")]
 
@@ -65,8 +48,5 @@ mesh = SubResource("BoxMesh_flashlight")
 script = ExtResource("3")
 target = NodePath("..")
 
-[node name="WallCutout" type="Node" parent="."]
+[node name="WallCutout" type="Node" parent="." unique_id=1395136778]
 script = ExtResource("20_cutout")
-
-[node name="TargetLock" type="Node" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/RightHandGrip/WeaponHolder"]
-script = ExtResource("21_lock")
