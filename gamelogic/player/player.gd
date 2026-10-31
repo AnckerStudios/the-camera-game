@@ -293,3 +293,9 @@ func _on_hp_changed(value: float, max_value: float) -> void:
 func set_shooting_lock(enemy: Node3D, duration: float) -> void:
 	_shooting_lock_target = enemy
 	_shooting_lock_remaining = maxf(duration, 0.0)
+
+
+## Получение внешнего урона (например, от взрыва); интерфейс смерти использует PlayerState.
+func take_damage(amount: float, _source: Node) -> void:
+	if is_finite(amount) and amount > 0.0:
+		PlayerState.hp -= amount

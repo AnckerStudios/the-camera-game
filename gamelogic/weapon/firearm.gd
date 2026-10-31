@@ -2,7 +2,7 @@ class_name Firearm
 extends Weapon
 
 ## Огнестрельное оружие с мгновенным попаданием (хитскан): патроны, перезарядка, разброс дроби.
-## Цель получает урон, если take_damage(amount: float, source: Node).
+## Доступность цели и получение урона определяет общий компонент DamageReceiver.
 ## Материальность цели (призраки) решает сама цель.
 
 ## Выстрел произведён; rounds - сколько патронов ушло. Можно использовать как шум для врагов.
@@ -179,9 +179,10 @@ func _fire_ray(direction: Vector3, pellet_damage: float = -1.0) -> void:
 	var endpoint: Vector3 = result.endpoint
 	var target: Object = result.target
 	var applied_damage := 0.0
-	if is_instance_valid(target) and target.has_method("take_damage"):
-		applied_damage = maxf(damage if pellet_damage < 0.0 else pellet_damage, 0.0)
-		target.take_damage(applied_damage, self)
+	var receiver := DamageReceiver.get_receiver(target)
+	if receiver and receiver.can_receive_damage():
+		var requested_damage := maxf(damage if pellet_damage < 0.0 else pellet_damage, 0.0)
+		applied_damage = receiver.receive_hit(requested_damage, self)
 	Tracer.spawn(self, _muzzle.global_position, endpoint)
 	pellet_fired.emit(origin, endpoint, target, applied_damage)
 
@@ -216,12 +217,7 @@ func _trace_pellet(origin: Vector3, direction: Vector3) -> Dictionary:
 
 ## Коллизия может находиться в дочернем узле, а здоровье — в скрипте самого врага.
 func _get_damage_receiver(collider: Node) -> Node:
-	var node := collider
-	while is_instance_valid(node):
-		if node.has_method("take_damage"):
-			return node
-		node = node.get_parent()
-	return null
+	return DamageReceiver.find_target(collider)
 
 
 ## Исключает владельца и все его дочерние коллизии, включая экипировку.
