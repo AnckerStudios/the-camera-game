@@ -3,6 +3,8 @@ extends StaticBody3D
 signal damaged(amount: float, source: Node)
 signal destroyed(source: Node)
 
+## Необязательная точка прицеливания; без неё используется центр коллизии/модели.
+@export var aim_point: Node3D
 var damage_receiver := DamageReceiver.new()
 @export var hp: float = 100.0:
 	get:
@@ -11,6 +13,7 @@ var damage_receiver := DamageReceiver.new()
 		damage_receiver.health = maxf(value, 0.0)
 
 func _ready() -> void:
+	damage_receiver.aim_point = aim_point
 	damage_receiver.register_owner(self)
 	add_to_group(&"damageable_environment")
 	damage_receiver.damaged.connect(_on_damage_received)

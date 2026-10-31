@@ -14,6 +14,8 @@ const PHYSICAL_WEAPONS := ["WeaponDoubleShotgun", "WeaponRevolver", "WeaponAxe"]
 var rotation_speed := 10.0
 
 var dimension: Dimension
+## Необязательная точка прицеливания; без неё используется центр коллизии/модели.
+@export var aim_point: Node3D
 var damage_receiver := DamageReceiver.new()
 var hp: float:
 	get:
@@ -26,6 +28,7 @@ var resistance_physical: float
 var resistance_energetic: float
 
 func _ready() -> void:
+	damage_receiver.aim_point = aim_point
 	damage_receiver.register_owner(self)
 	damage_receiver.depleted.connect(_on_health_depleted)
 	add_child(ConeVisibility.new())

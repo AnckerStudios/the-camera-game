@@ -5,7 +5,6 @@ signal target_changed(target: Node3D)
 
 @export var enabled: bool = true
 @export_range(0.0, 300.0, 1.0) var capture_radius_pixels: float = 80.0
-@export var target_height: float = 1.0
 @export var require_view_cone: bool = true
 @export_flags_3d_physics var obstruction_mask: int = 1
 
@@ -56,7 +55,8 @@ func acquire(origin: Vector3, max_distance: float, excluded: Array[RID], shooter
 	return current_target
 
 func get_target_point(enemy: Node3D) -> Vector3:
-	return enemy.global_position + Vector3.UP * target_height
+	var receiver := DamageReceiver.get_receiver(enemy)
+	return receiver.get_target_point() if receiver else enemy.global_position
 
 func _in_view(enemy: Node3D, shooter: Node3D) -> bool:
 	if not require_view_cone:
