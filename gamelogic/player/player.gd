@@ -42,6 +42,9 @@ var _coyote_remaining: float = 0.0
 var _fall_seconds: float = 0.0
 
 const INSPECTION_SCENE = preload("res://ui/item_inspection/item_inspection.tscn")
+const INVENTORY_WINDOW = preload("res://ui/inventory/inventory_window.tscn")
+var _inventory := PlayerInventory.new()
+var _inventory_window
 var _inspection
 
 var _selected_pickup: PickupItem
@@ -59,11 +62,18 @@ var _has_mouse_target: bool = false
 func _ready() -> void:
 	PlayerState.reset()
 	VisionFilters.set_mode(VisionProfile.Filter.NORMAL, false)
+	_inventory.name = &"Inventory"
+	add_child(_inventory)
+	var holder := find_child("WeaponHolder", true, false) as WeaponHolder
+	_inventory.initialize(holder)
+	_inventory_window = INVENTORY_WINDOW.instantiate()
+	add_child(_inventory_window)
 	_inspection = INSPECTION_SCENE.instantiate()
 	add_child(_inspection)
 	controls.dash.connect(_on_dash_requested)
 	controls.interaction.connect(_on_interaction_requested)
 	controls.filter_toggle.connect(VisionFilters.cycle_filter)
+	controls.inventory_toggle.connect(_on_inventory_toggle)
 	$MouseTracker.target_changed.connect(_on_mouse_target_changed)
 	PlayerState.hp_changed.connect(_on_hp_changed)
 
@@ -236,6 +246,9 @@ func _update_camera_walking() -> void:
 
 ## Одно нажатие E подбирает ближайший доступный предмет, совпадающий с подсветкой.
 func _on_interaction_requested() -> void:
+	if _inventory_window.is_open:
+		_inventory_window.handle_interaction()
+		return
 	if _inspection.is_open:
 		_inspection.close()
 		return
@@ -300,3 +313,20 @@ func set_aim_lock(target: Node3D) -> void:
 func take_damage(amount: float, _source: Node) -> void:
 	if is_finite(amount) and amount > 0.0:
 		PlayerState.hp -= amount
+
+
+func get_inventory() -> PlayerInventory:
+	return _inventory
+
+func _on_inventory_toggle() -> void:
+	if _inspection.is_open:
+		return
+	if _inventory_window.is_open:
+		_inventory_window.close()
+		return
+	if get_tree().paused:
+		return
+	velocity = Vector3.ZERO
+	_dash_remaining = 0.0
+	_set_selected_pickup(null)
+	_inventory_window.open(self, _inventory, controls)

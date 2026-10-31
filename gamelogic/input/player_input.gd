@@ -13,6 +13,12 @@ signal interaction
 ## По Tab переключает обычное, инфракрасное и ультрафиолетовое зрение.
 signal filter_toggle
 
+## Открытие и закрытие инвентаря по Q; доступно при отключённом движении.
+signal inventory_toggle
+## Навигация по меню, когда движение игрока отключено.
+signal menu_horizontal(direction: int)
+var menu_navigation_enabled: bool = false
+
 ## Передаёт направление движения при его изменении.
 signal movement_changed(direction: Vector2)
 
@@ -50,6 +56,15 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed(&"interaction"):
 		interaction.emit()
+
+	if Input.is_action_just_pressed(&"inventory"):
+		inventory_toggle.emit()
+
+	if menu_navigation_enabled:
+		if Input.is_action_just_pressed(&"move_left"):
+			menu_horizontal.emit(-1)
+		elif Input.is_action_just_pressed(&"move_right"):
+			menu_horizontal.emit(1)
 
 	if not hardware_enabled:
 		return

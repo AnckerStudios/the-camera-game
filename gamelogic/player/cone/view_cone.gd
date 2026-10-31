@@ -8,6 +8,12 @@ extends Node3D
 ## Периферийное зрение
 @export var peripheral_radius := 1.8
 
+## Цвет света при активном фильтре; обычный цвет сохраняется из сцены.
+@export var infrared_light_color: Color = Color(1.0, 0.18, 0.07, 1.0)
+@export var ultraviolet_light_color: Color = Color(0.45, 0.12, 1.0, 1.0)
+var _normal_flashlight_color: Color
+var _normal_peripheral_color: Color
+
 const CONE_SEGMENTS := 32
 const CONE_FLOOR_OFFSET := 0.02
 
@@ -24,6 +30,10 @@ func _ready() -> void:
 	add_to_group(&"visibility_cones")
 	add_child(_create_cone_mesh())
 	_fit_flashlight()
+	_normal_flashlight_color = _flashlight.light_color
+	_normal_peripheral_color = _peripheral_light.light_color
+	VisionFilters.filter_changed.connect(_on_filter_changed)
+	_on_filter_changed(VisionFilters.mode)
 
 func _create_cone_mesh() -> MeshInstance3D:
 	var y := CONE_FLOOR_OFFSET
@@ -85,3 +95,17 @@ func contains_world_point(world_position: Vector3) -> bool:
 	var forward := -global_basis.z
 	forward.y = 0.0
 	return forward.normalized().dot(direction.normalized()) >= cos(deg_to_rad(cone_angle * 0.5))
+
+
+## Меняем свет, а не материалы мира; цветовая заливка целей остаётся в FilterSubject.
+func _on_filter_changed(mode: VisionProfile.Filter) -> void:
+	match mode:
+		VisionProfile.Filter.INFRARED:
+			_flashlight.light_color = infrared_light_color
+			_peripheral_light.light_color = infrared_light_color
+		VisionProfile.Filter.ULTRAVIOLET:
+			_flashlight.light_color = ultraviolet_light_color
+			_peripheral_light.light_color = ultraviolet_light_color
+		_:
+			_flashlight.light_color = _normal_flashlight_color
+			_peripheral_light.light_color = _normal_peripheral_color
