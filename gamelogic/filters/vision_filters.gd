@@ -4,9 +4,10 @@ signal filter_changed(mode: VisionProfile.Filter)
 const Mode = VisionProfile.Filter
 var mode: VisionProfile.Filter = VisionProfile.Filter.NORMAL
 ## Звук интерфейса не зависит от положения персонажа или камеры.
-@export var switch_sound: AudioStream = preload("res://resources/music/gun_ghost.mp3")
+@export var switch_sound: AudioStream = preload("res://resources/music/caseta3.mp3")
 @export_range(-40.0, 6.0, 0.5) var switch_volume_db: float = -8.0
 var _switch_audio: AudioStreamPlayer
+var _available_modes: Array[int] = [VisionProfile.Filter.NORMAL]
 var _infrared: CanvasLayer
 var _ultraviolet: CanvasLayer
 
@@ -22,14 +23,19 @@ func _ready() -> void:
 	add_child(_ultraviolet)
 	_update_overlays()
 
+## Tab включает только фильтры из экипированного набора.
 func cycle_filter() -> void:
-	match mode:
-		Mode.NORMAL:
-			set_mode(Mode.INFRARED)
-		Mode.INFRARED:
-			set_mode(Mode.ULTRAVIOLET)
-		Mode.ULTRAVIOLET:
-			set_mode(Mode.NORMAL)
+	var index := _available_modes.find(int(mode))
+	set_mode(_available_modes[(index + 1) % _available_modes.size()])
+
+## Добавление фильтра не меняет текущий режим зрения.
+func set_available_filters(filters: Array[int]) -> void:
+	_available_modes.assign([VisionProfile.Filter.NORMAL])
+	for value in filters:
+		if value != VisionProfile.Filter.NORMAL and not _available_modes.has(value):
+			_available_modes.append(value)
+	if not _available_modes.has(int(mode)):
+		set_mode(VisionProfile.Filter.NORMAL)
 
 func set_mode(value: VisionProfile.Filter, play_sound: bool = true) -> void:
 	if mode == value:

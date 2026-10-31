@@ -14,6 +14,8 @@ var _target_lock: Node
 var _aim_direction: Vector3 = Vector3.ZERO
 var _aim_target: Node3D
 
+var _inventory_managed: bool = false
+var _inventory_weapons: Array[Weapon] = []
 var current: Weapon
 
 var _index := -1
@@ -50,6 +52,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func get_weapons() -> Array[Weapon]:
+	if _inventory_managed:
+		return _inventory_weapons
 	var result: Array[Weapon] = []
 	for child in get_children():
 		if child is Weapon:
@@ -126,3 +130,29 @@ func _physics_process(_delta: float) -> void:
 
 func has_target_lock() -> bool:
 	return is_instance_valid(_aim_target) and not _aim_target.is_queued_for_deletion() and not _aim_direction.is_zero_approx()
+
+
+func create_inventory_weapon(scene: PackedScene) -> Weapon:
+	var instance := scene.instantiate()
+	if not instance is Weapon:
+		instance.free()
+		return null
+	add_child(instance)
+	instance.unequip()
+	if instance is Firearm:
+		instance.fired.connect(_on_weapon_fired)
+	return instance
+
+func set_inventory_weapons(equipped: Array[Weapon]) -> void:
+	if is_instance_valid(current):
+		if current is Firearm and current.ammo_changed.is_connected(PlayerState.set_ammo):
+			current.ammo_changed.disconnect(PlayerState.set_ammo)
+		current.unequip()
+	current = null
+	_inventory_managed = true
+	_inventory_weapons = equipped.duplicate()
+	if not _inventory_weapons.is_empty():
+		select(0)
+	else:
+		PlayerState.weapon_name = ""
+		PlayerState.set_ammo(0, 0, 0)

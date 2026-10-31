@@ -9,6 +9,9 @@ signal picked_up(item: PickupItem, receiver: Node3D)
 ## Сцена 3D-модели (например, .tscn или импортированный .glb).
 ## Если не задана, используется модель, уже находящаяся в узле Model.
 @export var model_scene: PackedScene
+## Тип, иконка и действие предмета в инвентаре.
+@export var inventory_item: InventoryItem
+@export_range(1, 999, 1) var quantity: int = 1
 
 @export_multiline var description: String = "Найденный предмет."
 @export var display_name: String = "Предмет"
@@ -27,6 +30,9 @@ signal picked_up(item: PickupItem, receiver: Node3D)
 
 var _receivers: Array[Node3D] = []
 var _taken: bool = false
+## Состояние предмета, выброшенного из инвентаря.
+var stored_entry: InventoryEntry
+var model_snapshot: Node3D
 var _outline: ObjectOutline
 @onready var _shape: CollisionShape3D = $PickupRadius
 @onready var _model: Node3D = $Model
@@ -34,6 +40,11 @@ var _outline: ObjectOutline
 @export var vision_profile: VisionProfile = preload("res://gamelogic/filters/active_profile.tres")
 
 func _ready() -> void:
+	if inventory_item:
+		display_name = inventory_item.display_name
+		description = inventory_item.description
+		if not model_scene:
+			model_scene = inventory_item.model_scene
 	vision_profile = vision_profile.duplicate()
 	vision_profile.attach(self)
 	add_to_group(&"pickup_items")
@@ -95,8 +106,18 @@ func try_pick_up(receiver: Node3D) -> bool:
 	return true
 
 ## Наследник выдаёт ресурс/предмет в инвентарь; false отменяет подбор.
-func _apply_pickup(_receiver: Node3D) -> bool:
-	return true
+func _apply_pickup(receiver: Node3D) -> bool:
+	if not receiver.has_method("get_inventory"):
+		return false
+	if stored_entry:
+		return receiver.get_inventory().restore_entry(stored_entry)
+	var data := inventory_item
+	if not data:
+		data = InventoryItem.new()
+		data.display_name = display_name
+		data.description = description
+		data.model_scene = model_scene
+	return receiver.get_inventory().add_item(data, quantity)
 
 ## Выбор предмета делегирует смену цвета общему компоненту окружения.
 func set_pickup_selected(selected: bool) -> void:
@@ -105,6 +126,12 @@ func set_pickup_selected(selected: bool) -> void:
 
 ## Сохраняет контейнер Model, используемый обводкой и окном осмотра.
 func _load_model_scene() -> void:
+	if is_instance_valid(model_snapshot):
+		for child in _model.get_children():
+			_model.remove_child(child)
+			child.queue_free()
+		_model.add_child(model_snapshot)
+		return
 	if not model_scene:
 		return
 	var instance := model_scene.instantiate()

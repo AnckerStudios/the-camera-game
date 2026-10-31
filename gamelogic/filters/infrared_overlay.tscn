@@ -1,20 +1,9 @@
-[gd_scene load_steps=5 format=3]
-[ext_resource type="Shader" path="res://gamelogic/filters/infrared_screen.gdshader" id="1"]
+[gd_scene load_steps=3 format=3]
 [ext_resource type="Shader" path="res://gamelogic/filters/infrared_vignette.gdshader" id="2"]
-[sub_resource type="ShaderMaterial" id="ScreenFilter"]
-shader = ExtResource("1")
 [sub_resource type="ShaderMaterial" id="VignetteFilter"]
 shader = ExtResource("2")
 [node name="InfraredOverlay" type="CanvasLayer"]
 layer = -1
-[node name="FullScreen" type="ColorRect" parent="."]
-material = SubResource("ScreenFilter")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
 [node name="VignetteCRT" type="ColorRect" parent="."]
 material = SubResource("VignetteFilter")
 anchors_preset = 15
