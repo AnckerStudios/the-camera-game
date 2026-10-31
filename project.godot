@@ -23,6 +23,7 @@ buses/default_bus_layout="uid://l12p7u0id6b"
 
 PlayerState="*res://gamelogic/player/player_state.gd"
 TransitionTort="*uid://efpb6pdti1f2"
+MenuState="*uid://cxwniokfg1wut"
 
 [display]
 

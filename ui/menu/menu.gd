@@ -1,6 +1,9 @@
 extends Control
 var scene_setting = preload("res://ui/options/options.tscn")
 
+func _ready():
+	MenuState.state = true
+
 func _on_play_button_pressed() -> void:
 	TransitionTort.change_scene("res://scene/artem/misha_v2_doma.tscn")
 

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://d2ljhw0bxls3" path="res://scene/weapon_test.gd" id="1_test"]
 [ext_resource type="Script" uid="uid://c5mou2inmq2ys" path="res://gamelogic/weapon/weapon_holder.gd" id="2_holder"]
 [ext_resource type="PackedScene" uid="uid://cf044qdp2v615" path="res://gamelogic/weapon/weapon_double_shotgun.tscn" id="3_shotgun"]
-[ext_resource type="PackedScene" path="res://gamelogic/weapon/weapon_revolver.tscn" id="4_revolver"]
+[ext_resource type="PackedScene" uid="uid://bqyto6jdxwvfl" path="res://gamelogic/weapon/weapon_revolver.tscn" id="4_revolver"]
 [ext_resource type="Script" uid="uid://cmkrno3x3fyie" path="res://gamelogic/weapon/damage_dummy.gd" id="5_dummy"]
 [ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="6_hud"]
 

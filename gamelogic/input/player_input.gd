@@ -16,6 +16,8 @@ signal movement_changed(direction: Vector2)
 ## Время хранения запроса прыжка в секундах игрового времени.
 @export_range(0.01, 1.0, 0.01)
 var jump_buffer_seconds: float = 0.12
+@onready var hud: Hud = $"../../HUD"
+
 
 ## Включает обработку ввода. Отключение очищает движение и буфер.
 var hardware_enabled: bool = true:
@@ -66,10 +68,12 @@ func _physics_process(delta: float) -> void:
 		dash.emit()
 		
 	if Input.is_action_just_pressed(&"optional"):
-		var scene_setting = preload("res://ui/options/options.tscn")
-		var scene =  scene_setting.instantiate()
-		add_child(scene)
+		#var scene_setting = preload("res://ui/options/options.tscn")
+		#var scene =  scene_setting.instantiate()
+		#add_child(scene)
+		hud.optional()
 		get_tree().paused = true
+		
 
 
 

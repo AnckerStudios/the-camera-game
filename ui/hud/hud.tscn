@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://bnlk8t5iovka0" path="res://ui/hud/hud.gd" id="1_hud"]
 [ext_resource type="Script" uid="uid://rouca0282po1" path="res://ui/hud/viewfinder.gd" id="2_viewfinder"]
 [ext_resource type="Script" uid="uid://cw6ql5pscvlo4" path="res://ui/hud/battery_indicator.gd" id="3_battery"]
+[ext_resource type="PackedScene" uid="uid://dm1q2hktewkrd" path="res://ui/buttons/play_button.tscn" id="4_w75iv"]
+[ext_resource type="Theme" uid="uid://dh65ss64qf3kd" path="res://buttonX.tres" id="5_imuuq"]
+[ext_resource type="PackedScene" uid="uid://b4y23lfljnid0" path="res://ui/options/options.tscn" id="6_kwc50"]
 
 [sub_resource type="FontVariation" id="FontVariation_tabular"]
 opentype_features = {
@@ -20,8 +23,17 @@ border_color = Color(1, 1, 1, 0.4)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health"]
 bg_color = Color(0.75, 0.1, 0.1, 1)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kwc50"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o2lis"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gfles"]
+
 [node name="HUD" type="CanvasLayer" unique_id=643410873]
 script = ExtResource("1_hud")
+
+[node name="Options" parent="." unique_id=575043248 instance=ExtResource("6_kwc50")]
+visible = false
 
 [node name="FlashOverlay" type="ColorRect" parent="." unique_id=354243379]
 unique_name_in_owner = true
@@ -80,6 +92,20 @@ text = "●"
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
 text = "REC"
+
+[node name="PauseSing" type="Label" parent="Margin/Layout/TopRow/Rec" unique_id=725851468]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.1, 0.1, 1)
+theme_override_font_sizes/font_size = 22
+text = "❚❚"
+
+[node name="PauseText" type="Label" parent="Margin/Layout/TopRow/Rec" unique_id=2084056521]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "PAUSE"
 
 [node name="RecTime" type="Label" parent="Margin/Layout/TopRow/Rec" unique_id=197997017]
 unique_name_in_owner = true
@@ -167,3 +193,30 @@ theme_override_fonts/font = SubResource("FontVariation_tabular")
 theme_override_font_sizes/font_size = 22
 text = "0 / 0"
 horizontal_alignment = 2
+
+[node name="BackX" parent="." unique_id=1564832545 instance=ExtResource("4_w75iv")]
+process_mode = 3
+visible = false
+z_index = 14
+z_as_relative = false
+custom_minimum_size = Vector2(80, 80)
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -158.0
+offset_top = -211.0
+offset_right = -29.0
+offset_bottom = 30.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 4
+theme = ExtResource("5_imuuq")
+theme_override_font_sizes/font_size = 150
+theme_override_styles/normal = SubResource("StyleBoxEmpty_kwc50")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_o2lis")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_gfles")
+text = "⏎"
+
+[connection signal="pressed" from="BackX" to="." method="_on_back_x_pressed"]
