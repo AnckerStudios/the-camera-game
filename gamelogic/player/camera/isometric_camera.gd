@@ -30,6 +30,7 @@ var _sway_phase: float = 0.0
 var _shake_remaining: float = 0.0
 var _shake_duration: float = 0.0
 var _shake_strength: float = 0.0
+var _audio_listener: AudioListener3D
 var _camera: Camera3D
 var _base_h_offset: float = 0.0
 var _base_v_offset: float = 0.0
@@ -43,6 +44,12 @@ func _ready() -> void:
 	# Камера обновляется после физического движения персонажа.
 	process_physics_priority = 100
 	_camera = get_node_or_null("Camera3D")
+	_audio_listener = AudioListener3D.new()
+	_audio_listener.name = &"PlayerAudioListener"
+	_audio_listener.top_level = true
+	add_child(_audio_listener)
+	_update_audio_listener()
+	_audio_listener.make_current()
 	if _camera:
 		_base_h_offset = _camera.h_offset
 		_base_v_offset = _camera.v_offset
@@ -50,6 +57,7 @@ func _ready() -> void:
 		snap_to_target()
 
 func _physics_process(delta: float) -> void:
+	_update_audio_listener()
 	if not is_instance_valid(target):
 		return
 	_look_offset = _look_offset.lerp(_get_cursor_offset(),
@@ -140,3 +148,13 @@ func _process(delta: float) -> void:
 		_shake_strength = 0.0
 	_camera.h_offset = _base_h_offset + offset.x
 	_camera.v_offset = _base_v_offset + offset.y
+
+
+## Громкость зависит от расстояния до игрока; лево/право совпадает с видом камеры.
+## Пружина, покачивание и смещение камеры не перемещают звуковые «уши».
+func _update_audio_listener() -> void:
+	if not is_instance_valid(_audio_listener) or not is_instance_valid(target):
+		return
+	_audio_listener.global_position = target.global_position + Vector3.UP * 1.2
+	if is_instance_valid(_camera):
+		_audio_listener.global_basis = _camera.global_basis.orthonormalized()
