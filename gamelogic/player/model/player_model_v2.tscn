@@ -14,6 +14,8 @@
 [ext_resource type="Animation" uid="uid://coxot20qj0gnc" path="res://resources/animation/player_v2/walk_l_weapon.anim" id="10_nh4jj"]
 [ext_resource type="Animation" uid="uid://c1xiwyn54fm" path="res://resources/animation/player_v2/walk_r_weapon.anim" id="11_6vujn"]
 
+[ext_resource type="Script" path="res://gamelogic/weapon/weapon_holder.gd" id="12_holder"]
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_kmjtr"]
 _data = {
 &"axe_attack": ExtResource("3_e8snb"),
@@ -226,6 +228,11 @@ bones/63/rotation = Quaternion(0.27089235, -0.12930049, 0.07229967, 0.9511422)
 transform = Transform3D(0.6513619, -0.40103197, 0.64412826, 0.27803937, -0.6637155, -0.6943886, 0.7059901, 0.6313912, -0.32081658, -0.97374344, 2.033648, -0.41859332)
 bone_name = "mixamorig_RightHand"
 bone_idx = 40
+
+[node name="WeaponHolder" type="Node3D" parent="camera_man_5/Armature/Skeleton3D/RightHandGrip" node_paths=PackedStringArray("aim")]
+transform = Transform3D(1.422417, 1.794727, -0.263268, -0.451963, 0.026654, -2.259300, -1.756726, 1.445167, 0.368290, 0, 0, 0)
+script = ExtResource("12_holder")
+aim = NodePath("../../../../..")
 
 [node name="LeftHandGrip" type="BoneAttachment3D" parent="camera_man_5/Armature/Skeleton3D" index="2" unique_id=1250719779]
 transform = Transform3D(0.14529341, 0.3914225, -0.9086685, -0.3678258, -0.83121705, -0.41687316, -0.91847396, 0.39480057, 0.023204863, 0.90347946, 2.6867557, 0.11508864)

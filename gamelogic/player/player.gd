@@ -48,6 +48,7 @@ var _inventory_window
 var _inspection
 
 var _selected_pickup: PickupItem
+var _weapon_after_inspection: InventoryEntry
 
 var _aim_lock_target: Node3D
 
@@ -70,6 +71,7 @@ func _ready() -> void:
 	add_child(_inventory_window)
 	_inspection = INSPECTION_SCENE.instantiate()
 	add_child(_inspection)
+	_inspection.closed.connect(_on_inspection_closed)
 	controls.dash.connect(_on_dash_requested)
 	controls.interaction.connect(_on_interaction_requested)
 	controls.filter_toggle.connect(VisionFilters.cycle_filter)
@@ -257,7 +259,13 @@ func _on_interaction_requested() -> void:
 		return
 	# Снимок модели создаётся до удаления предмета из мира.
 	_inspection.prepare(_selected_pickup)
+	var previous_entries := _inventory.entries.duplicate()
 	if _selected_pickup.try_pick_up(self):
+		_weapon_after_inspection = null
+		for entry in _inventory.entries:
+			if entry.item.kind == InventoryItem.Kind.WEAPON and not previous_entries.has(entry):
+				_weapon_after_inspection = entry
+				break
 		_set_selected_pickup(null)
 		velocity = Vector3.ZERO
 		_dash_remaining = 0.0
@@ -330,3 +338,19 @@ func _on_inventory_toggle() -> void:
 	_dash_remaining = 0.0
 	_set_selected_pickup(null)
 	_inventory_window.open(self, _inventory, controls)
+
+
+## После осмотра оружия переходим к выбору экипировки в инвентаре.
+func _on_inspection_closed() -> void:
+	var entry := _weapon_after_inspection
+	_weapon_after_inspection = null
+	if entry:
+		_open_inventory_after_weapon.call_deferred(entry)
+
+func _open_inventory_after_weapon(entry: InventoryEntry) -> void:
+	if not is_inside_tree() or is_queued_for_deletion() or not _inventory.entries.has(entry):
+		return
+	if _inspection.is_open or _inventory_window.is_open or get_tree().paused:
+		return
+	_inventory_window.open(self, _inventory, controls)
+	_inventory_window.select_entry(entry)

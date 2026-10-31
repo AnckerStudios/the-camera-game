@@ -13,17 +13,16 @@ max_range = 12.0
 fire_interval = 0.25
 secondary_fires_all = true
 capacity = 2
-reserve_ammo = 16
 reload_time = 1.6
 animator = NodePath("Model/AnimationPlayer")
 reload_animation = &"Reload_002"
 display_name = "ДВУХСТВОЛКА"
 
 [node name="Model" parent="." unique_id=1537325724 instance=ExtResource("2_model")]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.51, -0.56, -0.3)
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.32360446, -0.8468461, 0)
 
 [node name="Muzzle" type="Marker3D" parent="." unique_id=1561908161]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22, 0.32, -0.95)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.038220644, -0.6432412)
 
 [node name="Flash" type="OmniLight3D" parent="Muzzle" unique_id=1132389526]
 light_color = Color(1, 0.8, 0.5, 1)

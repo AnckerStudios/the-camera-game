@@ -8,7 +8,7 @@ cone_color = Color(1, 1, 0.8509804, 0)
 cone_edge_color = Color(1, 1, 0.8509804, 0)
 
 [node name="Flashlight" type="SpotLight3D" parent="." unique_id=1863092743]
-transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.25881904, 0, -0.25881904, 0.9659258, 0, 1.1, -0.4)
+transform = Transform3D(1, 0, 0, 0, 0.9659259, 0.25881907, 0, -0.25881907, 0.9659258, 0, 1.5506858, -0.56288505)
 light_color = Color(1, 0.95, 0.85, 1)
 light_energy = 2.5
 shadow_enabled = true

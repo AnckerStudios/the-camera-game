@@ -8,43 +8,31 @@ var filter_slot: InventoryEntry
 var filters: Array[InventoryEntry] = []
 var _holder: WeaponHolder
 
-## Оружие, уже выданное сценой игрока, также появляется в инвентаре.
+## Начальный набор: только топор в первой ячейке, без установленных фильтров.
 func initialize(holder: WeaponHolder) -> void:
 	_holder = holder
-	if holder:
+	entries.clear()
+	weapons.assign([null, null])
+	filters.clear()
+	filter_slot = null
+	if is_instance_valid(holder):
+		var axe: Weapon
 		for weapon in holder.get_weapons():
-			var data := InventoryItem.new()
-			data.id = StringName("weapon_" + String(weapon.name))
-			data.display_name = weapon.display_name
-			data.kind = InventoryItem.Kind.WEAPON
-			data.weapon_id = weapon.name
-			if not weapon.scene_file_path.is_empty():
-				data.weapon_scene = load(weapon.scene_file_path) as PackedScene
+			if weapon.name == &"WeaponAxe":
+				axe = weapon
+				break
+		if not axe:
+			axe = holder.create_inventory_weapon(load("res://gamelogic/weapon/weapon_axe.tscn") as PackedScene)
+		if axe:
+			var data := load("res://gamelogic/environment/items/data/axe.tres") as InventoryItem
 			var entry := InventoryEntry.new()
 			entry.item = data
-			entry.weapon = weapon
+			entry.weapon = axe
 			entries.append(entry)
-			if weapons[0] == null:
-				weapons[0] = entry
-			elif weapons[1] == null:
-				weapons[1] = entry
-	# Сохраняем доступ к двум фильтрам, ранее доступным игроку по Tab.
-	for mode in [VisionProfile.Filter.INFRARED, VisionProfile.Filter.ULTRAVIOLET]:
-		var data := InventoryItem.new()
-		data.id = StringName("filter_" + str(mode))
-		data.display_name = "Инфракрасный фильтр" if mode == VisionProfile.Filter.INFRARED else "Ультрафиолетовый фильтр"
-		data.kind = InventoryItem.Kind.FILTER
-		data.filter_mode = mode
-		add_item(data, 1)
-	for entry in entries:
-		if entry.item.kind == InventoryItem.Kind.FILTER:
-			filter_slot = entry
-			filters.append(entry)
-			break
+			weapons[0] = entry
 	_sync_weapons()
 	_sync_filters()
 	changed.emit()
-
 func add_item(item: InventoryItem, quantity: int = 1) -> bool:
 	if not item or quantity <= 0:
 		return false
@@ -79,6 +67,8 @@ func equip_weapon(entry: InventoryEntry, slot: int) -> bool:
 		entry.weapon = _holder.create_inventory_weapon(entry.item.weapon_scene)
 		if not entry.weapon:
 			return false
+	if entry.weapon is Firearm:
+		entry.weapon.bind_ammo_inventory(self, entry.item.weapon_id)
 	for index in weapons.size():
 		if weapons[index] == entry:
 			weapons[index] = null
@@ -93,8 +83,7 @@ func equip_filter(entry: InventoryEntry) -> bool:
 	if not entries.has(entry) or entry.item.kind != InventoryItem.Kind.FILTER:
 		return false
 	filter_slot = entry
-	if not filters.has(entry):
-		filters.append(entry)
+	filters.assign([entry])
 	_sync_filters()
 	changed.emit()
 	return true
@@ -110,12 +99,44 @@ func use_item(entry: InventoryEntry) -> bool:
 		_consume(entry, 1)
 		return true
 	if entry.item.kind == InventoryItem.Kind.AMMO:
-		for candidate in entries:
-			if candidate.weapon is Firearm and candidate.item.weapon_id == entry.item.weapon_id:
-				candidate.weapon.add_ammo(entry.quantity)
-				_consume(entry, entry.quantity)
-				return true
+		# «Применить» запускает перезарядку совместимого оружия в руках.
+		if is_instance_valid(_holder) and _holder.current is Firearm:
+			var firearm := _holder.current as Firearm
+			if firearm.get_ammo_id() == entry.item.weapon_id:
+				firearm.reload()
+				return firearm.is_reloading
 	return false
+
+## Общий запас подходящих патронов во всех стопках инвентаря.
+func get_ammo_count(weapon_id: StringName) -> int:
+	if weapon_id.is_empty():
+		return 0
+	var total := 0
+	for entry in entries:
+		if entry.item.kind == InventoryItem.Kind.AMMO and entry.item.weapon_id == weapon_id:
+			total += entry.quantity
+	return total
+
+
+## Списание только реально загруженных патронов; пустые стопки удаляются.
+func consume_ammo(weapon_id: StringName, amount: int) -> int:
+	var remaining := maxi(amount, 0)
+	for index in range(entries.size() - 1, -1, -1):
+		var entry := entries[index]
+		if remaining == 0:
+			break
+		if weapon_id.is_empty() or entry.item.kind != InventoryItem.Kind.AMMO or entry.item.weapon_id != weapon_id:
+			continue
+		var count := mini(remaining, entry.quantity)
+		entry.quantity -= count
+		remaining -= count
+		if entry.quantity == 0:
+			entries.remove_at(index)
+	var consumed := maxi(amount, 0) - remaining
+	if consumed > 0:
+		changed.emit()
+	return consumed
+
 
 func _consume(entry: InventoryEntry, quantity: int) -> void:
 	entry.quantity -= quantity
@@ -171,6 +192,8 @@ func drop_item(entry: InventoryEntry, player: Node3D) -> bool:
 	_sync_weapons()
 	if is_instance_valid(entry.weapon):
 		entry.weapon.unequip()
+		if entry.weapon is Firearm:
+			entry.weapon.bind_ammo_inventory(null)
 		entry.weapon.get_parent().remove_child(entry.weapon)
 		pickup.add_child(entry.weapon)
 	get_tree().current_scene.add_child(pickup)
@@ -188,6 +211,8 @@ func restore_entry(entry: InventoryEntry) -> bool:
 		entry.weapon.unequip()
 		if entry.weapon is Firearm and not entry.weapon.fired.is_connected(_holder._on_weapon_fired):
 			entry.weapon.fired.connect(_holder._on_weapon_fired)
+		if entry.weapon is Firearm:
+			entry.weapon.bind_ammo_inventory(self, entry.item.weapon_id)
 	entries.append(entry)
 	changed.emit()
 	return true
@@ -219,7 +244,12 @@ func is_equipped(entry: InventoryEntry) -> bool:
 	return weapons.has(entry) or filters.has(entry)
 
 func _sync_filters() -> void:
+	# Единственный источник экипировки — filter_slot, одновременно установлен один фильтр.
+	filters.clear()
 	var modes: Array[int] = []
-	for entry in filters:
-		modes.append(int(entry.item.filter_mode))
+	if filter_slot and entries.has(filter_slot):
+		filters.append(filter_slot)
+		modes.append(int(filter_slot.item.filter_mode))
+	else:
+		filter_slot = null
 	VisionFilters.set_available_filters(modes)
