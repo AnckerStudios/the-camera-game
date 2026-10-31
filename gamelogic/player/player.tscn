@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://cquasyawaifv" path="res://gamelogic/player/cone/view_cone.tscn" id="7_cone"]
 [ext_resource type="Script" uid="uid://gltw66fqtyyp" path="res://gamelogic/player/camera/wall_cutout.gd" id="20_cutout"]
 
+[ext_resource type="Script" path="res://gamelogic/weapon/weapon_holder.gd" id="30_holder"]
+[ext_resource type="Script" path="res://gamelogic/weapon/target_lock.gd" id="31_lock"]
 [sub_resource type="CapsuleShape3D" id="Shape"]
 radius = 0.35
 height = 1.8
@@ -50,3 +52,11 @@ target = NodePath("..")
 
 [node name="WallCutout" type="Node" parent="." unique_id=1395136778]
 script = ExtResource("20_cutout")
+
+[node name="WeaponHolder" type="Node3D" parent="Visual/PlayerModel/camera_man_5/Armature/Skeleton3D/RightHandGrip" node_paths=PackedStringArray("aim")]
+transform = Transform3D(1.422417, 1.794727, -0.263268, -0.451963, 0.026654, -2.259300, -1.756726, 1.445167, 0.368290, 0, 0, 0)
+script = ExtResource("30_holder")
+aim = NodePath("../../../../../..")
+
+[node name="TargetLock" type="Node" parent="Visual/PlayerModel/camera_man_5/Armature/Skeleton3D/RightHandGrip/WeaponHolder"]
+script = ExtResource("31_lock")

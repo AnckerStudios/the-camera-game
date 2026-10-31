@@ -156,3 +156,11 @@ func set_inventory_weapons(equipped: Array[Weapon]) -> void:
 	else:
 		PlayerState.weapon_name = ""
 		PlayerState.set_ammo(0, 0, 0)
+
+
+## Выбранное в инвентаре оружие становится видимым в руке, а не только занимает слот.
+func activate_inventory_weapon(weapon: Weapon) -> void:
+	var equipped := get_weapons()
+	var index := equipped.find(weapon)
+	if index >= 0:
+		select(index)

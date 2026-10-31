@@ -71,7 +71,7 @@ func add_item(item: InventoryItem, quantity: int = 1) -> bool:
 	return true
 
 func equip_weapon(entry: InventoryEntry, slot: int) -> bool:
-	if not entries.has(entry) or slot < 0 or slot > 1 or entry.item.kind != InventoryItem.Kind.WEAPON:
+	if not entries.has(entry) or slot < 0 or slot > 1 or entry.item.kind != InventoryItem.Kind.WEAPON or not is_instance_valid(_holder):
 		return false
 	if not is_instance_valid(entry.weapon):
 		if not _holder or not entry.item.weapon_scene:
@@ -84,6 +84,7 @@ func equip_weapon(entry: InventoryEntry, slot: int) -> bool:
 			weapons[index] = null
 	weapons[slot] = entry
 	_sync_weapons()
+	_holder.activate_inventory_weapon(entry.weapon)
 	_sync_filters()
 	changed.emit()
 	return true

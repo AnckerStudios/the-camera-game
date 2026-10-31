@@ -8,7 +8,14 @@
 [ext_resource type="PackedScene" uid="uid://w3p8l3qnm13a" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="6_4ackd"]
 [ext_resource type="PackedScene" uid="uid://by6ubidcpixtr" path="res://gamelogic/environment/items/pickup_item.tscn" id="7_pickup_item"]
 [ext_resource type="PackedScene" uid="uid://c2g4ugy8n7yeu" path="res://resources/model/world/barrel.glb" id="8_barrel"]
-[ext_resource type="PackedScene" uid="uid://cf044qdp2v615" path="res://gamelogic/weapon/weapon_double_shotgun.tscn" id="8_rsf50"]
+[ext_resource type="Resource" path="res://gamelogic/environment/items/data/axe.tres" id="pickup_axe"]
+[ext_resource type="Resource" path="res://gamelogic/environment/items/data/infrared_filter.tres" id="pickup_infrared_filter"]
+[ext_resource type="Resource" path="res://gamelogic/environment/items/data/medkit.tres" id="pickup_medkit"]
+[ext_resource type="Resource" path="res://gamelogic/environment/items/data/revolver.tres" id="pickup_revolver"]
+[ext_resource type="Resource" path="res://gamelogic/environment/items/data/revolver_ammo.tres" id="pickup_revolver_ammo"]
+[ext_resource type="Resource" path="res://gamelogic/environment/items/data/shotgun.tres" id="pickup_shotgun"]
+[ext_resource type="Resource" path="res://gamelogic/environment/items/data/shotgun_ammo.tres" id="pickup_shotgun_ammo"]
+[ext_resource type="Resource" path="res://gamelogic/environment/items/data/ultraviolet_filter.tres" id="pickup_ultraviolet_filter"]
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 1
@@ -307,11 +314,88 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.731076, 0.8862281, 6.913606
 
 [node name="TestPickupItem2" parent="." unique_id=1246594492 instance=ExtResource("7_pickup_item")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5189924, 0.39750087, -0.10500479)
-model_scene = ExtResource("8_rsf50")
+inventory_item = ExtResource("pickup_shotgun")
 description = "Огромная пробивная сила и настолько же медленная перезарядка"
 display_name = "Двустволка"
 outline_width = 0.1
 
+[node name="Label" type="Label3D" parent="TestPickupItem2" unique_id=1940211158]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+pixel_size = 0.008
+billboard = 1
+text = "Двустволка"
+
 [node name="TestPickupItem" parent="." unique_id=464021308 instance=ExtResource("7_pickup_item")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2107819, 0.5, -0.08076906)
+inventory_item = ExtResource("pickup_medkit")
 display_name = "Тестовый предмет"
+
+[node name="Label" type="Label3D" parent="TestPickupItem" unique_id=1254785991]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+pixel_size = 0.008
+billboard = 1
+text = "Аптечка +25"
+
+[node name="PickupShowcase" type="Node3D" parent="." unique_id=1264310895]
+
+[node name="revolver" parent="PickupShowcase" unique_id=1488767330 instance=ExtResource("7_pickup_item")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.05, 0)
+inventory_item = ExtResource("pickup_revolver")
+
+[node name="Label" type="Label3D" parent="PickupShowcase/revolver" unique_id=468644230]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+pixel_size = 0.008
+billboard = 1
+text = "Револьвер"
+
+[node name="axe" parent="PickupShowcase" unique_id=1724879177 instance=ExtResource("7_pickup_item")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.05, 0)
+inventory_item = ExtResource("pickup_axe")
+
+[node name="Label" type="Label3D" parent="PickupShowcase/axe" unique_id=1375225561]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+pixel_size = 0.008
+billboard = 1
+text = "Топор"
+
+[node name="revolver_ammo" parent="PickupShowcase" unique_id=1433271116 instance=ExtResource("7_pickup_item")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.05, 2.5)
+inventory_item = ExtResource("pickup_revolver_ammo")
+quantity = 24
+
+[node name="Label" type="Label3D" parent="PickupShowcase/revolver_ammo" unique_id=228963152]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+pixel_size = 0.008
+billboard = 1
+text = "Патроны: револьвер x24"
+
+[node name="shotgun_ammo" parent="PickupShowcase" unique_id=38146467 instance=ExtResource("7_pickup_item")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.05, 2.5)
+inventory_item = ExtResource("pickup_shotgun_ammo")
+quantity = 8
+
+[node name="Label" type="Label3D" parent="PickupShowcase/shotgun_ammo" unique_id=2056991002]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+pixel_size = 0.008
+billboard = 1
+text = "Патроны: двустволка x8"
+
+[node name="infrared_filter" parent="PickupShowcase" unique_id=959453346 instance=ExtResource("7_pickup_item")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.05, 2.5)
+inventory_item = ExtResource("pickup_infrared_filter")
+
+[node name="Label" type="Label3D" parent="PickupShowcase/infrared_filter" unique_id=1152528447]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+pixel_size = 0.008
+billboard = 1
+text = "ИК-фильтр"
+
+[node name="ultraviolet_filter" parent="PickupShowcase" unique_id=1042856725 instance=ExtResource("7_pickup_item")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.05, 2.5)
+inventory_item = ExtResource("pickup_ultraviolet_filter")
+
+[node name="Label" type="Label3D" parent="PickupShowcase/ultraviolet_filter" unique_id=418724434]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+pixel_size = 0.008
+billboard = 1
+text = "УФ-фильтр"

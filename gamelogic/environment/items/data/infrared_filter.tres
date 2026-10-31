@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="InventoryItem" load_steps=3 format=3]
+[ext_resource type="Script" path="res://gamelogic/inventory/inventory_item.gd" id="1"]
+[ext_resource type="PackedScene" path="res://gamelogic/environment/items/models/infrared_filter.tscn" id="2"]
+[resource]
+script = ExtResource("1")
+id = &"filter_1"
+display_name = "Инфракрасный фильтр"
+description = "Позволяет видеть инфракрасные цели. После установки переключается по Tab."
+kind = 3
+max_stack = 1
+model_scene = ExtResource("2")
+filter_mode = 1
