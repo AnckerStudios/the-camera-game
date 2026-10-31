@@ -8,43 +8,31 @@ var filter_slot: InventoryEntry
 var filters: Array[InventoryEntry] = []
 var _holder: WeaponHolder
 
-## Оружие, уже выданное сценой игрока, также появляется в инвентаре.
+## Начальный набор: только топор в первой ячейке, без установленных фильтров.
 func initialize(holder: WeaponHolder) -> void:
 	_holder = holder
-	if holder:
+	entries.clear()
+	weapons.assign([null, null])
+	filters.clear()
+	filter_slot = null
+	if is_instance_valid(holder):
+		var axe: Weapon
 		for weapon in holder.get_weapons():
-			var data := InventoryItem.new()
-			data.id = StringName("weapon_" + String(weapon.name))
-			data.display_name = weapon.display_name
-			data.kind = InventoryItem.Kind.WEAPON
-			data.weapon_id = weapon.name
-			if not weapon.scene_file_path.is_empty():
-				data.weapon_scene = load(weapon.scene_file_path) as PackedScene
+			if weapon.name == &"WeaponAxe":
+				axe = weapon
+				break
+		if not axe:
+			axe = holder.create_inventory_weapon(load("res://gamelogic/weapon/weapon_axe.tscn") as PackedScene)
+		if axe:
+			var data := load("res://gamelogic/environment/items/data/axe.tres") as InventoryItem
 			var entry := InventoryEntry.new()
 			entry.item = data
-			entry.weapon = weapon
+			entry.weapon = axe
 			entries.append(entry)
-			if weapons[0] == null:
-				weapons[0] = entry
-			elif weapons[1] == null:
-				weapons[1] = entry
-	# Сохраняем доступ к двум фильтрам, ранее доступным игроку по Tab.
-	for mode in [VisionProfile.Filter.INFRARED, VisionProfile.Filter.ULTRAVIOLET]:
-		var data := InventoryItem.new()
-		data.id = StringName("filter_" + str(mode))
-		data.display_name = "Инфракрасный фильтр" if mode == VisionProfile.Filter.INFRARED else "Ультрафиолетовый фильтр"
-		data.kind = InventoryItem.Kind.FILTER
-		data.filter_mode = mode
-		add_item(data, 1)
-	for entry in entries:
-		if entry.item.kind == InventoryItem.Kind.FILTER:
-			filter_slot = entry
-			filters.append(entry)
-			break
+			weapons[0] = entry
 	_sync_weapons()
 	_sync_filters()
 	changed.emit()
-
 func add_item(item: InventoryItem, quantity: int = 1) -> bool:
 	if not item or quantity <= 0:
 		return false

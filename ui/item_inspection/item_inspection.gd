@@ -8,6 +8,9 @@ const MouseInput = preload("res://gamelogic/input/mouse_tracker.gd")
 @export_range(0.05, 1.0, 0.01) var entrance_seconds: float = 0.2
 @export_range(0.05, 1.0, 0.01) var text_fade_seconds: float = 0.15
 
+## Доля доступного кадра, занимаемая моделью. Больше — крупнее предмет.
+@export_range(0.2, 0.95, 0.01) var preview_fill: float = 0.8
+var _model_radius: float = 0.9
 var _entrance_tween: Tween
 var _entering: bool = false
 var _text_panel: Control
@@ -27,6 +30,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	layer = 50
 	_bind_interface()
+	_viewport.size_changed.connect(_fit_preview_camera)
 	hide()
 	var mouse_input := MouseInput.new()
 	mouse_input.drag_delta.connect(_rotate_model)
@@ -59,12 +63,34 @@ func prepare(item: PickupItem) -> void:
 		var mesh_bounds: AABB = mesh.transform * mesh.get_aabb()
 		bounds = bounds.merge(mesh_bounds) if initialized else mesh_bounds
 		initialized = true
-	var radius := maxf(bounds.size.length() * 0.5, 0.1)
+	# Единая сфера вокруг модели гарантирует, что любой поворот помещается в кадр.
+	var source_radius := maxf(bounds.size.length() * 0.5, 0.001)
+	_model_radius = 0.9
+	var factor := _model_radius / source_radius
+	var normalization := Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * factor), -bounds.get_center() * factor)
 	for mesh in _pivot.get_children():
-		mesh.position -= bounds.get_center()
-	_preview_camera.position.z = radius / tan(deg_to_rad(_preview_camera.fov * 0.5)) * 1.5
+		mesh.transform = normalization * mesh.transform
+	_pivot.scale = Vector3.ONE
+	_fit_preview_camera()
+
+
+## FOV задаёт вертикальный или горизонтальный угол в зависимости от Keep Aspect.
+func _vertical_half_fov() -> float:
+	var aspect := float(_viewport.size.x) / maxf(float(_viewport.size.y), 1.0)
+	var half_fov := deg_to_rad(_preview_camera.fov * 0.5)
+	return half_fov if _preview_camera.keep_aspect == Camera3D.KEEP_HEIGHT else atan(tan(half_fov) / aspect)
+
+func _fit_preview_camera() -> void:
+	if not is_instance_valid(_preview_camera) or not is_instance_valid(_viewport):
+		return
+	var aspect := float(_viewport.size.x) / maxf(float(_viewport.size.y), 1.0)
+	var vertical_half := _vertical_half_fov()
+	var horizontal_half := atan(tan(vertical_half) * aspect)
+	var limiting_half := maxf(minf(vertical_half, horizontal_half), 0.01)
+	var distance := _model_radius / sin(limiting_half) / maxf(preview_fill, 0.2)
+	_preview_camera.position = Vector3(0, 0, distance)
 	_preview_camera.near = 0.01
-	_preview_camera.far = maxf(_preview_camera.position.z + radius * 4.0, 20.0)
+	_preview_camera.far = maxf(distance + _model_radius * 4.0, 20.0)
 
 func _copy_meshes(node: Node3D, parent_transform: Transform3D) -> void:
 	if node.name == &"Outline":
@@ -125,7 +151,7 @@ func _play_entrance() -> void:
 	_stop_entrance()
 	_entering = true
 	_text_panel.modulate.a = 0.0
-	var half_view_height := _preview_camera.position.z * tan(deg_to_rad(_preview_camera.fov * 0.5))
+	var half_view_height := _preview_camera.position.z * tan(_vertical_half_fov())
 	_pivot.position = Vector3(0.0, -half_view_height * 1.8, 0.0)
 	_entrance_tween = create_tween()
 	_entrance_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
