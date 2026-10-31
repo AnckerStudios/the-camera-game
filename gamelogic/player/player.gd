@@ -267,4 +267,5 @@ func _exit_tree() -> void:
 
 func _update_shader_parametrs() -> void:
 	var grass_node = get_tree().current_scene.get_node("MultiMeshInstance3D")
-	grass_node.set_deferred("instance_shader_parameters/player_position", position + Vector3(0, -0.1, 0))
+	if (grass_node != null):
+		grass_node.set_deferred("instance_shader_parameters/player_position", position + Vector3(0, -0.1, 0))
