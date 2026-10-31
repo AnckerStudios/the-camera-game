@@ -12,8 +12,10 @@ var _flash_tween: Tween
 @onready var pause_text: Label = $Margin/Layout/TopRow/Rec/PauseText
 @onready var pause_sing: Label = %PauseSing
 @onready var bottom_row: HBoxContainer = $Margin/Layout/BottomRow
-@onready var back_x: Button = $BackX
 @onready var options: Control = $Options
+@onready var button_optional: Button = $Margin/Layout/TopRow/Battery/ButtonOptional
+@onready var button_back: Button = $Margin/Layout/TopRow/Battery/ButtonBack
+@onready var mvj: Label = $Margin/Layout/Mvj
 
 func _ready() -> void:
 	PlayerState.battery_changed.connect(set_battery)
@@ -75,8 +77,11 @@ func optional():
 	pause_text.visible = true
 	pause_sing.visible = true
 	options.visible = true
-	back_x.visible = true
+	mvj.visible = true
 	options.pause()
+	button_optional.visible = false
+	button_back.visible = true
+	get_tree().paused = true
 
 func from_optional():
 	rec_dot.visible = true
@@ -85,8 +90,14 @@ func from_optional():
 	pause_text.visible = false
 	pause_sing.visible = false
 	options.visible = false
-	back_x.visible = false
+	mvj.visible = false
+	button_optional.visible = true
+	button_back.visible = false
+	
 	get_tree().paused = false
 
-func _on_back_x_pressed() -> void:
+func _on_button_optional_pressed() -> void:
+	optional()
+
+func _on_button_back_pressed() -> void:
 	from_optional()

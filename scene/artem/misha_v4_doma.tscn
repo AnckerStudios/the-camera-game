@@ -5,8 +5,9 @@
 [ext_resource type="Curve" path="res://resources/animation/player/roll_motion.tres" id="3_1i3nq"]
 [ext_resource type="Script" uid="uid://depwexin4lwf1" path="res://gamelogic/player/camera/isometric_camera.gd" id="3_kbvua"]
 [ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="4_s1bv7"]
-[ext_resource type="Script" uid="uid://cmkrno3x3fyie" path="res://gamelogic/weapon/damage_dummy.gd" id="5_5egmh"]
 [ext_resource type="PackedScene" uid="uid://w3p8l3qnm13a" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="6_4ackd"]
+[ext_resource type="Script" uid="uid://cj0kaua4ww26t" path="res://gamelogic/environment/explosive_barrel.gd" id="6_8n1ek"]
+[ext_resource type="AudioStream" uid="uid://bsv1wusib4t65" path="res://resources/music/gun.mp3" id="7_dcx1t"]
 [ext_resource type="PackedScene" uid="uid://by6ubidcpixtr" path="res://gamelogic/environment/items/pickup_item.tscn" id="7_pickup_item"]
 [ext_resource type="PackedScene" uid="uid://c2g4ugy8n7yeu" path="res://resources/model/world/barrel.glb" id="8_barrel"]
 [ext_resource type="Resource" path="res://gamelogic/environment/items/data/axe.tres" id="pickup_axe"]
@@ -94,7 +95,8 @@ size = 9.0
 
 [node name="Dummy1" type="StaticBody3D" parent="." unique_id=1316338027]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -5)
-script = ExtResource("5_5egmh")
+script = ExtResource("6_8n1ek")
+explosion_sound = ExtResource("7_dcx1t")
 
 [node name="Shape" type="CollisionShape3D" parent="Dummy1" unique_id=830365736]
 shape = SubResource("DummyShape")

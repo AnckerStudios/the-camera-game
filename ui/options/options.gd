@@ -1,25 +1,28 @@
 extends Control
 @onready var back: Button = $Options/VBoxContainer/Back
 @onready var label: Label = $Label
+@onready var h_box_container: HBoxContainer = $Options/VBoxContainer/HBoxContainer
 
 func _ready() -> void:
 	if MenuState.state :
-		back.text = "назад"
+		back.visible = true
+		h_box_container.visible = false
 		label.visible = true
 	else :
-		back.text = "в меню"
+		back.visible = false
+		h_box_container.visible = true
 		label.visible = false
 	
 func _on_back_pressed() -> void:
-	if MenuState.state :
-		back_to_tree()
-	else :
-		get_tree().paused = false
-		TransitionTort.change_scene("res://ui/menu/menu.tscn")
+	get_tree().paused = false
+	queue_free()
 
-func back_to_tree() -> void:
-		get_tree().paused = false
-		queue_free()
-		
 func pause():
 	_ready()
+
+func _on_back_pause_pressed() -> void:
+	$"..".from_optional()
+
+func _on_back_menu_pressed() -> void:
+	TransitionTort.change_scene("res://ui/menu/menu.tscn")
+	get_tree().paused = false
