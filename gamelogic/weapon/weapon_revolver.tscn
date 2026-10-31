@@ -15,9 +15,10 @@ display_name = "РЕВОЛЬВЕР"
 one_handed = true
 
 [node name="Model" parent="." unique_id=548983202 instance=ExtResource("2_model")]
-transform = Transform3D(-0.075, 0, 0, 0, 0.075, 0, 0, 0, -0.075, 0, 0, 0)
+transform = Transform3D(-0.044235703, 0.03603597, -0.048678663, 0.047683958, 0.05788793, -0.0004783481, 0.037342254, -0.031231346, -0.05705401, -0.09915336, 0.024666032, -0.18948016)
 
 [node name="Muzzle" type="Marker3D" parent="." unique_id=1089161438]
+transform = Transform3D(0.58980936, 0.4804796, 0.6490488, -0.63578606, 0.771839, 0.0063779745, -0.4978967, -0.41641793, 0.7607201, -0.17105329, 0.08532889, -0.352116)
 
 [node name="Flash" type="OmniLight3D" parent="Muzzle" unique_id=2117685233]
 light_color = Color(1, 0.8, 0.5, 1)

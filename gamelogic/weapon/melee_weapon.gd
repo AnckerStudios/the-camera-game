@@ -129,7 +129,8 @@ func _play_swing_animation() -> void:
 		var length := animator.get_animation(swing_animation).length
 		animator.play(swing_animation, -1.0, length / maxf(swing_interval, 0.01))
 		return
-	if not swing_pivot:
+	var holder := get_parent() as WeaponHolder
+	if not swing_pivot or (holder and holder.owner_animates_attacks):
 		return
 	_reset_animation()
 	var half := swing_degrees / 2.0

@@ -3,11 +3,16 @@ extends Node3D
 
 ## Держатель оружия игрока: дочерние Weapon, переключение, ввод и проброс состояния в PlayerState.
 
+## Оружие в руке сменилось; null - руки пустые.
+signal weapon_changed(weapon: Weapon)
+
 ## Узел, вдоль -Z которого целится оружие. Держатель может сидеть на кисти и качаться
 ## вместе с анимацией, а стрелять нужно туда, куда смотрит персонаж. Без узла - сам держатель.
 @export var aim: Node3D
 ## Предмет во второй руке; виден только с одноручным оружием.
 @export var off_hand: Node3D
+## Держатель сидит на кости и удар делает анимация персонажа, а не само оружие.
+@export var owner_animates_attacks := false
 
 const TargetLockScript = preload("res://gamelogic/weapon/target_lock.gd")
 var _target_lock: Node
@@ -93,6 +98,7 @@ func select(index: int) -> void:
 		PlayerState.set_ammo(current.loaded, current.capacity, current.reserve_ammo)
 	else:
 		PlayerState.set_ammo(0, 0, 0)
+	weapon_changed.emit(current)
 
 
 ## Только успешный выстрел собственного оружия запускает тряску активной камеры.
@@ -156,6 +162,7 @@ func set_inventory_weapons(equipped: Array[Weapon]) -> void:
 	else:
 		PlayerState.weapon_name = ""
 		PlayerState.set_ammo(0, 0, 0)
+		weapon_changed.emit(null)
 
 
 ## Выбранное в инвентаре оружие становится видимым в руке, а не только занимает слот.

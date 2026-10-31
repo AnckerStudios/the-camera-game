@@ -19,10 +19,10 @@ reload_animation = &"Reload_002"
 display_name = "ДВУХСТВОЛКА"
 
 [node name="Model" parent="." unique_id=1537325724 instance=ExtResource("2_model")]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.32360446, -0.8468461, 0)
+transform = Transform3D(0.11934103, 0.07193561, 0.08360167, -0.10347097, 0.11566729, 0.04817769, -0.03818023, -0.08861488, 0.13075139, -0.54543074, -0.30918071, -0.06318824)
 
 [node name="Muzzle" type="Marker3D" parent="." unique_id=1561908161]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.038220644, -0.6432412)
+transform = Transform3D(0.73440635, 0.44268066, 0.5144718, -0.6367444, 0.7117987, 0.29647806, -0.23495527, -0.54532236, 0.8046239, -0.35138648, -0.15758176, -0.76274846)
 
 [node name="Flash" type="OmniLight3D" parent="Muzzle" unique_id=1132389526]
 light_color = Color(1, 0.8, 0.5, 1)
