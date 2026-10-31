@@ -69,6 +69,7 @@ func _physics_process(delta: float) -> void:
 	_apply_gravity_and_jump(delta)
 
 	move_and_slide()
+	_update_shader_parametrs()
 	_update_mouse_facing(delta)
 	_reset_if_fallen()
 	_update_camera_walking()
@@ -263,3 +264,7 @@ func _set_selected_pickup(item: PickupItem) -> void:
 func _exit_tree() -> void:
 	if is_instance_valid(_selected_pickup):
 		_selected_pickup.set_pickup_selected(false)
+
+func _update_shader_parametrs() -> void:
+	var grass_node = get_tree().current_scene.get_node("MultiMeshInstance3D")
+	grass_node.set_deferred("instance_shader_parameters/player_position", position + Vector3(0, -0.1, 0))
