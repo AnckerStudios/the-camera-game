@@ -10,7 +10,18 @@ signal target_changed(target: Node3D)
 @export var enemy_group: StringName = &"monster"
 @export_flags_3d_physics var obstruction_mask: int = 1
 
-var current_target: Node3D
+# Слабая ссылка не удерживает удалённого врага и возвращает null после его удаления.
+var _target_ref: WeakRef
+var current_target: Node3D:
+	get:
+		if not _target_ref:
+			return null
+		var candidate = _target_ref.get_ref()
+		if not is_instance_valid(candidate) or candidate.is_queued_for_deletion():
+			return null
+		return candidate as Node3D
+	set(value):
+		_target_ref = weakref(value) if is_instance_valid(value) else null
 
 ## Все дробины одного выстрела используют одну цель; разброс добавляется после захвата.
 func acquire(origin: Vector3, max_distance: float, excluded: Array[RID], shooter: Node3D) -> Node3D:
@@ -37,9 +48,12 @@ func acquire(origin: Vector3, max_distance: float, excluded: Array[RID], shooter
 				continue
 			closest = distance_squared
 			selected = enemy
-	if current_target != selected:
-		current_target = selected
-		target_changed.emit(current_target)
+	var previous := current_target
+	# Назначение обязательно и при selected == null: старую цель нельзя возвращать.
+	current_target = selected
+	if previous != selected:
+		target_changed.emit(selected)
+	# Обработчик сигнала также может удалить цель — повторно проверяем слабую ссылку.
 	return current_target
 
 func get_target_point(enemy: Node3D) -> Vector3:
