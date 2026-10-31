@@ -1,8 +1,9 @@
 class_name Ghoul extends Monster
 
 func _ready() -> void:
+	vision_profile = vision_profile.duplicate()
 	super()
-	dimension = Dimension.REAL
+	vision_profile.dimension = VisionProfile.Dimension.REAL
 	hp = 100.0
 	move_speed = 1.5
 	attack_damage = 10.0

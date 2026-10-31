@@ -31,7 +31,7 @@ func acquire(origin: Vector3, max_distance: float, excluded: Array[RID], shooter
 		for enemy in get_tree().get_nodes_in_group(DamageReceiver.TARGET_GROUP):
 			if not enemy is Node3D or enemy.is_queued_for_deletion() or not enemy.is_visible_in_tree():
 				continue
-			if DamageReceiver.find_target(enemy) != enemy or enemy == shooter:
+			if DamageReceiver.find_target(enemy) != enemy or enemy == shooter or not VisionFilters.is_target_visible(enemy):
 				continue
 			var point := get_target_point(enemy)
 			if camera.is_position_behind(point) or origin.distance_to(point) > max_distance:

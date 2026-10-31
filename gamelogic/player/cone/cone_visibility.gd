@@ -15,6 +15,11 @@ var _alpha := 1.0
 
 func _ready() -> void:
 	_target = get_parent()
+	_target.set_meta(&"cone_visibility_managed", true)
+	if not _target.has_node("FilterSubject"):
+		var subject := FilterSubject.new()
+		subject.name = &"FilterSubject"
+		_target.add_child.call_deferred(subject)
 	for node in _target.find_children("*", "GeometryInstance3D", true, false):
 		_meshes.append(node)
 	_alpha = 1.0 if _is_seen() else 0.0
@@ -22,6 +27,10 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if not VisionFilters.is_target_visible(_target):
+		_alpha = 0.0
+		_apply()
+		return
 	var goal := 1.0 if _is_seen() else 0.0
 	var time := fade_in_time if goal > _alpha else fade_out_time
 	_alpha = move_toward(_alpha, goal, delta / time) if time > 0.0 else goal
@@ -29,6 +38,8 @@ func _process(delta: float) -> void:
 
 
 func _is_seen() -> bool:
+	if not VisionFilters.is_target_visible(_target):
+		return false
 	var cones := get_tree().get_nodes_in_group(&"visibility_cones")
 	# Сцены без конуса сохраняют обычное отображение.
 	if cones.is_empty():

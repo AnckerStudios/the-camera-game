@@ -25,14 +25,17 @@ signal picked_up(item: PickupItem, receiver: Node3D)
 ## Толщина оболочки в локальных единицах модели.
 @export_range(0.001, 0.2, 0.001) var outline_width: float = 0.025
 
-const OUTLINE_SHADER = preload("res://gamelogic/items/item_outline.gdshader")
 var _receivers: Array[Node3D] = []
 var _taken: bool = false
-var _outline_material: ShaderMaterial
+var _outline: ObjectOutline
 @onready var _shape: CollisionShape3D = $PickupRadius
 @onready var _model: Node3D = $Model
 
+@export var vision_profile: VisionProfile = preload("res://gamelogic/filters/active_profile.tres")
+
 func _ready() -> void:
+	vision_profile = vision_profile.duplicate()
+	vision_profile.attach(self)
 	add_to_group(&"pickup_items")
 	# Обводка предмета не должна заменяться шейдером вырезания стен.
 	add_to_group(&"camera_cutout_ignore")
@@ -40,12 +43,16 @@ func _ready() -> void:
 	_update_radius()
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
-	_outline_material = ShaderMaterial.new()
-	_outline_material.shader = OUTLINE_SHADER
-	_outline_material.set_shader_parameter("outline_color", outline_color)
-	_outline_material.set_shader_parameter("outline_width", outline_width)
-	for mesh in _model.find_children("*", "MeshInstance3D", true, false):
-		_add_outline(mesh)
+	_outline = ObjectOutline.new()
+	_outline.name = &"ObjectOutline"
+	_outline.mesh_root = _model
+	_outline.color = outline_color
+	_outline.selected_color = selected_outline_color
+	_outline.width = outline_width
+	add_child(_outline)
+	var subject := FilterSubject.new()
+	subject.name = &"FilterSubject"
+	add_child(subject)
 
 func _update_radius() -> void:
 	var sphere := SphereShape3D.new()
@@ -69,7 +76,7 @@ func _on_body_exited(body: Node3D) -> void:
 
 ## Проверяет реальное пересечение области, а не только сохранённое событие входа.
 func can_pick_up(receiver: Node3D) -> bool:
-	return not _taken and is_instance_valid(receiver) and _accepts(receiver) and overlaps_body(receiver)
+	return not _taken and VisionFilters.is_target_visible(self) and is_instance_valid(receiver) and _accepts(receiver) and overlaps_body(receiver)
 
 ## Вызывается внешним контроллером взаимодействия. Удержание кнопок предмет не читает.
 func try_pick_up(receiver: Node3D) -> bool:
@@ -91,24 +98,10 @@ func try_pick_up(receiver: Node3D) -> bool:
 func _apply_pickup(_receiver: Node3D) -> bool:
 	return true
 
-## Отдельная оболочка сохраняет исходные материалы и текстуры модели.
-func _add_outline(source: MeshInstance3D) -> void:
-	if not source.mesh:
-		return
-	var outline := MeshInstance3D.new()
-	outline.name = &"Outline"
-	outline.mesh = source.mesh
-	outline.material_override = _outline_material
-	outline.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	source.add_child(outline)
-
-
-## Меняет только обводку; обычная подсветка остальных предметов сохраняется.
+## Выбор предмета делегирует смену цвета общему компоненту окружения.
 func set_pickup_selected(selected: bool) -> void:
-	if _outline_material:
-		var color := selected_outline_color if selected else outline_color
-		_outline_material.set_shader_parameter("outline_color", color)
-
+	if is_instance_valid(_outline):
+		_outline.set_selected(selected)
 
 ## Сохраняет контейнер Model, используемый обводкой и окном осмотра.
 func _load_model_scene() -> void:

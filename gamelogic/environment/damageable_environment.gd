@@ -14,10 +14,17 @@ var damage_receiver := DamageReceiver.new()
 		damage_receiver.health = maxf(value, 0.0)
 var _destroyed: bool = false
 
+@export var vision_profile: VisionProfile = preload("res://gamelogic/filters/active_profile.tres")
+
 func _ready() -> void:
+	vision_profile = vision_profile.duplicate()
+	vision_profile.attach(self)
 	damage_receiver.aim_point = aim_point
 	damage_receiver.register_owner(self)
 	add_to_group(&"damageable_environment")
+	var subject := FilterSubject.new()
+	subject.name = &"FilterSubject"
+	add_child(subject)
 	damage_receiver.damaged.connect(_on_damage_received)
 	damage_receiver.depleted.connect(_on_health_depleted)
 

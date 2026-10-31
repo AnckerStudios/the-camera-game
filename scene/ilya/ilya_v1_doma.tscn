@@ -10,8 +10,9 @@
 [ext_resource type="PackedScene" uid="uid://dhn6j3uin8x8b" path="res://gamelogic/props/pines/pine_1.tscn" id="7_4cm51"]
 [ext_resource type="PackedScene" uid="uid://w3p8l3qnm13a" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="7_fvh2d"]
 [ext_resource type="PackedScene" uid="uid://b27riekc87kn0" path="res://gamelogic/props/pines/pine_2.tscn" id="8_om8af"]
-[ext_resource type="PackedScene" uid="uid://by6ubidcpixtr" path="res://gamelogic/items/pickup_item.tscn" id="8_rwcgb"]
+[ext_resource type="PackedScene" uid="uid://by6ubidcpixtr" path="res://gamelogic/environment/items/pickup_item.tscn" id="8_rwcgb"]
 [ext_resource type="Shader" uid="uid://c8ynwk6s5k2sa" path="res://resources/shaders/grass_shader.gdshader" id="11_4d73h"]
+[ext_resource type="PackedScene" uid="uid://dwbunjtc84mc3" path="res://gamelogic/monster/ghost/ghost.tscn" id="11_b1tl3"]
 [ext_resource type="ArrayMesh" uid="uid://er8nljgvawhk" path="res://resources/model/world/GrassMesh.res" id="11_om8af"]
 [ext_resource type="Script" uid="uid://chqxm24x5s5t1" path="res://scene/ilya/grass_generation.gd" id="13_j7vhw"]
 
@@ -178,6 +179,9 @@ transform = Transform3D(0.07134643, 0, -0.9974516, 0, 1, 0, 0.9974516, 0, 0.0713
 
 [node name="Ghoul" parent="." unique_id=13065505 instance=ExtResource("7_fvh2d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.731076, 0.8862281, 6.9136066)
+
+[node name="Ghost" parent="." unique_id=1145615818 instance=ExtResource("11_b1tl3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9349439, 0.9623878, -5.2598195)
 
 [node name="TestPickupItem2" parent="." unique_id=1246594492 instance=ExtResource("8_rwcgb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5189924, 0.39750087, -0.10500479)

@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://depwexin4lwf1" path="res://gamelogic/player/camera/isometric_camera.gd" id="3_4r7s1"]
 [ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="4_bxor3"]
 [ext_resource type="Script" uid="uid://cmkrno3x3fyie" path="res://gamelogic/weapon/damage_dummy.gd" id="5_vqkpd"]
-[ext_resource type="PackedScene" uid="uid://cjuq8g0mbb8h8" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="6_4kfxk"]
+[ext_resource type="PackedScene" uid="uid://w3p8l3qnm13a" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="6_4kfxk"]
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 1
