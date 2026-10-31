@@ -46,6 +46,9 @@ var _inspection
 
 var _selected_pickup: PickupItem
 
+var _shooting_lock_target: Node3D
+var _shooting_lock_remaining: float = 0.0
+
 var _mouse_target: Vector3
 var _has_mouse_target: bool = false
 
@@ -201,6 +204,13 @@ func _on_mouse_target_changed(world_position: Vector3) -> void:
 
 ## Направление взгляда не зависит от клавиш движения и рывка.
 func _update_mouse_facing(delta: float) -> void:
+	if _shooting_lock_remaining > 0.0 and is_instance_valid(_shooting_lock_target):
+		_shooting_lock_remaining = maxf(_shooting_lock_remaining - delta, 0.0)
+		var locked_direction := _shooting_lock_target.global_position - global_position
+		locked_direction.y = 0.0
+		_rotate_visual(locked_direction.normalized(), delta)
+		return
+	_shooting_lock_remaining = 0.0
 	if not _has_mouse_target:
 		return
 	var direction := _mouse_target - global_position
@@ -278,3 +288,8 @@ func _on_hp_changed(value: float, max_value: float) -> void:
 		var scene =  scene_setting.instantiate()
 		add_child(scene)
 		get_tree().paused = true
+
+## Короткий визуальный поворот к цели выстрела без изменения направления движения.
+func set_shooting_lock(enemy: Node3D, duration: float) -> void:
+	_shooting_lock_target = enemy
+	_shooting_lock_remaining = maxf(duration, 0.0)
