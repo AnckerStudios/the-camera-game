@@ -30,6 +30,7 @@ VisionFilters="*res://gamelogic/filters/vision_filters.gd"
 
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/dpi/allow_hidpi.web=false
 
 [file_customization]
 
@@ -140,3 +141,18 @@ inventory={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+lights_and_shadows/directional_shadow/size.web=2048
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality.web=0
+lights_and_shadows/positional_shadow/soft_shadow_filter_quality.web=0
+lights_and_shadows/positional_shadow/atlas_size.web=2048
+
+[shader_globals]
+
+wall_cutout_target_uv={
+"type": "vec2",
+"value": Vector2(-10, -10)
+}
+wall_cutout_viewport_size={
+"type": "vec2",
+"value": Vector2(1, 1)
+}

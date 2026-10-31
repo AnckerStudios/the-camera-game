@@ -33,7 +33,9 @@ var _cutout_mode: int
 var _actions: Array[Button] = []
 
 func _ready() -> void:
+	visibility_changed.connect(_on_visibility_changed)
 	hide()
+	_on_visibility_changed()
 	_actions = [_primary, _drop, _cancel]
 	_primary.pressed.connect(_apply_selected)
 	_drop.pressed.connect(_drop_selected)
@@ -42,6 +44,12 @@ func _ready() -> void:
 	_weapon_two.pressed.connect(_choose_weapon_slot.bind(1))
 	_filter.pressed.connect(_select_equipped_filter)
 	_context.hide()
+
+## Закрытое окно не рендерит свой 3D-мир и не крутит карусель.
+func _on_visibility_changed() -> void:
+	var viewport := _carousel.get_viewport() as SubViewport
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if visible else SubViewport.UPDATE_DISABLED
+	_carousel.set_process(visible)
 
 func open(player: Node3D, inventory: PlayerInventory, adapter: Node) -> void:
 	_player = player

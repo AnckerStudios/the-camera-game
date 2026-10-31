@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://britfeef6c7oe"]
 
-[ext_resource type="PackedScene" uid="uid://itwk36mmn8b0" path="res://resources/model/weapons/bullet_shootgun.glb" id="1"]
+[ext_resource type="PackedScene" uid="uid://buniq73kwxfk5" path="res://resources/model/weapons/bullet_shootgun.glb" id="1"]
 
 [node name="ItemModel" type="Node3D" unique_id=501261417]
 

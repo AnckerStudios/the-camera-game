@@ -31,7 +31,9 @@ func _ready() -> void:
 	layer = 50
 	_bind_interface()
 	_viewport.size_changed.connect(_fit_preview_camera)
+	visibility_changed.connect(_on_visibility_changed)
 	hide()
+	_on_visibility_changed()
 	var mouse_input := MouseInput.new()
 	mouse_input.drag_delta.connect(_rotate_model)
 	add_child(mouse_input)
@@ -107,6 +109,10 @@ func _copy_meshes(node: Node3D, parent_transform: Transform3D) -> void:
 	for child in node.get_children():
 		if child is Node3D:
 			_copy_meshes(child, local_transform)
+
+## Закрытый просмотр не рендерит свой 3D-мир.
+func _on_visibility_changed() -> void:
+	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if visible else SubViewport.UPDATE_DISABLED
 
 func open(adapter: Node) -> void:
 	_adapter = adapter

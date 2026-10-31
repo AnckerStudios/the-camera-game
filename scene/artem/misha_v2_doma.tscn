@@ -52,6 +52,8 @@ transform = Transform3D(0.8660254, 0.40957603, -0.28678823, 0, 0.57357645, 0.819
 light_color = Color(0.55, 0.65, 0.9, 1)
 light_energy = 0.2
 shadow_enabled = true
+directional_shadow_mode = 0
+directional_shadow_max_distance = 30.0
 
 [node name="Player" parent="." unique_id=1732594493 instance=ExtResource("2_p72od")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)

@@ -11,6 +11,7 @@ extends Node
 var _target: Node3D
 var _meshes: Array[GeometryInstance3D] = []
 var _alpha := 1.0
+var _applied_alpha := -1.0
 
 
 func _ready() -> void:
@@ -50,7 +51,11 @@ func _is_seen() -> bool:
 	return false
 
 
+## Прозрачность каждого меша уходит в RenderingServer, поэтому не повторяем одинаковое значение.
 func _apply() -> void:
 	_target.visible = _alpha > 0.0
+	if _alpha == _applied_alpha:
+		return
+	_applied_alpha = _alpha
 	for mesh in _meshes:
 		mesh.transparency = 1.0 - _alpha

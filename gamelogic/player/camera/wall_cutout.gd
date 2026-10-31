@@ -23,6 +23,9 @@ const MAX_ENEMY_CUTOUTS := 8
 var _enemy_states: Dictionary = {}
 
 var _current_radii: Dictionary = {}
+var _applied_interior_visibility: float = NAN
+## Последние переданные материалу круги врагов, чтобы не отправлять одинаковые массивы.
+var _applied_enemy_cutouts: Dictionary = {}
 var _blocking_distances: Dictionary = {}
 var _blocking_bodies: Array[RID] = []
 @onready var _player: Node3D = get_parent()
@@ -88,10 +91,13 @@ func _process(delta: float) -> void:
 	if not camera:
 		for material in _materials:
 			material.set_shader_parameter("cutout_enabled", false)
+		_current_radii.clear()
 		return
 	var focus := _player.global_position + Vector3.UP * focus_height
 	var size := get_viewport().get_visible_rect().size
 	var screen_position := camera.unproject_position(focus)
+	RenderingServer.global_shader_parameter_set(&"wall_cutout_target_uv", screen_position / size)
+	RenderingServer.global_shader_parameter_set(&"wall_cutout_viewport_size", size)
 	var depth := -(camera.global_transform.affine_inverse() * focus).z
 	var visibility_flags: Array[bool] = []
 	for mesh in _meshes:
@@ -108,12 +114,16 @@ func _process(delta: float) -> void:
 			1.0 - exp(-radius_smoothing * delta))
 		if desired_radius == 0.0 and current_radius < 0.1:
 			current_radius = 0.0
+		# Большинство стен не перекрывает персонажа: их параметры не трогаем каждый кадр.
+		if current_radius == previous_radius and _current_radii.has(material):
+			continue
 		_current_radii[material] = current_radius
 		material.set_shader_parameter("cutout_enabled", enabled and current_radius > 0.0)
-		material.set_shader_parameter("interior_visibility", interior_visibility)
-		material.set_shader_parameter("target_uv", screen_position / size)
-		material.set_shader_parameter("viewport_size", size)
 		material.set_shader_parameter("radius_pixels", current_radius)
+	if interior_visibility != _applied_interior_visibility:
+		_applied_interior_visibility = interior_visibility
+		for material in _materials:
+			material.set_shader_parameter("interior_visibility", interior_visibility)
 
 
 ## Нелинейный рост по расстоянию: плавный старт и замедление у максимума.
@@ -247,6 +257,7 @@ func _update_enemy_materials(delta: float) -> void:
 	if not camera:
 		for material in _materials:
 			material.set_shader_parameter("enemy_cutout_count", 0)
+		_applied_enemy_cutouts.clear()
 		return
 	var size := get_viewport().get_visible_rect().size
 	var keys := _enemy_states.keys()
@@ -273,8 +284,14 @@ func _update_enemy_materials(delta: float) -> void:
 			if desired == 0.0 and radius < 0.1:
 				radius = 0.0
 			state.radii[material] = radius
-			var uv := camera.unproject_position(focus) / size
-			circles[slot] = Vector4(uv.x, uv.y, radius, 0.0)
+			# Пустой круг шейдер пропускает; нули не меняются, пока враг движется за другой стеной.
+			if radius > 0.0:
+				var uv := camera.unproject_position(focus) / size
+				circles[slot] = Vector4(uv.x, uv.y, radius, 0.0)
+		var previous_circles = _applied_enemy_cutouts.get(material)
+		if previous_circles == circles:
+			continue
+		_applied_enemy_cutouts[material] = circles
 		material.set_shader_parameter("enemy_cutouts", circles)
 		material.set_shader_parameter("enemy_cutout_count", keys.size())
 	# Освобождаем слоты исчезнувших из взгляда и уничтоженных врагов после затухания.
