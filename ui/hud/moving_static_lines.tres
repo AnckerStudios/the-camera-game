@@ -1,0 +1,19 @@
+[gd_resource type="Shader" format=3 uid="uid://bjajm8uc4cuhj"]
+
+[resource]
+code = "shader_type canvas_item;
+
+// Частота линий
+uniform float frequency : hint_range(0.01, 1.0) = 1.0;
+
+// Скорость перемещение линий
+uniform float speed : hint_range(0.0, 10.0) = 0.1;
+
+// Яркость
+uniform float strength : hint_range(0.0, 0.5) = 0.01;
+
+void fragment() {
+	float wave = sin(FRAGCOORD.y * frequency + TIME * speed) * strength;
+	COLOR = vec4(vec3(step(0.0, wave)), abs(wave));
+}
+"

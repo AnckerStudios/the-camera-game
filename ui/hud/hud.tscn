@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dm1q2hktewkrd" path="res://ui/buttons/play_button.tscn" id="4_w75iv"]
 [ext_resource type="Theme" uid="uid://dh65ss64qf3kd" path="res://buttonX.tres" id="5_imuuq"]
 [ext_resource type="PackedScene" uid="uid://b4y23lfljnid0" path="res://ui/options/options.tscn" id="6_kwc50"]
+[ext_resource type="Shader" uid="uid://bjajm8uc4cuhj" path="res://ui/hud/moving_static_lines.tres" id="7_cctv"]
 
 [sub_resource type="FontVariation" id="FontVariation_tabular"]
 opentype_features = {
@@ -29,8 +30,20 @@ bg_color = Color(0.75, 0.1, 0.1, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gfles"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cctv"]
+shader = ExtResource("7_cctv")
+
 [node name="HUD" type="CanvasLayer" unique_id=643410873]
 script = ExtResource("1_hud")
+
+[node name="CctvOverlay" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_cctv")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="Options" parent="." unique_id=575043248 instance=ExtResource("6_kwc50")]
 visible = false
