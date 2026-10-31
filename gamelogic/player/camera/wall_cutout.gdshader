@@ -13,8 +13,8 @@ uniform vec2 viewport_size = vec2(1.0);
 
 uniform float radius_pixels = 90.0;
 
-// Минимальная доля сохраняемых пикселей в центре; к краю возрастает до 1.
-uniform float interior_visibility : hint_range(0.0, 1.0, 0.01) = 0.02;
+uniform float interior_visibility : hint_range(0.01, 8.0, 0.01) = 2.0;
+
 
 uniform bool cutout_enabled = false;
 uniform int enemy_cutout_count = 0;
@@ -23,7 +23,8 @@ uniform vec4 enemy_cutouts[8];
 // Минимальная видимость в центре постепенно растёт по всей площади круга.
 float circle_visibility(float distance_to_center, float radius) {
 	float radial_progress = smoothstep(0.0, max(radius, 0.001), distance_to_center);
-	float radial_visibility = mix(interior_visibility, 1.0, radial_progress);
+	radial_progress = pow(radial_progress, max(interior_visibility, 0.01));
+	float radial_visibility = radial_progress;
 	return radial_visibility;
 }
 
