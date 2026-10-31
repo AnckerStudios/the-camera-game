@@ -28,24 +28,28 @@ func acquire(origin: Vector3, max_distance: float, excluded: Array[RID], shooter
 	if enabled and camera:
 		var mouse := get_viewport().get_mouse_position()
 		var closest := capture_radius_pixels * capture_radius_pixels
+		var cones := get_tree().get_nodes_in_group(&"visibility_cones")
+		var candidates: Array[Dictionary] = []
 		for enemy in get_tree().get_nodes_in_group(DamageReceiver.TARGET_GROUP):
 			if not enemy is Node3D or enemy.is_queued_for_deletion() or not enemy.is_visible_in_tree():
 				continue
 			if DamageReceiver.find_target(enemy) != enemy or enemy == shooter or not VisionFilters.is_target_visible(enemy):
 				continue
 			var point := get_target_point(enemy)
-			if camera.is_position_behind(point) or origin.distance_to(point) > max_distance:
+			if camera.is_position_behind(point) or origin.distance_squared_to(point) > max_distance * max_distance:
 				continue
 			var screen := camera.unproject_position(point)
 			if not get_viewport().get_visible_rect().has_point(screen):
 				continue
 			var distance_squared := mouse.distance_squared_to(screen)
-			if distance_squared > closest or not _in_view(enemy, shooter):
+			if distance_squared > closest or not _in_view(enemy, shooter, cones):
 				continue
-			if not _has_clear_path(origin, point, enemy, excluded):
-				continue
-			closest = distance_squared
-			selected = enemy
+			candidates.append({"target": enemy, "point": point, "distance": distance_squared})
+		candidates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.distance < b.distance)
+		for candidate in candidates:
+			if _has_clear_path(origin, candidate.point, candidate.target, excluded):
+				selected = candidate.target
+				break
 	var previous := current_target
 	# Назначение обязательно и при selected == null: старую цель нельзя возвращать.
 	current_target = selected
@@ -58,10 +62,10 @@ func get_target_point(enemy: Node3D) -> Vector3:
 	var receiver := DamageReceiver.get_receiver(enemy)
 	return receiver.get_target_point() if receiver else enemy.global_position
 
-func _in_view(enemy: Node3D, shooter: Node3D) -> bool:
+func _in_view(enemy: Node3D, shooter: Node3D, cones: Array[Node]) -> bool:
 	if not require_view_cone:
 		return true
-	for cone in get_tree().get_nodes_in_group(&"visibility_cones"):
+	for cone in cones:
 		if shooter and not shooter.is_ancestor_of(cone):
 			continue
 		if cone.contains_world_point(enemy.global_position):

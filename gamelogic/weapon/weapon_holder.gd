@@ -1,6 +1,8 @@
 class_name WeaponHolder
 extends Node3D
 
+signal weapon_selected(weapon: Weapon)
+
 ## Держатель оружия игрока: дочерние Weapon, переключение, ввод и проброс состояния в PlayerState.
 
 ## Узел, вдоль -Z которого целится оружие. Держатель может сидеть на кисти и качаться
@@ -18,6 +20,8 @@ var _inventory_managed: bool = false
 var _inventory_weapons: Array[Weapon] = []
 var current: Weapon
 
+@export_range(0.0, 0.2, 0.01) var target_scan_interval: float = 0.05
+var _target_scan_remaining := 0.0
 var _index := -1
 
 
@@ -68,6 +72,7 @@ func get_aim_direction() -> Vector3:
 
 
 func select(index: int) -> void:
+	_target_scan_remaining = 0.0
 	_aim_target = null
 	_aim_direction = Vector3.ZERO
 	var weapons := get_weapons()
@@ -93,6 +98,7 @@ func select(index: int) -> void:
 		PlayerState.set_ammo(current.loaded, current.capacity, current.reserve_ammo)
 	else:
 		PlayerState.set_ammo(0, 0, 0)
+	weapon_selected.emit(current)
 
 
 ## Только успешный выстрел собственного оружия запускает тряску активной камеры.
@@ -109,9 +115,8 @@ func _on_weapon_fired(rounds: int) -> void:
 
 
 ## Постоянный поиск цели выполняется в физическом тике, а не при выстреле.
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	_aim_direction = Vector3.ZERO
-	_aim_target = null
 	var shooter: Node3D = null
 	var node := get_parent()
 	while node:
@@ -119,12 +124,22 @@ func _physics_process(_delta: float) -> void:
 			shooter = node
 			break
 		node = node.get_parent()
+	_target_scan_remaining -= delta
 	if current is Firearm:
 		var origin: Vector3 = current.get_shot_origin()
-		var acquired = _target_lock.acquire(origin, current.max_range, current.get_shot_exclusions(), shooter)
-		if is_instance_valid(acquired) and not acquired.is_queued_for_deletion():
-			_aim_target = acquired
-			_aim_direction = (_target_lock.get_target_point(_aim_target) - origin).normalized()
+		if _target_scan_remaining <= 0.0:
+			_target_scan_remaining = maxf(_target_scan_remaining + target_scan_interval, 0.0)
+			var acquired = _target_lock.acquire(origin, current.max_range, current.get_shot_exclusions(), shooter)
+			_aim_target = acquired if is_instance_valid(acquired) else null
+		if is_instance_valid(_aim_target) and not _aim_target.is_queued_for_deletion():
+			if VisionFilters.is_target_visible(_aim_target):
+				_aim_direction = (_target_lock.get_target_point(_aim_target) - origin).normalized()
+			else:
+				_aim_target = null
+		else:
+			_aim_target = null
+	else:
+		_aim_target = null
 	if shooter and shooter.has_method("set_aim_lock"):
 		shooter.set_aim_lock(_aim_target)
 
@@ -154,6 +169,7 @@ func set_inventory_weapons(equipped: Array[Weapon]) -> void:
 	if not _inventory_weapons.is_empty():
 		select(0)
 	else:
+		weapon_selected.emit(null)
 		PlayerState.weapon_name = ""
 		PlayerState.set_ammo(0, 0, 0)
 

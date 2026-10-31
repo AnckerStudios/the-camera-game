@@ -20,6 +20,7 @@ var _hud_layer: CanvasLayer
 var _hud_visible: bool
 var _cutout: Node
 var _cutout_mode: int
+@onready var _preview_viewport: SubViewport = $Root/Left/Margin/Column/Preview/Viewport
 @onready var _carousel: InventoryCarousel = $Root/Left/Margin/Column/Preview/Viewport/Carousel
 @onready var _details: Label = $Root/Left/Margin/Column/Details
 @onready var _status: Label = $Root/Left/Margin/Column/Status
@@ -34,6 +35,7 @@ var _actions: Array[Button] = []
 
 func _ready() -> void:
 	hide()
+	_carousel.set_process(false)
 	_actions = [_primary, _drop, _cancel]
 	_primary.pressed.connect(_apply_selected)
 	_drop.pressed.connect(_drop_selected)
@@ -74,6 +76,8 @@ func open(player: Node3D, inventory: PlayerInventory, adapter: Node) -> void:
 	adapter.hardware_enabled = false
 	adapter.process_mode = Node.PROCESS_MODE_ALWAYS
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_preview_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	_carousel.set_process(true)
 	is_open = true
 	get_tree().paused = true
 	_close_context()
@@ -83,6 +87,8 @@ func open(player: Node3D, inventory: PlayerInventory, adapter: Node) -> void:
 func close() -> void:
 	if not is_open:
 		return
+	_preview_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
+	_carousel.set_process(false)
 	is_open = false
 	_close_context()
 	hide()
@@ -100,7 +106,7 @@ func close() -> void:
 	Input.mouse_mode = _mouse_mode
 
 func _refresh(direction: int = 0) -> void:
-	if not _inventory:
+	if not is_open or not _inventory:
 		return
 	if _selected and _inventory.entries.has(_selected):
 		_index = _inventory.entries.find(_selected)

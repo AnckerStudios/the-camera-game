@@ -17,6 +17,13 @@ extends Node
 @export_range(0.0, 1.0, 0.01) var depth_margin: float = 0.15
 
 const CUTOUT_SHADER = preload("res://gamelogic/player/camera/wall_cutout.gdshader")
+@export_range(0.0, 0.2, 0.01) var ray_update_interval: float = 0.05
+var _ray_remaining := 0.0
+var _mesh_bodies: Dictionary = {}
+var _shader_values: Dictionary = {}
+var _body_materials: Dictionary = {}
+var _material_meshes: Dictionary = {}
+var _enemy_active_materials: Dictionary = {}
 var _materials: Array[ShaderMaterial] = []
 var _meshes: Array[MeshInstance3D] = []
 const MAX_ENEMY_CUTOUTS := 8
@@ -53,6 +60,14 @@ func _prepare_mesh(node: MeshInstance3D) -> void:
 		ancestor = ancestor.get_parent()
 	if not is_static:
 		return
+	var bodies: Array[RID] = []
+	ancestor = node
+	while ancestor:
+		if ancestor is CollisionObject3D:
+			bodies.append(ancestor.get_rid())
+		ancestor = ancestor.get_parent()
+	_mesh_bodies[node] = bodies
+	node.tree_exiting.connect(_forget_mesh.bind(node), CONNECT_ONE_SHOT)
 	node.set_meta(&"wall_cutout_ready", true)
 	var override_material := node.material_override
 	for surface in node.mesh.get_surface_count():
@@ -63,68 +78,77 @@ func _prepare_mesh(node: MeshInstance3D) -> void:
 			continue
 		var material := ShaderMaterial.new()
 		material.shader = CUTOUT_SHADER
-		material.set_shader_parameter("interior_visibility", interior_visibility)
+		_set_material_parameter(material, "interior_visibility", interior_visibility)
 		if original is StandardMaterial3D:
-			material.set_shader_parameter("base_color", original.albedo_color)
-			material.set_shader_parameter("base_roughness", original.roughness)
-			material.set_shader_parameter("base_metallic", original.metallic)
-			material.set_shader_parameter("texture_scale", original.uv1_scale)
-			material.set_shader_parameter("texture_offset", original.uv1_offset)
+			_set_material_parameter(material, "base_color", original.albedo_color)
+			_set_material_parameter(material, "base_roughness", original.roughness)
+			_set_material_parameter(material, "base_metallic", original.metallic)
+			_set_material_parameter(material, "texture_scale", original.uv1_scale)
+			_set_material_parameter(material, "texture_offset", original.uv1_offset)
 			if original.albedo_texture:
-				material.set_shader_parameter("has_texture", true)
-				material.set_shader_parameter("base_texture", original.albedo_texture)
+				_set_material_parameter(material, "has_texture", true)
+				_set_material_parameter(material, "base_texture", original.albedo_texture)
 		if override_material:
 			node.material_override = material
-			_materials.append(material)
-			_meshes.append(node)
+			_register_material(node, material)
 			break
 		node.set_surface_override_material(surface, material)
-		_materials.append(material)
-		_meshes.append(node)
+		_register_material(node, material)
 
+func _register_material(mesh: MeshInstance3D, material: ShaderMaterial) -> void:
+	_materials.append(material)
+	_meshes.append(mesh)
+	_material_meshes[material] = mesh
+	for body in _mesh_bodies[mesh]:
+		var materials: Array = _body_materials.get_or_add(body, [])
+		materials.append(material)
+
+## Обрабатываем только пересечённые стены и те, где круг ещё плавно закрывается.
 func _process(delta: float) -> void:
 	_update_enemy_materials(delta)
 	var camera := get_viewport().get_camera_3d()
 	if not camera:
-		for material in _materials:
-			material.set_shader_parameter("cutout_enabled", false)
+		for material in _current_radii:
+			_set_material_parameter(material, &"cutout_enabled", false)
+		_current_radii.clear()
+		return
+	var candidates: Dictionary = {}
+	for material in _current_radii:
+		candidates[material] = true
+	if enabled:
+		for body in _blocking_distances:
+			for material in _body_materials.get(body, []):
+				candidates[material] = true
+	if candidates.is_empty():
 		return
 	var focus := _player.global_position + Vector3.UP * focus_height
 	var size := get_viewport().get_visible_rect().size
-	var screen_position := camera.unproject_position(focus)
+	var uv := camera.unproject_position(focus) / size
 	var depth := -(camera.global_transform.affine_inverse() * focus).z
-	var visibility_flags: Array[bool] = []
-	for mesh in _meshes:
-		var occluding := false
-		if enabled and not camera.is_position_behind(focus) and is_instance_valid(mesh):
-			occluding = _is_occluding(mesh, camera, depth) and _has_blocking_body(mesh)
-		visibility_flags.append(occluding)
+	var in_front := not camera.is_position_behind(focus)
+	var weight := 1.0 - exp(-radius_smoothing * delta)
+	for material in candidates:
+		var mesh: MeshInstance3D = _material_meshes[material]
+		var desired := 0.0
+		if enabled and in_front and _has_blocking_body(mesh) and _is_occluding(mesh, camera, depth):
+			desired = _get_radius(mesh)
+		var previous: float = _current_radii.get(material, 0.0)
+		var radius := lerpf(previous, desired, weight)
+		if desired == 0.0 and radius < 0.1:
+			radius = 0.0
+		_set_material_parameter(material, &"cutout_enabled", enabled and radius > 0.0)
+		if radius == 0.0:
+			_current_radii.erase(material)
+			continue
+		_current_radii[material] = radius
+		_set_material_parameter(material, &"interior_visibility", interior_visibility)
+		_set_material_parameter(material, &"target_uv", uv)
+		_set_material_parameter(material, &"viewport_size", size)
+		_set_material_parameter(material, &"radius_pixels", radius)
 
-	for index in _materials.size():
-		var material := _materials[index]
-		var desired_radius := _get_radius(_meshes[index]) if visibility_flags[index] else 0.0
-		var previous_radius: float = _current_radii.get(material, 0.0)
-		var current_radius := lerpf(previous_radius, desired_radius,
-			1.0 - exp(-radius_smoothing * delta))
-		if desired_radius == 0.0 and current_radius < 0.1:
-			current_radius = 0.0
-		_current_radii[material] = current_radius
-		material.set_shader_parameter("cutout_enabled", enabled and current_radius > 0.0)
-		material.set_shader_parameter("interior_visibility", interior_visibility)
-		material.set_shader_parameter("target_uv", screen_position / size)
-		material.set_shader_parameter("viewport_size", size)
-		material.set_shader_parameter("radius_pixels", current_radius)
 
-
-## Нелинейный рост по расстоянию: плавный старт и замедление у максимума.
 func _get_radius(mesh: MeshInstance3D) -> float:
-	var distance_behind := 0.0
-	var node: Node = mesh
-	while is_instance_valid(node):
-		if node is CollisionObject3D and _blocking_distances.has(node.get_rid()):
-			distance_behind = _blocking_distances[node.get_rid()]
-			break
-		node = node.get_parent()
+	var distance_behind := maxf(_blocking_distance(mesh, _blocking_distances), 0.0)
 	var progress := smoothstep(0.0, maxf(radius_max_distance, 0.01), distance_behind)
 	return lerpf(radius_pixels, maxf(radius_pixels, max_radius_pixels), progress)
 
@@ -143,7 +167,11 @@ func _is_occluding(mesh: MeshInstance3D, camera: Camera3D, focus_depth: float) -
 
 
 ## Луч строится через экранную точку персонажа — это важно для ортографической камеры.
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	_ray_remaining -= delta
+	if _ray_remaining > 0.0:
+		return
+	_ray_remaining = maxf(_ray_remaining + ray_update_interval, 0.0)
 	_update_enemy_rays()
 	_blocking_bodies.clear()
 	_blocking_distances.clear()
@@ -180,15 +208,42 @@ func _physics_process(_delta: float) -> void:
 
 ## Вырезаем только меши тел, реально пересекающих линию взгляда к персонажу.
 func _has_blocking_body(mesh: MeshInstance3D) -> bool:
-	var node: Node = mesh
-	while node:
-		if node is CollisionObject3D and _blocking_bodies.has(node.get_rid()):
-			return true
-		node = node.get_parent()
-	return false
+	return _blocking_distance(mesh, _blocking_distances) >= 0.0
 
+func _blocking_distance(mesh: MeshInstance3D, distances: Dictionary) -> float:
+	for body in _mesh_bodies.get(mesh, []):
+		if distances.has(body):
+			return distances[body]
+	return -1.0
 
-## Собирает только врагов, доступных взгляду; цели вне конуса плавно закрываются.
+## Большинство стен не меняются: не отправляем одинаковые uniforms каждый кадр.
+func _set_material_parameter(material: ShaderMaterial, parameter: StringName, value: Variant) -> void:
+	var values: Dictionary = _shader_values.get_or_add(material, {})
+	if values.has(parameter) and values[parameter] == value:
+		return
+	values[parameter] = value
+	material.set_shader_parameter(parameter, value)
+
+func _forget_mesh(mesh: MeshInstance3D) -> void:
+	for body in _mesh_bodies.get(mesh, []):
+		var materials: Array = _body_materials.get(body, [])
+		for index in range(materials.size() - 1, -1, -1):
+			if _material_meshes.get(materials[index]) == mesh:
+				materials.remove_at(index)
+		if materials.is_empty():
+			_body_materials.erase(body)
+	_mesh_bodies.erase(mesh)
+	for index in range(_meshes.size() - 1, -1, -1):
+		if _meshes[index] == mesh:
+			_material_meshes.erase(_materials[index])
+			_enemy_active_materials.erase(_materials[index])
+			_shader_values.erase(_materials[index])
+			_current_radii.erase(_materials[index])
+			for state in _enemy_states.values():
+				state.radii.erase(_materials[index])
+			_materials.remove_at(index)
+			_meshes.remove_at(index)
+
 func _update_enemy_rays() -> void:
 	for state in _enemy_states.values():
 		state.bodies = {}
@@ -244,48 +299,63 @@ func _update_enemy_rays() -> void:
 ## На каждом материале хранится до восьми отверстий; их края объединяются в шейдере.
 func _update_enemy_materials(delta: float) -> void:
 	var camera := get_viewport().get_camera_3d()
-	if not camera:
-		for material in _materials:
-			material.set_shader_parameter("enemy_cutout_count", 0)
+	if not camera or _enemy_states.is_empty():
+		for material in _enemy_active_materials:
+			_set_material_parameter(material, &"enemy_cutout_count", 0)
+		_enemy_active_materials.clear()
+		if not camera:
+			for state in _enemy_states.values():
+				state.radii.clear()
 		return
 	var size := get_viewport().get_visible_rect().size
 	var keys := _enemy_states.keys()
-	for index in _materials.size():
-		var material := _materials[index]
-		var mesh := _meshes[index]
-		var circles := PackedVector4Array()
-		circles.resize(MAX_ENEMY_CUTOUTS)
-		for slot in keys.size():
-			var state: Dictionary = _enemy_states[keys[slot]]
-			var focus: Vector3 = state.focus
-			var desired := 0.0
-			if enabled and is_instance_valid(mesh) and not camera.is_position_behind(focus):
-				var ancestor: Node = mesh
-				while ancestor:
-					if ancestor is CollisionObject3D and state.bodies.has(ancestor.get_rid()):
-						var distance_behind: float = state.bodies[ancestor.get_rid()]
-						var progress := smoothstep(0.0, maxf(radius_max_distance, 0.01), distance_behind)
-						desired = lerpf(radius_pixels, maxf(radius_pixels, max_radius_pixels), progress)
-						break
-					ancestor = ancestor.get_parent()
-			var previous: float = state.radii.get(material, 0.0)
-			var radius := lerpf(previous, desired, 1.0 - exp(-radius_smoothing * delta))
-			if desired == 0.0 and radius < 0.1:
-				radius = 0.0
-			state.radii[material] = radius
-			var uv := camera.unproject_position(focus) / size
-			circles[slot] = Vector4(uv.x, uv.y, radius, 0.0)
-		material.set_shader_parameter("enemy_cutouts", circles)
-		material.set_shader_parameter("enemy_cutout_count", keys.size())
-	# Освобождаем слоты исчезнувших из взгляда и уничтоженных врагов после затухания.
+	# Проекция врага одинакова для всех стен — считаем один раз, а не на каждый материал.
 	for id in keys:
 		var state: Dictionary = _enemy_states[id]
-		if not state.bodies.is_empty():
-			continue
-		var fading := false
-		for radius in state.radii.values():
+		state.uv = camera.unproject_position(state.focus) / size
+		state.in_front = not camera.is_position_behind(state.focus)
+	var weight := 1.0 - exp(-radius_smoothing * delta)
+	var candidates: Dictionary = {}
+	for material in _enemy_active_materials:
+		candidates[material] = true
+	if enabled:
+		for id in keys:
+			for body in _enemy_states[id].bodies:
+				for material in _body_materials.get(body, []):
+					candidates[material] = true
+	for material in candidates:
+		var mesh: MeshInstance3D = _material_meshes[material]
+		var circles := PackedVector4Array()
+		circles.resize(MAX_ENEMY_CUTOUTS)
+		var count := 0
+		for id in keys:
+			var state: Dictionary = _enemy_states[id]
+			var desired := 0.0
+			if enabled and state.in_front:
+				var distance_behind := _blocking_distance(mesh, state.bodies)
+				if distance_behind >= 0.0:
+					var progress := smoothstep(0.0, maxf(radius_max_distance, 0.01), distance_behind)
+					desired = lerpf(radius_pixels, maxf(radius_pixels, max_radius_pixels), progress)
+			var previous: float = state.radii.get(material, 0.0)
+			var radius := lerpf(previous, desired, weight)
+			if desired == 0.0 and radius < 0.1:
+				radius = 0.0
 			if radius > 0.0:
-				fading = true
-				break
-		if not fading:
+				state.radii[material] = radius
+				var uv: Vector2 = state.uv
+				circles[count] = Vector4(uv.x, uv.y, radius, 0.0)
+				count += 1
+			else:
+				state.radii.erase(material)
+		if count > 0:
+			_enemy_active_materials[material] = true
+			_set_material_parameter(material, &"enemy_cutouts", circles)
+			_set_material_parameter(material, &"viewport_size", size)
+			_set_material_parameter(material, &"interior_visibility", interior_visibility)
+		else:
+			_enemy_active_materials.erase(material)
+		_set_material_parameter(material, &"enemy_cutout_count", count)
+	for id in keys:
+		var state: Dictionary = _enemy_states[id]
+		if state.bodies.is_empty() and state.radii.is_empty():
 			_enemy_states.erase(id)

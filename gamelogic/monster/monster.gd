@@ -11,6 +11,8 @@ var animation_tree : AnimationTree
 var monster_state : MonsterState
 
 var rotation_speed := 10.0
+var _next_path_update_ms: int = 0
+var _has_navigation_target := false
 
 @export var vision_profile: VisionProfile = VisionProfile.new()
 ## Необязательная точка прицеливания; без неё используется центр коллизии/модели.
@@ -73,6 +75,13 @@ func _physics_process(delta: float) -> void:
 		rotation.y = lerp_angle(rotation.y, target_angle, delta * rotation_speed)
 
 func update_target_location(target_location: Vector3) -> void:
+	if monster_state and monster_state.is_dead:
+		return
+	var now := Time.get_ticks_msec()
+	if _has_navigation_target and (now < _next_path_update_ms or nav_agent.target_position.distance_squared_to(target_location) < 0.04):
+		return
+	_has_navigation_target = true
+	_next_path_update_ms = now + 150
 	nav_agent.target_position = target_location
 
 ## Монстры переопределяют множитель или сам метод, сохраняя общий расчёт здоровья.

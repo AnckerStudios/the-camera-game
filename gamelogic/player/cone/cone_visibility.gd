@@ -11,6 +11,9 @@ extends Node
 var _target: Node3D
 var _meshes: Array[GeometryInstance3D] = []
 var _alpha := 1.0
+var _applied_alpha := -1.0
+var _cones: Array[Node] = []
+var _cone_refresh := 0.0
 
 
 func _ready() -> void:
@@ -27,6 +30,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	_cone_refresh -= delta
 	if not VisionFilters.is_target_visible(_target):
 		_alpha = 0.0
 		_apply()
@@ -40,17 +44,25 @@ func _process(delta: float) -> void:
 func _is_seen() -> bool:
 	if not VisionFilters.is_target_visible(_target):
 		return false
-	var cones := get_tree().get_nodes_in_group(&"visibility_cones")
+	if _cone_refresh <= 0.0:
+		_cones = get_tree().get_nodes_in_group(&"visibility_cones")
+		_cone_refresh = 0.25
+	var cones := _cones
 	# Сцены без конуса сохраняют обычное отображение.
 	if cones.is_empty():
 		return true
 	for cone in cones:
-		if cone.contains_world_point(_target.global_position):
+		if is_instance_valid(cone) and cone.contains_world_point(_target.global_position):
 			return true
 	return false
 
 
 func _apply() -> void:
+	if _applied_alpha == _alpha:
+		return
+	_applied_alpha = _alpha
 	_target.visible = _alpha > 0.0
 	for mesh in _meshes:
+		if not is_instance_valid(mesh):
+			continue
 		mesh.transparency = 1.0 - _alpha

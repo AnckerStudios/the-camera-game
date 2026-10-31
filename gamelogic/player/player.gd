@@ -50,6 +50,7 @@ var _inspection
 var _selected_pickup: PickupItem
 var _weapon_after_inspection: InventoryEntry
 
+var _dying := false
 var _aim_lock_target: Node3D
 
 
@@ -58,6 +59,7 @@ var _has_mouse_target: bool = false
 
 @onready var controls = $PlayerInput
 @onready var visual: Node3D = $Visual
+@onready var _look_target: Node3D = get_node_or_null("Visual/PlayerModel/LookTarget")
 
 
 func _ready() -> void:
@@ -81,7 +83,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if get_tree().paused:
+	if get_tree().paused or _dying:
 		return
 	var direction := _get_movement_direction()
 	_update_dash_and_movement(direction, delta)
@@ -151,6 +153,9 @@ func _apply_air_gravity(delta: float) -> void:
 
 ## Поворачивает только модель; при отсутствии ввода сохраняет её направление.
 func _rotate_visual(direction: Vector3, delta: float) -> void:
+	if _look_target and _look_target.has_method(&"update_look"):
+		_look_target.update_look(global_position + direction, visual, delta, turn_speed)
+		return
 	if direction.length_squared() > 0.001:
 		var target_angle := atan2(-direction.x, -direction.z)
 		var weight := 1.0 - exp(-turn_speed * delta)
@@ -305,14 +310,29 @@ func _update_shader_parametrs() -> void:
 		var grass_node = get_tree().current_scene.get_node("MultiMeshInstance3D")
 		grass_node.set_deferred("instance_shader_parameters/player_position", position + Vector3(0, -0.1, 0))
 
-func _on_hp_changed(value: float, max_value: float) -> void:
-	if value <= 0.0:
-		var scene_setting = preload("res://ui/dead/dead.tscn")
-		var scene =  scene_setting.instantiate()
-		add_child(scene)
-		get_tree().paused = true
+func _on_hp_changed(value: float, _max_value: float) -> void:
+	if value > 0.0 or _dying:
+		return
+	_dying = true
+	velocity = Vector3.ZERO
+	controls.hardware_enabled = false
+	var holder := find_child("WeaponHolder", true, false) as WeaponHolder
+	if holder:
+		holder.set_process_unhandled_input(false)
+		if holder.current:
+			holder.current.unequip()
+	var actions := get_node_or_null("Visual/PlayerModel/WeaponAnimation")
+	if actions:
+		var duration: float = actions.play_death()
+		await get_tree().create_timer(maxf(duration - 0.03, 0.01), false).timeout
+		if not is_inside_tree():
+			return
+		$Visual/PlayerModel/AnimationTree.active = false
+	var scene = preload("res://ui/dead/dead.tscn").instantiate()
+	add_child(scene)
+	get_tree().paused = true
 
-## Постоянная цель взгляда от держателя оружия; null возвращает взгляд к курсору.
+
 func set_aim_lock(target: Node3D) -> void:
 	_aim_lock_target = target if is_instance_valid(target) else null
 
@@ -332,7 +352,7 @@ func _on_inventory_toggle() -> void:
 	if _inventory_window.is_open:
 		_inventory_window.close()
 		return
-	if get_tree().paused:
+	if get_tree().paused or _dying:
 		return
 	velocity = Vector3.ZERO
 	_dash_remaining = 0.0

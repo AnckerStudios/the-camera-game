@@ -117,6 +117,7 @@ func open(adapter: Node) -> void:
 	adapter.hardware_enabled = false
 	adapter.process_mode = Node.PROCESS_MODE_ALWAYS
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	is_open = true
 	show()
 	get_tree().paused = true
@@ -125,6 +126,7 @@ func open(adapter: Node) -> void:
 func close() -> void:
 	if not is_open:
 		return
+	_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
 	is_open = false
 	_stop_entrance()
 	hide()

@@ -16,7 +16,7 @@ extends Node3D
 ## Скорость возврата модели к направлению взгляда после кувырка.
 @export var face_back_speed := 6.0
 
-const ROLL_ANIMATION := &"move/roll"
+
 
 var _blend := Vector2.ZERO
 var _roll_remaining := 0.0
@@ -26,6 +26,9 @@ var _roll_yaw := 0.0
 
 
 func _ready() -> void:
+	var actions := get_node_or_null("WeaponAnimation")
+	if actions:
+		actions.initialize(body, find_child("WeaponHolder", true, false) as WeaponHolder)
 	if body and body.has_signal(&"dashed"):
 		body.dashed.connect(_on_body_dashed)
 
@@ -39,20 +42,17 @@ func _physics_process(delta: float) -> void:
 	velocity.y = 0.0
 	# Скорость в осях модели: вперёд по взгляду (-Z) и вправо (+X).
 	var local := global_basis.inverse() * velocity
-	var target := Vector2(local.x, -local.z) / full_blend_speed
+	var target := Vector2(local.x, -local.z) / maxf(full_blend_speed, 0.01)
 	target = target.limit_length(1.0)
 	_blend = _blend.lerp(target, 1.0 - exp(-blend_smoothing * delta))
 	_tree.set(&"parameters/Move/blend_position", _blend)
 
 	var speed := velocity.length()
-	_tree.set(&"parameters/Speed/scale", maxf(1.0, minf(speed / anim_ground_speed, max_time_scale)))
+	_tree.set(&"parameters/Speed/scale", maxf(1.0, minf(speed / maxf(anim_ground_speed, 0.01), max_time_scale)))
 
 
 ## Кувырок растягивается на длительность рывка.
 func _on_body_dashed(direction: Vector3, duration: float) -> void:
-	var roll := _tree.get_animation(ROLL_ANIMATION)
-	_tree.set(&"parameters/RollSpeed/scale", roll.length / maxf(duration, 0.01))
-	_tree.set(&"parameters/Roll/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	_roll_remaining = duration
 	_roll_yaw = atan2(-direction.x, -direction.z)
 
@@ -60,7 +60,7 @@ func _on_body_dashed(direction: Vector3, duration: float) -> void:
 ## Во время кувырка модель смотрит туда, куда катится, а не на курсор;
 ## родитель (взгляд) продолжает поворачиваться, поэтому направление держится в мировых осях.
 func _update_facing(delta: float) -> void:
-	if _roll_remaining > 0.5:
+	if _roll_remaining > 0.0:
 		_roll_remaining -= delta
 		global_rotation.y = _roll_yaw
 	else:

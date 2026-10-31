@@ -60,6 +60,9 @@ var _ammo_id: StringName
 var loaded := 0
 var is_reloading := false
 
+var _cached_exclusions: Array[RID] = []
+var _exclusions_parent: Node
+var _exclusions_refresh_ms: int = 0
 var _cooldown := 0.0
 var _reload_timer := 0.0
 
@@ -243,6 +246,11 @@ func _get_damage_receiver(collider: Node) -> Node:
 
 ## Исключает владельца и все его дочерние коллизии, включая экипировку.
 func get_shot_exclusions() -> Array[RID]:
+	var now := Time.get_ticks_msec()
+	if _exclusions_parent == get_parent() and now < _exclusions_refresh_ms:
+		return _cached_exclusions
+	_exclusions_parent = get_parent()
+	_exclusions_refresh_ms = now + 250
 	var excluded: Array[RID] = []
 	var node := get_parent()
 	while node:
@@ -252,6 +260,7 @@ func get_shot_exclusions() -> Array[RID]:
 				excluded.append(child.get_rid())
 			break
 		node = node.get_parent()
+	_cached_exclusions = excluded
 	return excluded
 
 ## метод для растягивания анимации оружия под reload 

@@ -1,4 +1,4 @@
-﻿class_name MeleeWeapon
+class_name MeleeWeapon
 extends Weapon
 
 ## Оружие ближнего боя: удар задевает всех в секторе перед персонажем.
@@ -31,6 +31,9 @@ signal struck(hits: int)
 ## Дуга горизонтального удара справа налево, градусы; середина дуги - момент попадания.
 @export var swing_degrees := 140.0
 
+## При анимации персонажа не вращаем оружие второй раз отдельным tween.
+var character_animation := false
+
 var _cooldown := 0.0
 var _hit_timer := 0.0
 var _tween: Tween
@@ -58,7 +61,8 @@ func swing() -> bool:
 		return false
 	_cooldown = swing_interval
 	_hit_timer = maxf(hit_delay, 0.001)
-	_play_swing_animation()
+	if not character_animation:
+		_play_swing_animation()
 	if _swing_sound:
 		_swing_sound.play()
 	swung.emit()
