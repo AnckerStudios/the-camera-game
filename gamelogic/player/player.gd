@@ -58,7 +58,7 @@ var _has_mouse_target: bool = false
 
 func _ready() -> void:
 	PlayerState.reset()
-	VisionFilters.set_mode(VisionProfile.Filter.NORMAL)
+	VisionFilters.set_mode(VisionProfile.Filter.NORMAL, false)
 	_inspection = INSPECTION_SCENE.instantiate()
 	add_child(_inspection)
 	controls.dash.connect(_on_dash_requested)
