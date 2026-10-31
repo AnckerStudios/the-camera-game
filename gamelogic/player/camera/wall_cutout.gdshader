@@ -12,35 +12,33 @@ uniform vec2 target_uv = vec2(-10.0);
 uniform vec2 viewport_size = vec2(1.0);
 
 uniform float radius_pixels = 90.0;
-// Ширина мягкого края внутри круга в экранных пикселях.
-uniform float edge_softness_pixels : hint_range(0.0, 100.0) = 50.0;
+
+// Минимальная доля сохраняемых пикселей в центре; к краю возрастает до 1.
+uniform float interior_visibility : hint_range(0.0, 1.0, 0.01) = 0.02;
 
 uniform bool cutout_enabled = false;
 uniform int enemy_cutout_count = 0;
 uniform vec4 enemy_cutouts[8];
 
+// Минимальная видимость в центре постепенно растёт по всей площади круга.
+float circle_visibility(float distance_to_center, float radius) {
+	float radial_progress = smoothstep(0.0, max(radius, 0.001), distance_to_center);
+	float radial_visibility = mix(interior_visibility, 1.0, radial_progress);
+	return radial_visibility;
+}
+
 void fragment() {
-	// У выбранного препятствия удаляются все поверхности внутри круга.
-	float distance_pixels = length((SCREEN_UV - target_uv) * viewport_size);
 	float visibility = 1.0;
 	if (cutout_enabled && radius_pixels > 0.0) {
-		float softness = min(edge_softness_pixels, radius_pixels);
-		if (softness > 0.001) {
-			visibility = smoothstep(radius_pixels - softness, radius_pixels, distance_pixels);
-		} else {
-			visibility = step(radius_pixels, distance_pixels);
-		}
+		float distance_pixels = length((SCREEN_UV - target_uv) * viewport_size);
+		visibility = circle_visibility(distance_pixels, radius_pixels);
 	}
-	// Несколько отверстий объединяются, сохраняя одинаковый мягкий край.
+	// Каждый круг вычисляет собственное расстояние до центра до объединения.
 	for (int i = 0; i < enemy_cutout_count; i++) {
 		float radius = enemy_cutouts[i].z;
 		if (radius <= 0.0) { continue; }
 		float distance_to_enemy = length((SCREEN_UV - enemy_cutouts[i].xy) * viewport_size);
-		float softness = min(edge_softness_pixels, radius);
-		float enemy_visibility = softness > 0.001
-			? smoothstep(radius - softness, radius, distance_to_enemy)
-			: step(radius, distance_to_enemy);
-		visibility = min(visibility, enemy_visibility);
+		visibility = min(visibility, circle_visibility(distance_to_enemy, radius));
 	}
 	vec4 color = base_color;
 	if (has_texture) {

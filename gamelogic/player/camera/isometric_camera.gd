@@ -2,7 +2,12 @@ extends Node3D
 ## Следует за персонажем и немного смещает кадр в сторону курсора.
 
 @export var target: Node3D
-@export var follow_speed: float = 8.0
+## Жёсткость пружины: меньше значение — заметнее отставание.
+@export_range(0.1, 30.0, 0.1) var follow_speed: float = 7.0
+## Затухание: 1 — без раскачки, меньше 1 — мягкое пружинное колебание.
+@export_range(0.1, 2.0, 0.05) var follow_damping: float = 1.2
+## При телепортации дальше этого расстояния камера сразу догоняет цель.
+@export_range(1.0, 100.0, 0.5) var teleport_snap_distance: float = 15.0
 ## Максимальное горизонтальное смещение от персонажа в метрах.
 @export_range(0.0, 5.0, 0.1) var look_ahead_distance: float = 1.5
 ## Скорость сглаживания смещения к курсору.
@@ -31,6 +36,8 @@ var _base_v_offset: float = 0.0
 var _rng := RandomNumberGenerator.new()
 
 var _look_offset: Vector3 = Vector3.ZERO
+var _follow_velocity: Vector3 = Vector3.ZERO
+var _last_target_position: Vector3 = Vector3.ZERO
 
 func _ready() -> void:
 	# Камера обновляется после физического движения персонажа.
@@ -40,7 +47,7 @@ func _ready() -> void:
 		_base_h_offset = _camera.h_offset
 		_base_v_offset = _camera.v_offset
 	if is_instance_valid(target):
-		global_position = target.global_position
+		snap_to_target()
 
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(target):
@@ -48,9 +55,30 @@ func _physics_process(delta: float) -> void:
 	_look_offset = _look_offset.lerp(_get_cursor_offset(),
 		1.0 - exp(-look_ahead_speed * delta))
 	var desired_position := target.global_position + _look_offset
-	global_position = global_position.lerp(desired_position,
-		1.0 - exp(-follow_speed * delta))
+	if target.global_position.distance_to(_last_target_position) > teleport_snap_distance:
+		snap_to_target()
+	else:
+		_update_spring(desired_position, delta)
+	_last_target_position = target.global_position
 
+
+## Пружина хранит скорость: камера набирает ход и мягко тормозит у цели.
+## Неявное интегрирование сохраняет устойчивость при изменении частоты кадров.
+func _update_spring(desired_position: Vector3, delta: float) -> void:
+	var frequency := maxf(follow_speed, 0.1)
+	var stiffness := frequency * frequency
+	var damping := 2.0 * maxf(follow_damping, 0.0) * frequency
+	var displacement := global_position - desired_position
+	_follow_velocity = (_follow_velocity - displacement * stiffness * delta) / (1.0 + damping * delta + stiffness * delta * delta)
+	global_position += _follow_velocity * delta
+
+
+## Внешний вызов для телепортаций или смены цели; сбрасывает инерцию.
+func snap_to_target() -> void:
+	_follow_velocity = Vector3.ZERO
+	if is_instance_valid(target):
+		global_position = target.global_position + _look_offset
+		_last_target_position = target.global_position
 
 ## Экранное смещение не зависит от положения камеры, исключая самораскачивание.
 ## У центра кадра смещение небольшое, у края достигает заданного предела.
@@ -75,7 +103,7 @@ func _get_cursor_offset() -> Vector3:
 ## Задаёт интенсивность покачивания: 0 — выключено, 1 — полная амплитуда.
 ## Параметры действуют до следующего вызова; пропущенные используют значения аргументов по умолчанию.
 
-func set_sway_amount(amount: float = 1.0, amplitude: float = 0.0, frequency: float = 0.6, smoothing: float = 10.0) -> void:
+func set_sway_amount(amount: float = 1.0, amplitude: float = 0.02, frequency: float = 0.7, smoothing: float = 1.0) -> void:
 	_active_sway_amplitude = maxf(amplitude, 0.0)
 	_active_sway_frequency = maxf(frequency, 0.0)
 	_active_sway_smoothing = maxf(smoothing, 0.0)
