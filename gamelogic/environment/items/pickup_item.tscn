@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://by6ubidcpixtr"]
 
-[ext_resource type="Script" uid="uid://b2i6cojcoojdr" path="res://gamelogic/items/pickup_item.gd" id="1"]
+[ext_resource type="Script" uid="uid://b2i6cojcoojdr" path="res://gamelogic/environment/items/pickup_item.gd" id="1"]
 
 [sub_resource type="SphereShape3D" id="Radius"]
 radius = 1.5

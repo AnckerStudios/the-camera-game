@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://b1lslrydxss8g"]
+
+[ext_resource type="Shader" uid="uid://dlt0k4n1sc6d2" path="res://gamelogic/filters/infrared_screen.gdshader" id="1"]
+[ext_resource type="Shader" uid="uid://dkyjfrcvskbx3" path="res://gamelogic/filters/infrared_vignette.gdshader" id="2"]
+
+[sub_resource type="ShaderMaterial" id="ScreenFilter"]
+shader = ExtResource("1")
+shader_parameter/ultraviolet_mode = true
+shader_parameter/strength = 0.6
+shader_parameter/cold_color = Color(0.22, 0.06, 0.4, 1)
+
+[sub_resource type="ShaderMaterial" id="VignetteFilter"]
+shader = ExtResource("2")
+shader_parameter/strength = 0.7
+shader_parameter/crt_strength = 0.22
+shader_parameter/vignette_start = 0.25
+shader_parameter/vignette_end = 0.85
+shader_parameter/scanline_pixels = 3.0
+shader_parameter/tint = Color(0.045, 0.005, 0.09, 1)
+
+[node name="UltravioletOverlay" type="CanvasLayer" unique_id=2050939400]
+layer = -1
+
+[node name="FullScreen" type="ColorRect" parent="." unique_id=39004346]
+material = SubResource("ScreenFilter")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VignetteCRT" type="ColorRect" parent="." unique_id=925919426]
+material = SubResource("VignetteFilter")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

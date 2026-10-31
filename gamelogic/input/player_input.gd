@@ -10,6 +10,9 @@ signal dash
 ## Запрашивает взаимодействие при нажатии E.
 signal interaction
 
+## По Tab переключает обычное, инфракрасное и ультрафиолетовое зрение.
+signal filter_toggle
+
 ## Передаёт направление движения при его изменении.
 signal movement_changed(direction: Vector2)
 
@@ -50,6 +53,9 @@ func _physics_process(delta: float) -> void:
 
 	if not hardware_enabled:
 		return
+
+	if Input.is_action_just_pressed(&"toggle_filter"):
+		filter_toggle.emit()
 
 	_set_movement(Input.get_vector(
 		&"move_left",

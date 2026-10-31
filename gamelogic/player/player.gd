@@ -58,10 +58,12 @@ var _has_mouse_target: bool = false
 
 func _ready() -> void:
 	PlayerState.reset()
+	VisionFilters.set_mode(VisionProfile.Filter.NORMAL)
 	_inspection = INSPECTION_SCENE.instantiate()
 	add_child(_inspection)
 	controls.dash.connect(_on_dash_requested)
 	controls.interaction.connect(_on_interaction_requested)
+	controls.filter_toggle.connect(VisionFilters.cycle_filter)
 	$MouseTracker.target_changed.connect(_on_mouse_target_changed)
 	PlayerState.hp_changed.connect(_on_hp_changed)
 

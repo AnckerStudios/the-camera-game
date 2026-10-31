@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="4_s1bv7"]
 [ext_resource type="Script" uid="uid://cmkrno3x3fyie" path="res://gamelogic/weapon/damage_dummy.gd" id="5_5egmh"]
 [ext_resource type="PackedScene" uid="uid://w3p8l3qnm13a" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="6_4ackd"]
-[ext_resource type="PackedScene" uid="uid://by6ubidcpixtr" path="res://gamelogic/items/pickup_item.tscn" id="7_pickup_item"]
+[ext_resource type="PackedScene" uid="uid://by6ubidcpixtr" path="res://gamelogic/environment/items/pickup_item.tscn" id="7_pickup_item"]
 [ext_resource type="PackedScene" uid="uid://c2g4ugy8n7yeu" path="res://resources/model/world/barrel.glb" id="8_barrel"]
 [ext_resource type="PackedScene" uid="uid://cf044qdp2v615" path="res://gamelogic/weapon/weapon_double_shotgun.tscn" id="8_rsf50"]
 

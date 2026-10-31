@@ -28,17 +28,33 @@ var damage_receiver := DamageReceiver.new()
 @export_range(0.0, 1.0, 0.01) var shake_amplitude: float = 0.25
 @export_range(0.01, 2.0, 0.01) var shake_duration: float = 0.4
 
+@export_group("Обводка")
+@export var outline_color: Color = Color(1.0, 0.08, 0.04, 1.0)
+@export_range(0.001, 0.2, 0.001) var outline_width: float = 0.025
+
 var _exploded: bool = false
 static var _fallback_sound: AudioStreamWAV
 
+@export var vision_profile: VisionProfile = preload("res://gamelogic/filters/active_profile.tres")
+
 func _ready() -> void:
+	vision_profile = vision_profile.duplicate()
+	vision_profile.attach(self)
 	damage_receiver.aim_point = aim_point
 	damage_receiver.register_owner(self)
 	add_to_group(&"damageable_environment")
 	add_to_group(&"cutout_targets")
 	damage_receiver.damaged.connect(_on_damage_received)
 	damage_receiver.depleted.connect(_on_health_depleted)
-	add_child(ConeVisibility.new())
+	var outline := ObjectOutline.new()
+	outline.name = &"ObjectOutline"
+	outline.mesh_root = self
+	outline.color = outline_color
+	outline.width = outline_width
+	add_child(outline)
+	var subject := FilterSubject.new()
+	subject.name = &"FilterSubject"
+	add_child(subject)
 
 func take_damage(amount: float, source: Node) -> void:
 	if not _exploded:
