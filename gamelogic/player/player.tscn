@@ -12,6 +12,8 @@
 
 [ext_resource type="Script" path="res://gamelogic/player/camera/wall_cutout.gd" id="20_cutout"]
 
+[ext_resource type="Script" path="res://gamelogic/weapon/target_lock.gd" id="21_lock"]
+
 [sub_resource type="CapsuleShape3D" id="Shape"]
 radius = 0.35
 height = 1.8
@@ -65,3 +67,6 @@ target = NodePath("..")
 
 [node name="WallCutout" type="Node" parent="."]
 script = ExtResource("20_cutout")
+
+[node name="TargetLock" type="Node" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/RightHandGrip/WeaponHolder"]
+script = ExtResource("21_lock")
