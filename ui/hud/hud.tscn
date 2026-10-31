@@ -12,6 +12,12 @@ opentype_features = {
 "tnum": 1
 }
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kwc50"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o2lis"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_o2lis"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_bg"]
 bg_color = Color(0, 0, 0, 0.5)
 border_width_left = 1
@@ -22,12 +28,6 @@ border_color = Color(1, 1, 1, 0.4)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health"]
 bg_color = Color(0.75, 0.1, 0.1, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kwc50"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o2lis"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gfles"]
 
 [node name="HUD" type="CanvasLayer" unique_id=643410873]
 script = ExtResource("1_hud")
@@ -139,6 +139,39 @@ size_flags_vertical = 4
 mouse_filter = 2
 script = ExtResource("3_battery")
 
+[node name="ButtonOptional" parent="Margin/Layout/TopRow/Battery" unique_id=1564832545 instance=ExtResource("4_w75iv")]
+process_mode = 3
+z_as_relative = false
+custom_minimum_size = Vector2(40, 6)
+custom_maximum_size = Vector2(41, 27)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme = ExtResource("5_imuuq")
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxEmpty_kwc50")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_o2lis")
+theme_override_styles/hover = SubResource("StyleBoxTexture_o2lis")
+text = "⚙️"
+
+[node name="ButtonBack" parent="Margin/Layout/TopRow/Battery" unique_id=1649087154 instance=ExtResource("4_w75iv")]
+process_mode = 3
+visible = false
+z_as_relative = false
+custom_minimum_size = Vector2(40, 6)
+custom_maximum_size = Vector2(41, 27)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme = ExtResource("5_imuuq")
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxEmpty_kwc50")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_o2lis")
+theme_override_styles/hover = SubResource("StyleBoxTexture_o2lis")
+text = "❌"
+
 [node name="MiddleSpacer" type="Control" parent="Margin/Layout" unique_id=1440178183]
 layout_mode = 2
 size_flags_vertical = 3
@@ -194,29 +227,13 @@ theme_override_font_sizes/font_size = 22
 text = "0 / 0"
 horizontal_alignment = 2
 
-[node name="BackX" parent="." unique_id=1564832545 instance=ExtResource("4_w75iv")]
-process_mode = 3
+[node name="Mvj" type="Label" parent="Margin/Layout" unique_id=621896814]
 visible = false
-z_index = 14
-z_as_relative = false
-custom_minimum_size = Vector2(80, 80)
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -158.0
-offset_top = -211.0
-offset_right = -29.0
-offset_bottom = 30.0
-grow_horizontal = 0
-grow_vertical = 0
-size_flags_horizontal = 4
-theme = ExtResource("5_imuuq")
-theme_override_font_sizes/font_size = 150
-theme_override_styles/normal = SubResource("StyleBoxEmpty_kwc50")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_o2lis")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_gfles")
-text = "⏎"
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "МАГИ
+В ДЖЕМЕ"
+horizontal_alignment = 2
 
-[connection signal="pressed" from="BackX" to="." method="_on_back_x_pressed"]
+[connection signal="pressed" from="Margin/Layout/TopRow/Battery/ButtonOptional" to="." method="_on_button_optional_pressed"]
+[connection signal="pressed" from="Margin/Layout/TopRow/Battery/ButtonBack" to="." method="_on_button_back_pressed"]
