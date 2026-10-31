@@ -81,8 +81,7 @@ func equip_filter(entry: InventoryEntry) -> bool:
 	if not entries.has(entry) or entry.item.kind != InventoryItem.Kind.FILTER:
 		return false
 	filter_slot = entry
-	if not filters.has(entry):
-		filters.append(entry)
+	filters.assign([entry])
 	_sync_filters()
 	changed.emit()
 	return true
@@ -207,7 +206,12 @@ func is_equipped(entry: InventoryEntry) -> bool:
 	return weapons.has(entry) or filters.has(entry)
 
 func _sync_filters() -> void:
+	# Единственный источник экипировки — filter_slot, одновременно установлен один фильтр.
+	filters.clear()
 	var modes: Array[int] = []
-	for entry in filters:
-		modes.append(int(entry.item.filter_mode))
+	if filter_slot and entries.has(filter_slot):
+		filters.append(filter_slot)
+		modes.append(int(filter_slot.item.filter_mode))
+	else:
+		filter_slot = null
 	VisionFilters.set_available_filters(modes)
