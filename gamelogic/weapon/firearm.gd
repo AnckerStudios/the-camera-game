@@ -128,13 +128,8 @@ func shoot(rounds := 1) -> bool:
 	rounds = clampi(rounds, 1, loaded)
 	loaded -= rounds
 	_cooldown = fire_interval
-	var holder := get_parent() as WeaponHolder
-	if holder:
-		holder.prepare_shot(_get_shot_origin(), max_range, _exclude())
 	for i in rounds * pellets:
 		_fire_ray(_spread_direction(), damage)
-	if holder:
-		holder.finish_shot()
 	_flash()
 	fired.emit(rounds)
 	ammo_changed.emit(loaded, capacity, reserve_ammo)
@@ -163,7 +158,7 @@ func _spread_direction() -> Vector3:
 	if holder:
 		forward = holder.get_aim_direction()
 	# Захват сохраняет высоту цели; без захвата остаётся стрельба по горизонтали.
-	if not holder or not holder.has_shot_lock():
+	if not holder or not holder.has_target_lock():
 		forward.y = 0.0
 	return forward.normalized().rotated(Vector3.UP, randf_range(-half, half))
 
@@ -174,7 +169,7 @@ func _fire_ray(direction: Vector3, pellet_damage: float = -1.0) -> void:
 	if direction.is_zero_approx() or max_range <= 0.0:
 		return
 	direction = direction.normalized()
-	var origin := _get_shot_origin()
+	var origin := get_shot_origin()
 	var result := _trace_pellet(origin, direction)
 	var endpoint: Vector3 = result.endpoint
 	var target: Object = result.target
@@ -188,7 +183,7 @@ func _fire_ray(direction: Vector3, pellet_damage: float = -1.0) -> void:
 
 
 ## Игровой старт не зависит от анимации руки и положения ствола.
-func _get_shot_origin() -> Vector3:
+func get_shot_origin() -> Vector3:
 	if is_instance_valid(shot_origin):
 		return shot_origin.global_position
 	var node := get_parent()
@@ -204,7 +199,7 @@ func _get_shot_origin() -> Vector3:
 ## её траектории. Точка и объект попадания получаются одним физическим запросом.
 func _trace_pellet(origin: Vector3, direction: Vector3) -> Dictionary:
 	var endpoint := origin + direction * max_range
-	var query := PhysicsRayQueryParameters3D.create(origin, endpoint, hit_mask, _exclude())
+	var query := PhysicsRayQueryParameters3D.create(origin, endpoint, hit_mask, get_shot_exclusions())
 	query.collide_with_areas = hit_areas
 	query.collide_with_bodies = true
 	query.hit_from_inside = true
@@ -221,7 +216,7 @@ func _get_damage_receiver(collider: Node) -> Node:
 
 
 ## Исключает владельца и все его дочерние коллизии, включая экипировку.
-func _exclude() -> Array[RID]:
+func get_shot_exclusions() -> Array[RID]:
 	var excluded: Array[RID] = []
 	var node := get_parent()
 	while node:

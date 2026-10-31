@@ -21,7 +21,7 @@ var current_target: Node3D:
 	set(value):
 		_target_ref = weakref(value) if is_instance_valid(value) else null
 
-## Все дробины одного выстрела используют одну цель; разброс добавляется после захвата.
+## Вызывается держателем каждый физический тик; выстрел использует готовый результат.
 func acquire(origin: Vector3, max_distance: float, excluded: Array[RID], shooter: Node3D) -> Node3D:
 	var selected: Node3D = null
 	var camera := get_viewport().get_camera_3d()

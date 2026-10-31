@@ -8,15 +8,12 @@ extends Node3D
 @export var aim: Node3D
 ## Предмет во второй руке; виден только с одноручным оружием.
 @export var off_hand: Node3D
-## Время визуального удержания оружия на цели после выстрела.
-@export_range(0.0, 1.0, 0.01) var lock_pose_seconds: float = 0.2
 @export_range(0.1, 30.0, 0.1) var aim_return_speed: float = 12.0
 
 const TargetLockScript = preload("res://gamelogic/weapon/target_lock.gd")
 var _target_lock: Node
-var _shot_direction: Vector3 = Vector3.ZERO
-var _shot_target: Node3D
-var _visual_lock_remaining: float = 0.0
+var _aim_direction: Vector3 = Vector3.ZERO
+var _aim_target: Node3D
 var _rest_basis: Basis
 var _visual_aim_active: bool = false
 
@@ -26,6 +23,8 @@ var _index := -1
 
 
 func _ready() -> void:
+	# После адаптера ввода, перед физическим обновлением игрока.
+	process_physics_priority = -50
 	_rest_basis = basis
 	_target_lock = get_node_or_null("TargetLock")
 	if not _target_lock:
@@ -63,13 +62,14 @@ func get_weapons() -> Array[Weapon]:
 
 
 func get_aim_direction() -> Vector3:
-	if not _shot_direction.is_zero_approx():
-		return _shot_direction
+	if has_target_lock():
+		return _aim_direction
 	return -(aim if aim else self).global_basis.z
 
 
 func select(index: int) -> void:
-	_visual_lock_remaining = 0.0
+	_aim_target = null
+	_aim_direction = Vector3.ZERO
 	if _visual_aim_active:
 		basis = _rest_basis
 		_visual_aim_active = false
@@ -111,9 +111,10 @@ func _on_weapon_fired(rounds: int) -> void:
 		rig.shake(sqrt(float(rounds)))
 
 
-## Захват вызывается один раз на успешную попытку выстрела из Firearm.
-func prepare_shot(origin: Vector3, max_distance: float, excluded: Array[RID]) -> void:
-	_shot_direction = Vector3.ZERO
+## Постоянный поиск цели выполняется в физическом тике, а не при выстреле.
+func _physics_process(_delta: float) -> void:
+	_aim_direction = Vector3.ZERO
+	_aim_target = null
 	var shooter: Node3D = null
 	var node := get_parent()
 	while node:
@@ -121,39 +122,25 @@ func prepare_shot(origin: Vector3, max_distance: float, excluded: Array[RID]) ->
 			shooter = node
 			break
 		node = node.get_parent()
-	_shot_target = null
-	var acquired = _target_lock.acquire(origin, max_distance, excluded, shooter)
-	if is_instance_valid(acquired) and not acquired.is_queued_for_deletion():
-		_shot_target = acquired
-	if is_instance_valid(_shot_target):
-		_shot_direction = _target_lock.get_target_point(_shot_target) - origin
+	if current is Firearm:
+		var origin: Vector3 = current.get_shot_origin()
+		var acquired = _target_lock.acquire(origin, current.max_range, current.get_shot_exclusions(), shooter)
+		if is_instance_valid(acquired) and not acquired.is_queued_for_deletion():
+			_aim_target = acquired
+			_aim_direction = (_target_lock.get_target_point(_aim_target) - origin).normalized()
+	if shooter and shooter.has_method("set_aim_lock"):
+		shooter.set_aim_lock(_aim_target)
 
-		_shot_direction = _shot_direction.normalized()
-		_visual_lock_remaining = lock_pose_seconds
+func has_target_lock() -> bool:
+	return is_instance_valid(_aim_target) and not _aim_target.is_queued_for_deletion() and not _aim_direction.is_zero_approx()
+
+
+## Визуальное наведение обновляется каждый кадр; без цели оружие плавно возвращается.
+func _process(delta: float) -> void:
+	if has_target_lock():
 		_visual_aim_active = true
 		_apply_visual_aim()
-		if shooter and shooter.has_method("set_shooting_lock"):
-			shooter.set_shooting_lock(_shot_target, lock_pose_seconds)
-
-func finish_shot() -> void:
-	_shot_direction = Vector3.ZERO
-
-
-func has_shot_lock() -> bool:
-	return not _shot_direction.is_zero_approx()
-
-
-## Обновляется после анимации руки, сохраняя наведение на движущуюся цель.
-func _process(delta: float) -> void:
-	if not is_instance_valid(_shot_target):
-		_shot_target = null
-	elif _shot_target.is_queued_for_deletion():
-		_shot_target = null
-	if _visual_lock_remaining > 0.0 and is_instance_valid(_shot_target) and not _shot_target.is_queued_for_deletion():
-		_visual_lock_remaining = maxf(_visual_lock_remaining - delta, 0.0)
-		_apply_visual_aim()
 	elif _visual_aim_active:
-		_visual_lock_remaining = 0.0
 		var weight := 1.0 - exp(-aim_return_speed * delta)
 		var rotation_from := basis.orthonormalized().get_rotation_quaternion()
 		var rotation_to := _rest_basis.orthonormalized().get_rotation_quaternion()
@@ -162,15 +149,14 @@ func _process(delta: float) -> void:
 			basis = _rest_basis
 			_visual_aim_active = false
 
-
 ## Ориентирует оружие по всем трём осям, не наклоняя тело персонажа.
 func _apply_visual_aim() -> void:
-	if not is_instance_valid(current) or not is_instance_valid(_shot_target):
+	if not is_instance_valid(current) or not is_instance_valid(_aim_target):
 		return
 	var muzzle := current.get_node_or_null("Muzzle") as Node3D
 	if not muzzle:
 		return
-	var point: Vector3 = _target_lock.get_target_point(_shot_target)
+	var point: Vector3 = _target_lock.get_target_point(_aim_target)
 	# Два уточнения компенсируют смещение самого дула при повороте держателя.
 	for iteration in 2:
 		var direction := point - muzzle.global_position
