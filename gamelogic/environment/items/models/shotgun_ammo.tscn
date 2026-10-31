@@ -1,23 +1,8 @@
 [gd_scene format=3 uid="uid://britfeef6c7oe"]
 
-[sub_resource type="StandardMaterial3D" id="Material"]
-albedo_color = Color(0.75, 0.12, 0.06, 1)
-metallic = 0.6
-roughness = 0.35
+[ext_resource type="PackedScene" uid="uid://itwk36mmn8b0" path="res://resources/model/weapons/bullet_shootgun.glb" id="1"]
 
-[sub_resource type="CylinderMesh" id="Shell"]
-top_radius = 0.06
-bottom_radius = 0.08
-height = 0.35
+[node name="ItemModel" type="Node3D" unique_id=501261417]
 
-[node name="Ammo" type="Node3D" unique_id=501261417]
-
-[node name="Shell1" type="MeshInstance3D" parent="." unique_id=1830190914]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, 0.19, 0)
-material_override = SubResource("Material")
-mesh = SubResource("Shell")
-
-[node name="Shell2" type="MeshInstance3D" parent="." unique_id=1069520099]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.19, 0)
-material_override = SubResource("Material")
-mesh = SubResource("Shell")
+[node name="Model" parent="." unique_id=1830190914 instance=ExtResource("1")]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.0528, -0.1051, -0.3393)
