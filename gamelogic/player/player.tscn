@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://gamelogic/weapon/weapon_revolver.tscn" id="6_revolver"]
 [ext_resource type="PackedScene" uid="uid://cquasyawaifv" path="res://gamelogic/player/cone/view_cone.tscn" id="7_cone"]
 [ext_resource type="PackedScene" path="res://gamelogic/player/model/player_model.tscn" id="8_model"]
+[ext_resource type="PackedScene" path="res://gamelogic/weapon/weapon_axe.tscn" id="9_axe"]
 
 [ext_resource type="Script" path="res://gamelogic/player/camera/wall_cutout.gd" id="20_cutout"]
 
@@ -47,6 +48,8 @@ off_hand = NodePath("../../LeftHandGrip/Flashlight")
 [node name="WeaponDoubleShotgun" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/RightHandGrip/WeaponHolder" unique_id=1504881159 instance=ExtResource("5_shotgun")]
 
 [node name="WeaponRevolver" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/RightHandGrip/WeaponHolder" unique_id=1816449901 instance=ExtResource("6_revolver")]
+
+[node name="WeaponAxe" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/RightHandGrip/WeaponHolder" instance=ExtResource("9_axe")]
 
 [node name="Flashlight" type="MeshInstance3D" parent="Visual/PlayerModel/camera_man_5/Armature_001/Skeleton3D/LeftHandGrip"]
 transform = Transform3D(0.71220434, 0.0065567405, 0.68935585, 0.6893651, -0.014705395, -0.71207404, 0.0055167656, 0.99107563, -0.015126121, 0, 0.08, 0.03)

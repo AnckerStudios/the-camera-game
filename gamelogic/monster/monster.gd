@@ -3,7 +3,7 @@ class_name Monster extends CharacterBody3D
 enum Dimension {REAL, INFRARED}
 
 const MONSTER_GROUP = "monster"
-const PHYSICAL_WEAPONS := ["WeaponDoubleShotgun", "WeaponRevolver"]
+const PHYSICAL_WEAPONS := ["WeaponDoubleShotgun", "WeaponRevolver", "WeaponAxe"]
 
 @onready var nav_agent : NavigationAgent3D = $NavigationAgent3D
 @onready var collision : CollisionShape3D = $CollisionShape3D
