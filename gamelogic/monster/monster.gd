@@ -14,13 +14,20 @@ const PHYSICAL_WEAPONS := ["WeaponDoubleShotgun", "WeaponRevolver", "WeaponAxe"]
 var rotation_speed := 10.0
 
 var dimension: Dimension
-var hp: float
+var damage_receiver := DamageReceiver.new()
+var hp: float:
+	get:
+		return damage_receiver.health
+	set(value):
+		damage_receiver.health = maxf(value, 0.0)
 var move_speed: float
 var attack_damage: float
 var resistance_physical: float
 var resistance_energetic: float
 
 func _ready() -> void:
+	damage_receiver.register_owner(self)
+	damage_receiver.depleted.connect(_on_health_depleted)
 	add_child(ConeVisibility.new())
 	add_to_group(MONSTER_GROUP)
 
@@ -57,18 +64,19 @@ func _physics_process(delta: float) -> void:
 func update_target_location(target_location: Vector3) -> void:
 	nav_agent.target_position = target_location
 
+## Монстры переопределяют множитель или сам метод, сохраняя общий расчёт здоровья.
 func take_damage(amount: float, source: Node) -> void:
-	var resistance: float
-	
-	if PHYSICAL_WEAPONS.has(source.name):
-		resistance = resistance_physical
-	else:
-		resistance = resistance_energetic
-	
-	hp -= amount * resistance
-	print("%s: -%.0f от %s, осталось %.0f" % [name, amount, source.name, hp])
-	if hp <= 0.0:
-		die()
+	if monster_state.is_dead:
+		return
+	damage_receiver.take_damage(amount * _get_damage_multiplier(source), source)
+
+func _get_damage_multiplier(source: Node) -> float:
+	if is_instance_valid(source) and PHYSICAL_WEAPONS.has(source.name):
+		return resistance_physical
+	return resistance_energetic
+
+func _on_health_depleted(_source: Node) -> void:
+	die()
 
 # Действия при смерти монстра
 func die() -> void:

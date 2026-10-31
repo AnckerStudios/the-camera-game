@@ -1,13 +1,12 @@
 class_name WeaponTargetLock
 extends Node
-## Выбирает ближайшего к курсору живого врага при начале выстрела.
+## Выбирает ближайшую к курсору доступную цель с DamageReceiver: монстра или окружение.
 signal target_changed(target: Node3D)
 
 @export var enabled: bool = true
 @export_range(0.0, 300.0, 1.0) var capture_radius_pixels: float = 80.0
 @export var target_height: float = 1.0
 @export var require_view_cone: bool = true
-@export var enemy_group: StringName = &"monster"
 @export_flags_3d_physics var obstruction_mask: int = 1
 
 # Слабая ссылка не удерживает удалённого врага и возвращает null после его удаления.
@@ -30,10 +29,10 @@ func acquire(origin: Vector3, max_distance: float, excluded: Array[RID], shooter
 	if enabled and camera:
 		var mouse := get_viewport().get_mouse_position()
 		var closest := capture_radius_pixels * capture_radius_pixels
-		for enemy in get_tree().get_nodes_in_group(enemy_group):
+		for enemy in get_tree().get_nodes_in_group(DamageReceiver.TARGET_GROUP):
 			if not enemy is Node3D or enemy.is_queued_for_deletion() or not enemy.is_visible_in_tree():
 				continue
-			if enemy.get("is_dead") == true:
+			if DamageReceiver.find_target(enemy) != enemy or enemy == shooter:
 				continue
 			var point := get_target_point(enemy)
 			if camera.is_position_behind(point) or origin.distance_to(point) > max_distance:
@@ -71,10 +70,10 @@ func _in_view(enemy: Node3D, shooter: Node3D) -> bool:
 
 func _has_clear_path(origin: Vector3, point: Vector3, enemy: Node3D, excluded: Array[RID]) -> bool:
 	var query := PhysicsRayQueryParameters3D.create(origin, point, obstruction_mask, excluded)
-	query.collide_with_areas = true
+	query.collide_with_areas = false
 	query.hit_from_inside = true
 	var hit := enemy.get_world_3d().direct_space_state.intersect_ray(query)
 	if hit.is_empty():
 		return true
 	var collider: Node = hit.collider
-	return collider == enemy or enemy.is_ancestor_of(collider)
+	return DamageReceiver.find_target(collider) == enemy
