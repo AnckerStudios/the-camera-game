@@ -63,6 +63,7 @@ var _has_mouse_target: bool = false
 
 
 func _ready() -> void:
+	add_child(preload("res://gamelogic/player/performance_diagnostics.gd").new())
 	PlayerState.reset()
 	VisionFilters.set_mode(VisionProfile.Filter.NORMAL, false)
 	_inventory.name = &"Inventory"

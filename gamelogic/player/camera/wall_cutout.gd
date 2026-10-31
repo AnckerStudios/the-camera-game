@@ -23,6 +23,8 @@ var _mesh_bodies: Dictionary = {}
 var _shader_values: Dictionary = {}
 var _body_materials: Dictionary = {}
 var _material_meshes: Dictionary = {}
+var _material_bindings: Dictionary = {}
+var _attached_materials: Dictionary = {}
 var _enemy_active_materials: Dictionary = {}
 var _materials: Array[ShaderMaterial] = []
 var _meshes: Array[MeshInstance3D] = []
@@ -89,16 +91,15 @@ func _prepare_mesh(node: MeshInstance3D) -> void:
 				_set_material_parameter(material, "has_texture", true)
 				_set_material_parameter(material, "base_texture", original.albedo_texture)
 		if override_material:
-			node.material_override = material
-			_register_material(node, material)
+			_register_material(node, material, -1, override_material)
 			break
-		node.set_surface_override_material(surface, material)
-		_register_material(node, material)
+		_register_material(node, material, surface, node.get_surface_override_material(surface))
 
-func _register_material(mesh: MeshInstance3D, material: ShaderMaterial) -> void:
+func _register_material(mesh: MeshInstance3D, material: ShaderMaterial, surface: int, original: Material) -> void:
 	_materials.append(material)
 	_meshes.append(mesh)
 	_material_meshes[material] = mesh
+	_material_bindings[material] = {"surface": surface, "original": original}
 	for body in _mesh_bodies[mesh]:
 		var materials: Array = _body_materials.get_or_add(body, [])
 		materials.append(material)
@@ -223,6 +224,31 @@ func _set_material_parameter(material: ShaderMaterial, parameter: StringName, va
 		return
 	values[parameter] = value
 	material.set_shader_parameter(parameter, value)
+	if parameter == &"cutout_enabled" or parameter == &"enemy_cutout_count":
+		_sync_material_attachment(material)
+
+## Шейдер с discard нужен только на стенах, где действительно открывается отверстие.
+## Остальное окружение сохраняет исходные общие материалы и обычную отрисовку.
+func _sync_material_attachment(material: ShaderMaterial) -> void:
+	if not _material_bindings.has(material):
+		return
+	var values: Dictionary = _shader_values[material]
+	var needed: bool = values.get(&"cutout_enabled", false) or values.get(&"enemy_cutout_count", 0) > 0
+	if needed == _attached_materials.has(material):
+		return
+	var mesh: MeshInstance3D = _material_meshes[material]
+	if not is_instance_valid(mesh) or mesh.is_queued_for_deletion():
+		return
+	var binding: Dictionary = _material_bindings[material]
+	var replacement: Material = material if needed else binding.original
+	if binding.surface < 0:
+		mesh.material_override = replacement
+	else:
+		mesh.set_surface_override_material(binding.surface, replacement)
+	if needed:
+		_attached_materials[material] = true
+	else:
+		_attached_materials.erase(material)
 
 func _forget_mesh(mesh: MeshInstance3D) -> void:
 	for body in _mesh_bodies.get(mesh, []):
@@ -235,6 +261,8 @@ func _forget_mesh(mesh: MeshInstance3D) -> void:
 	_mesh_bodies.erase(mesh)
 	for index in range(_meshes.size() - 1, -1, -1):
 		if _meshes[index] == mesh:
+			_material_bindings.erase(_materials[index])
+			_attached_materials.erase(_materials[index])
 			_material_meshes.erase(_materials[index])
 			_enemy_active_materials.erase(_materials[index])
 			_shader_values.erase(_materials[index])
