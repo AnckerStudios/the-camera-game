@@ -8,6 +8,8 @@ enum Kind {WEAPON, AMMO, MEDICINE, FILTER, BATTERY}
 @export var kind: Kind = Kind.MEDICINE
 @export var icon: Texture2D
 @export var model_scene: PackedScene
+## Дополнительная ориентация модели в окне осмотра, без влияния на мир и оружие в руках.
+@export var inspection_rotation_degrees: Vector3 = Vector3.ZERO
 @export_range(1, 999, 1) var max_stack: int = 10
 @export var weapon_scene: PackedScene
 ## Имя узла оружия для совместимых патронов, например WeaponRevolver.

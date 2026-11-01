@@ -8,28 +8,13 @@ var filter_slot: InventoryEntry
 var filters: Array[InventoryEntry] = []
 var _holder: WeaponHolder
 
-## Начальный набор: только топор в первой ячейке, без установленных фильтров.
+## Игра начинается с пустым инвентарём и свободными слотами экипировки.
 func initialize(holder: WeaponHolder) -> void:
 	_holder = holder
 	entries.clear()
 	weapons.assign([null, null])
 	filters.clear()
 	filter_slot = null
-	if is_instance_valid(holder):
-		var axe: Weapon
-		for weapon in holder.get_weapons():
-			if weapon.name == &"WeaponAxe":
-				axe = weapon
-				break
-		if not axe:
-			axe = holder.create_inventory_weapon(load("res://gamelogic/weapon/weapon_axe.tscn") as PackedScene)
-		if axe:
-			var data := load("res://gamelogic/environment/items/data/axe.tres") as InventoryItem
-			var entry := InventoryEntry.new()
-			entry.item = data
-			entry.weapon = axe
-			entries.append(entry)
-			weapons[0] = entry
 	_sync_weapons()
 	_sync_filters()
 	changed.emit()
@@ -183,7 +168,7 @@ func drop_item(entry: InventoryEntry, player: Node3D) -> bool:
 	pickup.inventory_item = entry.item
 	pickup.quantity = entry.quantity
 	pickup.stored_entry = entry
-	pickup.model_snapshot = InventoryPreview.build(entry)
+	pickup.model_snapshot = InventoryPreview.build(entry, false)
 	pickup.model_snapshot.position.y = pickup.model_snapshot.get_meta(&"floor_offset", 0.3)
 	var position := _drop_position(player)
 	# Сначала исключаем из экипировки, затем переносим скрытую логику оружия в предмет.

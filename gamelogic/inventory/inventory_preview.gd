@@ -1,20 +1,19 @@
 class_name InventoryPreview
 extends RefCounted
 ## Копирует только геометрию, не запуская оружие, коллизии и скрипты моделей.
-static func build(entry: InventoryEntry) -> Node3D:
+static func build(entry: InventoryEntry, normalize_for_preview: bool = true) -> Node3D:
 	var root := Node3D.new()
 	var source: Node3D
 	var temporary: Node
-	if is_instance_valid(entry.weapon):
-		source = entry.weapon.get_node_or_null("Model") as Node3D
-		if not source:
-			source = entry.weapon
-	elif entry.item.model_scene:
+	# Сцена предмета задаёт мировой масштаб и ориентацию, независимо от хвата оружия.
+	if entry.item.model_scene:
 		temporary = entry.item.model_scene.instantiate()
 		source = temporary as Node3D
 	elif entry.item.weapon_scene:
 		temporary = entry.item.weapon_scene.instantiate()
 		source = temporary as Node3D
+	elif is_instance_valid(entry.weapon):
+		source = entry.weapon
 	if source:
 		_copy(source, Transform3D.IDENTITY, root)
 	if temporary:
@@ -27,6 +26,10 @@ static func build(entry: InventoryEntry) -> Node3D:
 		var box: AABB = mesh.transform * mesh.get_aabb()
 		bounds = bounds.merge(box) if found else box
 		found = true
+	if not normalize_for_preview:
+		# Сохраняем размер исходной сцены; приподнимаем лишь если меш уходит ниже земли.
+		root.set_meta(&"floor_offset", maxf(-bounds.position.y, 0.0) + 0.02)
+		return root
 	var longest := maxf(bounds.size.x, maxf(bounds.size.y, bounds.size.z))
 	var factor := 1.7 / maxf(longest, 0.01)
 	for mesh in root.get_children():

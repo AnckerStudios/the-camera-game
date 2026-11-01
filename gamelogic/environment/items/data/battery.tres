@@ -10,4 +10,5 @@ display_name = "Батарейка"
 description = "Восстанавливает 50 единиц заряда камеры"
 kind = 4
 model_scene = ExtResource("2")
+inspection_rotation_degrees = Vector3(-85, -90, -15)
 charging = 50.0
