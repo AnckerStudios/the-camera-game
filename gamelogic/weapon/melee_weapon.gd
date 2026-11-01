@@ -10,6 +10,9 @@ signal struck(hits: int)
 @export var damage := 40.0
 ## Дальность удара от оружия, м.
 @export var reach := 1.6
+@export var attack_origin_height: float = 1.0
+## Допуск только для близких дверей; не увеличивает дальность удара по монстрам.
+@export_range(0.0, 1.0, 0.05) var door_hit_assist: float = 0.4
 ## Полный угол сектора удара в градусах (в плоскости пола).
 @export_range(0.0, 360.0) var arc_degrees := 100.0
 ## Минимальная пауза между ударами, сек.
@@ -35,6 +38,7 @@ var _cooldown := 0.0
 var _hit_timer := 0.0
 var _tween: Tween
 var _hit_shape := CylinderShape3D.new()
+var _door_shape := SphereShape3D.new()
 
 @onready var _swing_sound: AudioStreamPlayer3D = get_node_or_null("SwingSound")
 @onready var _miss_sound: AudioStreamPlayer3D = get_node_or_null("MissSound")
@@ -80,7 +84,7 @@ func unequip() -> void:
 ## Бьёт всех в секторе перед персонажем, каждого не больше одного раза.
 func _strike() -> void:
 	var forward := _aim_direction()
-	var origin := global_position
+	var origin := _get_attack_origin()
 	_hit_shape.radius = reach
 	_hit_shape.height = hit_band_below + hit_band_above
 
@@ -92,22 +96,47 @@ func _strike() -> void:
 	query.collide_with_areas = true
 	query.exclude = _exclude()
 
-	var half := deg_to_rad(arc_degrees) / 2.0
+	var space := get_world_3d().direct_space_state
+	var candidates := space.intersect_shape(query, 32)
+	# Сфера находит реальную коллизию двери, даже если узкая полоса удара её не задела.
+	_door_shape.radius = reach + door_hit_assist
+	var door_query := PhysicsShapeQueryParameters3D.new()
+	door_query.shape = _door_shape
+	door_query.transform = Transform3D(Basis.IDENTITY, origin)
+	door_query.collision_mask = hit_mask
+	door_query.collide_with_areas = false
+	door_query.exclude = query.exclude
+	for hit in space.intersect_shape(door_query, 64):
+		if DamageReceiver.find_target(hit.collider) is DamageDoor:
+			candidates.append(hit)
+	var half := deg_to_rad(arc_degrees) * 0.5
 	var hit_targets := {}
 	var hit_monster := false
 	var hit_door := false
-	for hit in get_world_3d().direct_space_state.intersect_shape(query, 32):
-		var target: Object = hit.collider
-		if hit_targets.has(target) or not target.has_method("take_damage"):
+	for hit in candidates:
+		var target := DamageReceiver.find_target(hit.collider)
+		if not is_instance_valid(target) or hit_targets.has(target):
 			continue
-		var to_target: Vector3 = (target as Node3D).global_position - origin
+		var receiver := DamageReceiver.get_receiver(target)
+		if not receiver or not receiver.can_receive_damage():
+			continue
+		var contact := receiver.get_target_point()
+		if target is DamageDoor:
+			contact = target.get_melee_contact_point(origin)
+		var to_target := contact - origin
 		to_target.y = 0.0
-		if to_target.length_squared() > 0.0001 and forward.angle_to(to_target) > half:
+		var allowed_angle := half
+		var close_door := target is DamageDoor and origin.distance_squared_to(contact) <= 0.75 * 0.75
+		if target is DamageDoor:
+			allowed_angle = maxf(half, deg_to_rad(80.0))
+		if not close_door and to_target.length_squared() > 0.0001 and forward.angle_to(to_target) > allowed_angle:
+			continue
+		if target is DamageDoor and not _door_has_clear_path(origin, contact, target, query.exclude):
 			continue
 		hit_targets[target] = true
 		hit_monster = hit_monster or target is Monster
 		hit_door = hit_door or target is DamageDoor
-		target.take_damage(damage, self)
+		receiver.receive_hit(damage, self)
 	# Звук выбирается после проверки попаданий, один раз на весь удар.
 	var sound := _miss_sound if hit_targets.is_empty() else _swing_sound
 	# Дверь сохраняет прежний звук; монстры используют отдельный звук FleshSound.
@@ -120,6 +149,24 @@ func _strike() -> void:
 
 
 ## Направление удара в плоскости пола. В держателе - по его прицелу, а не по модели в руке.
+## Центр удара привязан к персонажу, а не к анимированной руке и scale оружия.
+func _get_attack_origin() -> Vector3:
+	var node := get_parent()
+	while node:
+		if node is CollisionObject3D:
+			return node.global_position + Vector3.UP * attack_origin_height
+		node = node.get_parent()
+	return global_position
+
+func _door_has_clear_path(origin: Vector3, contact: Vector3, door: Node3D, excluded: Array[RID]) -> bool:
+	if origin.distance_squared_to(contact) < 0.0001:
+		return true
+	var query := PhysicsRayQueryParameters3D.create(origin, contact, hit_mask, excluded)
+	query.collide_with_areas = false
+	query.hit_from_inside = true
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	return hit.is_empty() or DamageReceiver.find_target(hit.collider) == door
+
 func _aim_direction() -> Vector3:
 	var forward := -global_basis.z
 	var holder := get_parent() as WeaponHolder
