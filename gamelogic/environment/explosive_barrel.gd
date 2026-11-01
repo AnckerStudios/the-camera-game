@@ -20,7 +20,7 @@ var damage_receiver := DamageReceiver.new()
 @export var walls_block_damage: bool = true
 @export_flags_3d_physics var explosion_obstacle_mask: int = 1
 @export_group("Звук")
-@export var explosion_sound: AudioStream
+@export var explosion_sound: AudioStream = preload("res://resources/music/explosion.mp3")
 @export_range(-40.0, 12.0, 0.5) var explosion_volume_db: float = -3.0
 @export_group("Тряска")
 @export_range(0.1, 50.0, 0.5) var shake_radius: float = 15.0

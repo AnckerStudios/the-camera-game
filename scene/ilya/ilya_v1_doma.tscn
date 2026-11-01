@@ -109,7 +109,6 @@ size = 9.0
 [node name="Dummy2" type="StaticBody3D" parent="." unique_id=1147076394]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4581802, 1.5, 3.1996922)
 script = ExtResource("5_j7vhw")
-explosion_sound = ExtResource("6_t2knu")
 
 [node name="Shape" type="CollisionShape3D" parent="Dummy2" unique_id=1064016809]
 shape = SubResource("DummyShape")
@@ -120,7 +119,6 @@ transform = Transform3D(0.27, 0, 0, 0, 0.27, 0, 0, 0, 0.27, 0, -0.0171, 0)
 [node name="Dummy1" type="StaticBody3D" parent="." unique_id=1316338027]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.8939977, 0.5, 1.6000023)
 script = ExtResource("5_j7vhw")
-explosion_sound = ExtResource("6_t2knu")
 
 [node name="Shape" type="CollisionShape3D" parent="Dummy1" unique_id=830365736]
 shape = SubResource("DummyShape")
