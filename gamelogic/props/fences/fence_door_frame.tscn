@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bo7mdh4tq5ad8"]
+
+[ext_resource type="PackedScene" uid="uid://b3n4naj0qv86f" path="res://resources/model/modules/fence/fence_door_frame.glb" id="1_rgco5"]
+
+[sub_resource type="BoxShape3D" id="Shape"]
+size = Vector3(0.48242188, 6.7781, 1)
+
+[node name="Fence3" type="StaticBody3D" unique_id=1852519532]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2029047941]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.87939453, 1.554, 0)
+shape = SubResource("Shape")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=116675586]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.87931436, 1.554, 0)
+shape = SubResource("Shape")
+
+[node name="Model" parent="." unique_id=1618896687 instance=ExtResource("1_rgco5")]
+
+[node name="Cube_009" parent="Model" index="0" unique_id=219357933]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[editable path="Model"]

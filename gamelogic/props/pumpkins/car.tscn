@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://rqmbvxty2xlu"]
+
+[ext_resource type="PackedScene" uid="uid://5nf46avhngtv" path="res://resources/model/modules/props/car.glb" id="1_4x5hp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mfodn"]
+size = Vector3(1, 1, 2.6383362)
+
+[node name="Pumpkin1" type="StaticBody3D" unique_id=1795698653]
+
+[node name="car" parent="." unique_id=1784027444 instance=ExtResource("1_4x5hp")]
+
+[node name="Куб" parent="car" index="0" unique_id=302649543]
+transform = Transform3D(0.25823486, 0, 0, 0, 0.25823486, 0, 0, 0, 0.25823486, -0.033, 0, 0)
+
+[node name="Цилиндр" parent="car" index="2" unique_id=1767451110]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38426107, 0)
+
+[node name="Цилиндр_001" parent="car" index="3" unique_id=1889119318]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38426107, 0)
+
+[node name="Цилиндр_002" parent="car" index="4" unique_id=938322315]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.103, 0.38426107, 0)
+
+[node name="Цилиндр_003" parent="car" index="5" unique_id=1883467329]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.103, 0.38426107, 3.089)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=990197667]
+transform = Transform3D(1.7131411, 0, 0, 0, 2.0325744, 0, 0, 0, 1.5813036, 0.012573563, 0.31758976, -0.16296571)
+shape = SubResource("BoxShape3D_mfodn")
+
+[editable path="car"]
