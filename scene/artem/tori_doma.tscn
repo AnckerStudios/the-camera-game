@@ -1,0 +1,262 @@
+[gd_scene format=3 uid="uid://lxemhtw6x2m"]
+
+[ext_resource type="PackedScene" uid="uid://kmwuw8pmi1bl" path="res://gamelogic/player/player.tscn" id="1_4kvmk"]
+[ext_resource type="Script" uid="uid://depwexin4lwf1" path="res://gamelogic/player/camera/isometric_camera.gd" id="2_uonun"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_jgc3x"]
+vertices = PackedVector3Array(-10, 0.5, 8.75, -8, 0.5, 8.5, -8, 0.5, 7.75, -10, 0.5, 7.5, -14.5, 0.5, 14.5, -10, 0.5, 4.75, -10, 0.5, 3.5, -10, 0.5, -3.25, -8, 0.5, -3.5, -8, 0.5, -4.25, -10, 0.5, -4.5, -14.5, 0.5, -14.5, -10.25, 0.5, 14.5, -10, 0.5, 11.5, -9.75, 0.5, -7.5, -3.75, 0.5, -7.5, -3.75, 0.5, -8.25, -10, 0.5, -8.5, -10, 0.5, -0.5, -10, 0.5, 0.75, -9.75, 0.5, -11.5, -4.5, 0.5, -11.5, -4.5, 0.5, -14.5, -2.25, 0.5, -8.75, -1.75, 0.5, -7.25, -1.25, 0.5, -3.25, -1, 0.5, 0.5, -0.75, 0.5, 2.25, 14.5, 0.5, 2, -1.75, 0.5, -4.75, -3.25, 0.5, -4.25, -3.25, 0.5, -3.5, 14.5, 0.5, -14.5, -1.25, 0.5, -1, -2.25, 0.5, -11.25, -9, 1.5, -10.5, -9, 1.5, -9.25, -6.75, 1.5, -9.25, -6.75, 1.5, -10.5, -5.5, 1.5, -10.5, -5.5, 1.5, -9.25, -3.25, 1.5, -9.25, -3.25, 1.5, -10.5, -9, 1.5, -6.5, -9, 1.5, -5.25, -6.75, 1.5, -5.25, -6.75, 1.5, -6.5, -5, 1.5, -6.5, -5, 1.5, -5.25, -2.75, 1.5, -5.25, -2.75, 1.5, -6.5, -0.5, 0.5, 4.5, -0.75, 0.5, 3, -1.25, 0.5, 3.75, -1.75, 0.5, -0.25, -6.25, 0.5, 7.75, -5.75, 0.5, 8.75, -6.25, 0.5, -0.25, -5.75, 0.5, 0.75, -4.75, 0.5, 0.5, -5.5, 0.5, -0.5, -5.75, 0.5, -0.75, -5.75, 0.5, 7.25, -4, 0.5, 8.75, -4.5, 0.5, 7.5, -5.75, 0.5, -3.25, -5.5, 0.5, -3.25, -1.75, 0.5, 8.5, -1.75, 0.5, 7.75, -4.5, 0.5, 4.75, -5, 0.5, 3.5, -6.25, 0.5, 3.75, -5.75, 0.5, 4.75, -6, 0.5, 11.5, -4, 0.5, 11.5, -5.75, 0.5, 3.25, -9, 1.5, -2.5, -9, 1.5, -1.25, -6.75, 1.5, -1.25, -6.75, 1.5, -2.5, -4.5, 1.5, -2.5, -4.5, 1.5, -1.25, -2.25, 1.5, -1.25, -2.25, 1.5, -2.5, -9, 1.5, 1.5, -9, 1.5, 2.75, -6.75, 1.5, 2.75, -6.75, 1.5, 1.5, -4, 1.5, 1.5, -4, 1.5, 2.75, -1.75, 1.5, 2.75, -1.75, 1.5, 1.5, -0.25, 0.5, 7.25, 0.25, 0.5, 8.75, 0.25, 0.5, 11.25, 0.25, 0.5, 14.5, 14.5, 0.5, 14.5, -9, 1.5, 5.5, -9, 1.5, 6.75, -6.75, 1.5, 6.75, -6.75, 1.5, 5.5, -3.5, 1.5, 5.5, -3.5, 1.5, 6.75, -1.25, 1.5, 6.75, -1.25, 1.5, 5.5, -9, 1.5, 9.5, -9, 1.5, 10.75, -6.75, 1.5, 10.75, -6.75, 1.5, 9.5, -3, 1.5, 9.5, -3, 1.5, 10.75, -0.75, 1.5, 10.75, -0.75, 1.5, 9.5, -0.25, 0.5, 11.75)
+polygons = [PackedInt32Array(1, 0, 2), PackedInt32Array(2, 0, 3), PackedInt32Array(6, 5, 4), PackedInt32Array(8, 7, 9), PackedInt32Array(9, 7, 10), PackedInt32Array(11, 10, 7), PackedInt32Array(13, 12, 0), PackedInt32Array(0, 12, 4), PackedInt32Array(15, 14, 16), PackedInt32Array(16, 14, 17), PackedInt32Array(19, 4, 18), PackedInt32Array(18, 4, 11), PackedInt32Array(14, 10, 17), PackedInt32Array(17, 10, 11), PackedInt32Array(21, 20, 22), PackedInt32Array(22, 20, 11), PackedInt32Array(18, 11, 7), PackedInt32Array(19, 6, 4), PackedInt32Array(20, 17, 11), PackedInt32Array(3, 0, 4), PackedInt32Array(5, 3, 4), PackedInt32Array(16, 23, 15), PackedInt32Array(15, 23, 24), PackedInt32Array(26, 25, 27), PackedInt32Array(27, 25, 28), PackedInt32Array(30, 29, 31), PackedInt32Array(31, 29, 25), PackedInt32Array(29, 24, 25), PackedInt32Array(25, 24, 28), PackedInt32Array(28, 24, 32), PackedInt32Array(26, 33, 25), PackedInt32Array(21, 22, 34), PackedInt32Array(34, 22, 32), PackedInt32Array(23, 34, 24), PackedInt32Array(24, 34, 32), PackedInt32Array(38, 37, 35), PackedInt32Array(35, 37, 36), PackedInt32Array(42, 41, 39), PackedInt32Array(39, 41, 40), PackedInt32Array(46, 45, 43), PackedInt32Array(43, 45, 44), PackedInt32Array(50, 49, 47), PackedInt32Array(47, 49, 48), PackedInt32Array(53, 52, 51), PackedInt32Array(54, 33, 26), PackedInt32Array(2, 55, 1), PackedInt32Array(1, 55, 56), PackedInt32Array(61, 60, 57), PackedInt32Array(57, 60, 58), PackedInt32Array(58, 60, 59), PackedInt32Array(55, 62, 56), PackedInt32Array(56, 62, 64), PackedInt32Array(56, 64, 63), PackedInt32Array(65, 8, 66), PackedInt32Array(66, 8, 9), PackedInt32Array(66, 9, 31), PackedInt32Array(31, 9, 30), PackedInt32Array(67, 63, 68), PackedInt32Array(68, 63, 64), PackedInt32Array(71, 70, 72), PackedInt32Array(72, 70, 69), PackedInt32Array(69, 70, 53), PackedInt32Array(69, 53, 51), PackedInt32Array(63, 74, 56), PackedInt32Array(56, 74, 73), PackedInt32Array(71, 75, 70), PackedInt32Array(6, 71, 5), PackedInt32Array(5, 71, 72), PackedInt32Array(65, 66, 61), PackedInt32Array(61, 66, 60), PackedInt32Array(18, 57, 19), PackedInt32Array(19, 57, 58), PackedInt32Array(72, 69, 62), PackedInt32Array(62, 69, 64), PackedInt32Array(26, 59, 54), PackedInt32Array(54, 59, 60), PackedInt32Array(75, 58, 70), PackedInt32Array(70, 58, 59), PackedInt32Array(79, 78, 76), PackedInt32Array(76, 78, 77), PackedInt32Array(83, 82, 80), PackedInt32Array(80, 82, 81), PackedInt32Array(87, 86, 84), PackedInt32Array(84, 86, 85), PackedInt32Array(91, 90, 88), PackedInt32Array(88, 90, 89), PackedInt32Array(68, 92, 67), PackedInt32Array(67, 92, 93), PackedInt32Array(96, 95, 94), PackedInt32Array(52, 27, 51), PackedInt32Array(51, 27, 93), PackedInt32Array(93, 27, 28), PackedInt32Array(93, 28, 96), PackedInt32Array(93, 92, 51), PackedInt32Array(96, 94, 93), PackedInt32Array(100, 99, 97), PackedInt32Array(97, 99, 98), PackedInt32Array(104, 103, 101), PackedInt32Array(101, 103, 102), PackedInt32Array(108, 107, 105), PackedInt32Array(105, 107, 106), PackedInt32Array(112, 111, 109), PackedInt32Array(109, 111, 110), PackedInt32Array(113, 94, 95), PackedInt32Array(12, 13, 73), PackedInt32Array(74, 113, 73), PackedInt32Array(73, 113, 95), PackedInt32Array(73, 95, 12)]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4kvmk"]
+size = Vector3(3, 5, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uonun"]
+albedo_color = Color(0.9, 0.55, 0.18, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1rmw5"]
+size = Vector3(3, 5, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pvf07"]
+size = Vector3(30, 1, 30)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_adove"]
+albedo_color = Color(0.22, 0.29, 0.25, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_v4fnr"]
+size = Vector3(30, 1, 30)
+
+[node name="ToriDoma" type="Node3D" unique_id=1180060154]
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=322081102]
+navigation_mesh = SubResource("NavigationMesh_jgc3x")
+
+[node name="JumpTests" type="Node3D" parent="NavigationRegion3D" unique_id=411483611]
+
+[node name="Gap0" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=944598921]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.5, -10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Gap0" unique_id=2091998390]
+shape = SubResource("BoxShape3D_4kvmk")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Gap0" unique_id=397021240]
+material_override = SubResource("StandardMaterial3D_uonun")
+mesh = SubResource("BoxMesh_1rmw5")
+
+[node name="Label" type="Label3D" parent="NavigationRegion3D/JumpTests/Gap0" unique_id=783957548]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+pixel_size = 0.01
+billboard = 1
+text = "Gap: 0.5 m"
+font_size = 48
+
+[node name="Start0" type="Label3D" parent="NavigationRegion3D/JumpTests" unique_id=34951695]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.8, -10)
+pixel_size = 0.01
+billboard = 1
+text = "0.5 m ->"
+font_size = 40
+
+[node name="Gap1" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=1574652126]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.5, -6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Gap1" unique_id=1174688342]
+shape = SubResource("BoxShape3D_4kvmk")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Gap1" unique_id=2034197174]
+material_override = SubResource("StandardMaterial3D_uonun")
+mesh = SubResource("BoxMesh_1rmw5")
+
+[node name="Label" type="Label3D" parent="NavigationRegion3D/JumpTests/Gap1" unique_id=1469957400]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+pixel_size = 0.01
+billboard = 1
+text = "Gap: 1.0 m"
+font_size = 48
+
+[node name="Start1" type="Label3D" parent="NavigationRegion3D/JumpTests" unique_id=350731206]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.8, -6)
+pixel_size = 0.01
+billboard = 1
+text = "1.0 m ->"
+font_size = 40
+
+[node name="Gap2" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=1588585045]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0.5, -2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Gap2" unique_id=114831154]
+shape = SubResource("BoxShape3D_4kvmk")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Gap2" unique_id=608089090]
+material_override = SubResource("StandardMaterial3D_uonun")
+mesh = SubResource("BoxMesh_1rmw5")
+
+[node name="Label" type="Label3D" parent="NavigationRegion3D/JumpTests/Gap2" unique_id=897302849]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+pixel_size = 0.01
+billboard = 1
+text = "Gap: 1.5 m"
+font_size = 48
+
+[node name="Start2" type="Label3D" parent="NavigationRegion3D/JumpTests" unique_id=1580616892]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.8, -2)
+pixel_size = 0.01
+billboard = 1
+text = "1.5 m ->"
+font_size = 40
+
+[node name="Gap3" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=194165346]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.5, 2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Gap3" unique_id=1369352865]
+shape = SubResource("BoxShape3D_4kvmk")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Gap3" unique_id=866164765]
+material_override = SubResource("StandardMaterial3D_uonun")
+mesh = SubResource("BoxMesh_1rmw5")
+
+[node name="Label" type="Label3D" parent="NavigationRegion3D/JumpTests/Gap3" unique_id=741127413]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+pixel_size = 0.01
+billboard = 1
+text = "Gap: 2.0 m"
+font_size = 48
+
+[node name="Start3" type="Label3D" parent="NavigationRegion3D/JumpTests" unique_id=338106049]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.8, 2)
+pixel_size = 0.01
+billboard = 1
+text = "2.0 m ->"
+font_size = 40
+
+[node name="Gap4" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=1784519315]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.5, 6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Gap4" unique_id=1931823840]
+shape = SubResource("BoxShape3D_4kvmk")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Gap4" unique_id=1073904429]
+material_override = SubResource("StandardMaterial3D_uonun")
+mesh = SubResource("BoxMesh_1rmw5")
+
+[node name="Label" type="Label3D" parent="NavigationRegion3D/JumpTests/Gap4" unique_id=859691419]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+pixel_size = 0.01
+billboard = 1
+text = "Gap: 2.5 m"
+font_size = 48
+
+[node name="Start4" type="Label3D" parent="NavigationRegion3D/JumpTests" unique_id=144587838]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.8, 6)
+pixel_size = 0.01
+billboard = 1
+text = "2.5 m ->"
+font_size = 40
+
+[node name="Gap5" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=487282742]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, 10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Gap5" unique_id=1647611115]
+shape = SubResource("BoxShape3D_4kvmk")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Gap5" unique_id=656621902]
+material_override = SubResource("StandardMaterial3D_uonun")
+mesh = SubResource("BoxMesh_1rmw5")
+
+[node name="Label" type="Label3D" parent="NavigationRegion3D/JumpTests/Gap5" unique_id=1869131980]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+pixel_size = 0.01
+billboard = 1
+text = "Gap: 3.0 m"
+font_size = 48
+
+[node name="Start5" type="Label3D" parent="NavigationRegion3D/JumpTests" unique_id=769921751]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.8, 10)
+pixel_size = 0.01
+billboard = 1
+text = "3.0 m ->"
+font_size = 40
+
+[node name="Launch0" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=690229562]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, -10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Launch0" unique_id=1344736391]
+shape = SubResource("BoxShape3D_4kvmk")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Launch0" unique_id=1013130966]
+material_override = SubResource("StandardMaterial3D_uonun")
+mesh = SubResource("BoxMesh_1rmw5")
+
+[node name="Launch1" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=2082701821]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, -6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Launch1" unique_id=1724416378]
+shape = SubResource("BoxShape3D_4kvmk")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Launch1" unique_id=90374769]
+material_override = SubResource("StandardMaterial3D_uonun")
+mesh = SubResource("BoxMesh_1rmw5")
+
+[node name="Launch2" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=1895048561]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, -2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Launch2" unique_id=1435518837]
+shape = SubResource("BoxShape3D_4kvmk")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Launch2" unique_id=482773843]
+material_override = SubResource("StandardMaterial3D_uonun")
+mesh = SubResource("BoxMesh_1rmw5")
+
+[node name="Launch3" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=1421482895]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, 2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Launch3" unique_id=2141649181]
+shape = SubResource("BoxShape3D_4kvmk")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Launch3" unique_id=534015850]
+material_override = SubResource("StandardMaterial3D_uonun")
+mesh = SubResource("BoxMesh_1rmw5")
+
+[node name="Launch4" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=183243115]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, 6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Launch4" unique_id=1101857317]
+shape = SubResource("BoxShape3D_4kvmk")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Launch4" unique_id=192662144]
+material_override = SubResource("StandardMaterial3D_uonun")
+mesh = SubResource("BoxMesh_1rmw5")
+
+[node name="Launch5" type="StaticBody3D" parent="NavigationRegion3D/JumpTests" unique_id=986832111]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, 10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/JumpTests/Launch5" unique_id=1057959500]
+shape = SubResource("BoxShape3D_4kvmk")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/JumpTests/Launch5" unique_id=993905138]
+material_override = SubResource("StandardMaterial3D_uonun")
+mesh = SubResource("BoxMesh_1rmw5")
+
+[node name="Ground" type="StaticBody3D" parent="NavigationRegion3D" unique_id=1636700135]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Ground" unique_id=130553164]
+shape = SubResource("BoxShape3D_pvf07")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/Ground" unique_id=1932044825]
+material_override = SubResource("StandardMaterial3D_adove")
+mesh = SubResource("BoxMesh_v4fnr")
+
+[node name="Player" parent="." unique_id=1577945846 instance=ExtResource("1_4kvmk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0382788, 1.0028534, 2.5725822)
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=1438152555 node_paths=PackedStringArray("target")]
+script = ExtResource("2_uonun")
+target = NodePath("")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=117958820]
+transform = Transform3D(0.70710677, -0.40824828, 0.57735026, 0, 0.8164966, 0.57735026, -0.70710677, -0.40824828, 0.57735026, 10, 10, 10)
+projection = 1
+current = true
+size = 9.0

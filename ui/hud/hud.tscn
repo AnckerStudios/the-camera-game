@@ -4,20 +4,41 @@
 [ext_resource type="Script" uid="uid://rouca0282po1" path="res://ui/hud/viewfinder.gd" id="2_viewfinder"]
 [ext_resource type="Script" uid="uid://cw6ql5pscvlo4" path="res://ui/hud/battery_indicator.gd" id="3_battery"]
 [ext_resource type="PackedScene" uid="uid://dm1q2hktewkrd" path="res://ui/buttons/play_button.tscn" id="4_w75iv"]
+[ext_resource type="FontFile" uid="uid://bkjytm5sk1aaw" path="res://resources/font/NotoSansMono-VariableFont_wdth,wght.ttf" id="5_aixkq"]
 [ext_resource type="Theme" uid="uid://dh65ss64qf3kd" path="res://buttonX.tres" id="5_imuuq"]
 [ext_resource type="PackedScene" uid="uid://b4y23lfljnid0" path="res://ui/options/options.tscn" id="6_kwc50"]
 [ext_resource type="Shader" uid="uid://bjajm8uc4cuhj" path="res://ui/hud/moving_static_lines.tres" id="7_cctv"]
+[ext_resource type="Texture2D" uid="uid://b8d1tgiw22sad" path="res://resources/texture/gear.svg" id="9_aixkq"]
+[ext_resource type="Texture2D" uid="uid://cfto3jj4itl40" path="res://resources/texture/cancel.svg" id="10_cxhb7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cctv"]
+shader = ExtResource("7_cctv")
+shader_parameter/frequency = 1.0
+shader_parameter/speed = 0.1
+shader_parameter/strength = 0.01
 
 [sub_resource type="FontVariation" id="FontVariation_tabular"]
 opentype_features = {
 "tnum": 1
 }
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kwc50"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ubgr0"]
+texture = ExtResource("9_aixkq")
+modulate_color = Color(1, 1, 1, 0.8509804)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o2lis"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_o2lis"]
+texture = ExtResource("9_aixkq")
+modulate_color = Color(1, 0, 0.101960786, 0.3372549)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_aixkq"]
+texture = ExtResource("10_cxhb7")
+modulate_color = Color(1, 1, 1, 0.8509804)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cxhb7"]
+texture = ExtResource("10_cxhb7")
+modulate_color = Color(1, 0, 0.101960786, 0.3372549)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_bg"]
 bg_color = Color(0, 0, 0, 0.5)
@@ -30,19 +51,10 @@ border_color = Color(1, 1, 1, 0.4)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health"]
 bg_color = Color(0.75, 0.1, 0.1, 1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kwc50"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o2lis"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gfles"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cctv"]
-shader = ExtResource("7_cctv")
-
 [node name="HUD" type="CanvasLayer" unique_id=643410873]
 script = ExtResource("1_hud")
 
-[node name="CctvOverlay" type="ColorRect" parent="."]
+[node name="CctvOverlay" type="ColorRect" parent="." unique_id=1555002326]
 material = SubResource("ShaderMaterial_cctv")
 anchors_preset = 15
 anchor_right = 1.0
@@ -124,6 +136,7 @@ theme_override_constants/separation = 8
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.1, 0.1, 1)
+theme_override_fonts/font = ExtResource("5_aixkq")
 theme_override_font_sizes/font_size = 22
 text = "●"
 
@@ -138,11 +151,12 @@ visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.1, 0.1, 1)
 theme_override_font_sizes/font_size = 22
-text = "❚❚"
+text = "II"
 
 [node name="PauseText" type="Label" parent="Margin/Layout/TopRow/Rec" unique_id=2084056521]
 visible = false
 layout_mode = 2
+theme_override_fonts/font = ExtResource("5_aixkq")
 theme_override_font_sizes/font_size = 22
 text = "PAUSE"
 
@@ -181,35 +195,38 @@ script = ExtResource("3_battery")
 [node name="ButtonOptional" parent="Margin/Layout/TopRow/Battery" unique_id=1564832545 instance=ExtResource("4_w75iv")]
 process_mode = 3
 z_as_relative = false
-custom_minimum_size = Vector2(40, 6)
-custom_maximum_size = Vector2(41, 27)
+custom_minimum_size = Vector2(30, 30)
+custom_maximum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
+offset_transform_scale = Vector2(0.2, 0.2)
 theme = ExtResource("5_imuuq")
 theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_aixkq")
 theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = SubResource("StyleBoxEmpty_kwc50")
+theme_override_styles/normal = SubResource("StyleBoxTexture_ubgr0")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_o2lis")
 theme_override_styles/hover = SubResource("StyleBoxTexture_o2lis")
-text = "⚙️"
+text = ""
 
 [node name="ButtonBack" parent="Margin/Layout/TopRow/Battery" unique_id=1649087154 instance=ExtResource("4_w75iv")]
 process_mode = 3
 visible = false
 z_as_relative = false
-custom_minimum_size = Vector2(40, 6)
-custom_maximum_size = Vector2(41, 27)
+custom_minimum_size = Vector2(30, 30)
+custom_maximum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 theme = ExtResource("5_imuuq")
 theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_aixkq")
 theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = SubResource("StyleBoxEmpty_kwc50")
+theme_override_styles/normal = SubResource("StyleBoxTexture_aixkq")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_o2lis")
-theme_override_styles/hover = SubResource("StyleBoxTexture_o2lis")
-text = "❌"
+theme_override_styles/hover = SubResource("StyleBoxTexture_cxhb7")
+text = ""
 
 [node name="MiddleSpacer" type="Control" parent="Margin/Layout" unique_id=1440178183]
 layout_mode = 2
