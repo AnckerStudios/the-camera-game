@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://b6rm4gjleavnu"]
+
+[ext_resource type="PackedScene" uid="uid://dnky8v0sbsrpq" path="res://resources/model/world/rocks/rock_1.glb" id="1_model"]
+
+[sub_resource type="BoxShape3D" id="Shape"]
+size = Vector3(2.657609, 2.268864, 2.713484)
+
+[node name="Rock1" type="StaticBody3D" unique_id=1314814057]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=57639560]
+shape = SubResource("Shape")
+
+[node name="Model" parent="." unique_id=2070104249 instance=ExtResource("1_model")]
+
+[node name="Icosphere_002" parent="Model" index="0" unique_id=678706312]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[editable path="Model"]

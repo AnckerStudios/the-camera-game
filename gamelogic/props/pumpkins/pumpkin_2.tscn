@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://cs4xnys0h75tl"]
+
+[ext_resource type="PackedScene" uid="uid://bosuys04o1a3e" path="res://resources/model/modules/props/pump2.glb" id="1_model"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_btcr7"]
+
+[node name="Pumpkin2" type="StaticBody3D" unique_id=845594939]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=623714738]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, -0.009607, 0.135911, -0.009608)
+shape = SubResource("SphereShape3D_btcr7")
+
+[node name="Model" parent="." unique_id=1002505958 instance=ExtResource("1_model")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+
+[editable path="Model"]
