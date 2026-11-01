@@ -183,7 +183,7 @@ func drop_item(entry: InventoryEntry, player: Node3D) -> bool:
 	pickup.inventory_item = entry.item
 	pickup.quantity = entry.quantity
 	pickup.stored_entry = entry
-	pickup.model_snapshot = InventoryPreview.build(entry)
+	pickup.model_snapshot = InventoryPreview.build(entry, false)
 	pickup.model_snapshot.position.y = pickup.model_snapshot.get_meta(&"floor_offset", 0.3)
 	var position := _drop_position(player)
 	# Сначала исключаем из экипировки, затем переносим скрытую логику оружия в предмет.

@@ -1,14 +1,17 @@
-[gd_resource type="Resource" script_class="InventoryItem" load_steps=4 format=3]
-[ext_resource type="Script" path="res://gamelogic/inventory/inventory_item.gd" id="1"]
-[ext_resource type="PackedScene" path="res://gamelogic/weapon/weapon_revolver.tscn" id="2"]
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://peoe6fjaatkj"]
+
+[ext_resource type="Script" uid="uid://qned3kybvfox" path="res://gamelogic/inventory/inventory_item.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://cdfc88ww24to0" path="res://gamelogic/weapon/weapon_revolver.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://gamelogic/environment/items/models/revolver.tscn" id="3"]
+
 [resource]
 script = ExtResource("1")
 id = &"weapon_WeaponRevolver"
 display_name = "Револьвер"
 description = "Точное оружие с шестью патронами в барабане."
 kind = 0
+model_scene = ExtResource("3")
+inspection_rotation_degrees = Vector3(-20, -90, 25)
 max_stack = 1
 weapon_scene = ExtResource("2")
 weapon_id = &"WeaponRevolver"
-model_scene = ExtResource("3")

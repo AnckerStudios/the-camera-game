@@ -4,7 +4,7 @@ signal closed
 const MouseInput = preload("res://gamelogic/input/mouse_tracker.gd")
 
 ## Начальный наклон модели и длительности появления в секундах.
-@export var initial_tilt_degrees: Vector3 = Vector3(35.0, 90.0, -25.0)
+@export var initial_tilt_degrees: Vector3 = Vector3(15.0, 0.0, -10.0)
 @export_range(0.05, 1.0, 0.01) var entrance_seconds: float = 0.2
 @export_range(0.05, 1.0, 0.01) var text_fade_seconds: float = 0.15
 
@@ -55,10 +55,22 @@ func prepare(item: PickupItem) -> void:
 	_stop_entrance()
 	_pivot.position = Vector3.ZERO
 	_pivot.rotation_degrees = initial_tilt_degrees
+	if item.inventory_item:
+		_pivot.rotation_degrees += item.inventory_item.inspection_rotation_degrees
 	_text_panel.modulate.a = 0.0
 	_title.text = item.display_name
 	_description.text = item.description
-	_copy_meshes(item.get_node("Model"), Transform3D.IDENTITY)
+	# Не наследуем поворот из рук или прошлой сессии осмотра.
+	var scene: PackedScene = item.model_scene
+	if not scene and item.inventory_item:
+		scene = item.inventory_item.model_scene
+	if scene:
+		var source := scene.instantiate()
+		if source is Node3D:
+			_copy_meshes(source, Transform3D.IDENTITY)
+		source.free()
+	else:
+		_copy_meshes(item.get_node("Model"), Transform3D.IDENTITY)
 	var bounds := AABB()
 	var initialized := false
 	for mesh in _pivot.get_children():
