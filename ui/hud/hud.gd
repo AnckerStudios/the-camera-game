@@ -7,6 +7,7 @@ const FLASH_DURATION := 0.4
 
 var _rec_time := 0.0
 var _flash_tween: Tween
+@onready var _filter_status: Label = %FilterStatus
 @onready var rec_dot: Label = %RecDot
 @onready var rec_text: Label = $Margin/Layout/TopRow/Rec/RecText
 @onready var pause_text: Label = $Margin/Layout/TopRow/Rec/PauseText
@@ -18,6 +19,9 @@ var _flash_tween: Tween
 @onready var mvj: Label = $Margin/Layout/Mvj
 
 func _ready() -> void:
+	VisionFilters.filter_changed.connect(_on_filter_changed)
+	VisionFilters.available_filters_changed.connect(_update_filter_status)
+	_update_filter_status()
 	PlayerState.battery_changed.connect(set_battery)
 	set_battery(PlayerState.battery, PlayerState.BATTERY_MAX)
 
@@ -38,6 +42,19 @@ func _process(delta: float) -> void:
 	%RecTime.text = "%02d:%02d" % [seconds / 60, seconds % 60]
 	%RecDot.modulate.a = 1.0 if fmod(_rec_time, 1.0) < 0.5 else 0.0
 
+
+## Обновляется по сигналам, без проверки состояния в каждом кадре.
+func _on_filter_changed(_mode: VisionProfile.Filter) -> void:
+	_update_filter_status()
+
+func _update_filter_status() -> void:
+	var equipped := VisionFilters.get_equipped_filter_mode()
+	_filter_status.visible = equipped != VisionProfile.Filter.NORMAL
+	if not _filter_status.visible:
+		return
+	var title := "Инфракрасный" if equipped == VisionProfile.Filter.INFRARED else "Ультрафиолетовый"
+	var active: bool = int(VisionFilters.mode) == equipped
+	_filter_status.text = "%s фильтр: %s [Tab]" % [title, "включён" if active else "выключен"]
 
 func set_health(value: float, max_value: float) -> void:
 	%HealthBar.max_value = max_value

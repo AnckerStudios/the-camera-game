@@ -1,6 +1,7 @@
 extends Node
 ## Переключает режим; правила конкретного объекта находятся в VisionProfile.
 signal filter_changed(mode: VisionProfile.Filter)
+signal available_filters_changed
 const Mode = VisionProfile.Filter
 var mode: VisionProfile.Filter = VisionProfile.Filter.NORMAL
 ## Звук интерфейса не зависит от положения персонажа или камеры.
@@ -37,12 +38,19 @@ func cycle_filter() -> void:
 
 ## Добавление фильтра не меняет текущий режим зрения.
 func set_available_filters(filters: Array[int]) -> void:
+	var previous := _available_modes.duplicate()
 	_available_modes.assign([VisionProfile.Filter.NORMAL])
 	for value in filters:
 		if value != VisionProfile.Filter.NORMAL and not _available_modes.has(value):
 			_available_modes.append(value)
 	if not _available_modes.has(int(mode)):
 		set_mode(VisionProfile.Filter.NORMAL)
+	if previous != _available_modes:
+		available_filters_changed.emit()
+
+## Экипированный фильтр доступен по Tab, но может оставаться выключенным.
+func get_equipped_filter_mode() -> int:
+	return _available_modes[1] if _available_modes.size() > 1 else int(Mode.NORMAL)
 
 func set_mode(value: VisionProfile.Filter, play_sound: bool = true) -> void:
 	if mode == value:

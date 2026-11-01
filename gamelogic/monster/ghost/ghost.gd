@@ -1,8 +1,11 @@
 class_name Ghost extends Monster
 
+@export_range(0.05, 1.0, 0.05) var infrared_opacity: float = 0.1
+
 func _ready() -> void:
 	vision_profile = vision_profile.duplicate()
 	vision_profile.dimension = VisionProfile.Dimension.INFRARED
+	vision_profile.infrared_opacity = infrared_opacity
 	super()
 	hp = 200.0
 	move_speed = 3.0
