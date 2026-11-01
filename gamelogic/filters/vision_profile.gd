@@ -8,6 +8,8 @@ const META: StringName = &"vision_profile"
 @export var dimension: Dimension = Dimension.REAL
 @export var active_object: bool = false
 @export var infrared_color: Color = Color(1.0, 0.28, 0.035, 1.0)
+## Непрозрачность объекта в инфракрасном режиме (1 — полностью непрозрачный).
+@export_range(0.05, 1.0, 0.05) var infrared_opacity: float = 1.0
 @export var ultraviolet_color: Color = Color(0.15, 0.8, 1.0, 1.0)
 
 func attach(target: Node3D) -> void:

@@ -50,7 +50,7 @@ albedo_color = Color(0.22, 0.29, 0.25, 1)
 [sub_resource type="BoxMesh" id="FloorMesh"]
 size = Vector3(30, 1, 30)
 
-[node name="MishaV4" type="Node3D" unique_id=1632283159]
+[node name="MishaV5" type="Node3D" unique_id=1632283159]
 script = ExtResource("1_l4rdr")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2136058302]

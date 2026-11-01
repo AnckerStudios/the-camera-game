@@ -2,12 +2,10 @@
 
 [ext_resource type="Script" uid="uid://djumrh3554s1" path="res://scene/dima/test_level_dima_script.gd" id="1_l4sg3"]
 [ext_resource type="PackedScene" uid="uid://kmwuw8pmi1bl" path="res://gamelogic/player/player.tscn" id="2_lntd3"]
-[ext_resource type="Curve" path="res://resources/animation/player/roll_motion.tres" id="3_u8q8r"]
 [ext_resource type="Script" uid="uid://depwexin4lwf1" path="res://gamelogic/player/camera/isometric_camera.gd" id="3_wemht"]
 [ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="4_si8ks"]
 [ext_resource type="Script" uid="uid://cj0kaua4ww26t" path="res://gamelogic/environment/explosive_barrel.gd" id="5_j7vhw"]
 [ext_resource type="PackedScene" uid="uid://c2g4ugy8n7yeu" path="res://resources/model/world/barrel.glb" id="6_ca088"]
-[ext_resource type="AudioStream" uid="uid://bsv1wusib4t65" path="res://resources/music/gun.mp3" id="6_t2knu"]
 [ext_resource type="PackedScene" uid="uid://dhn6j3uin8x8b" path="res://gamelogic/props/pines/pine_1.tscn" id="7_4cm51"]
 [ext_resource type="PackedScene" uid="uid://w3p8l3qnm13a" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="7_fvh2d"]
 [ext_resource type="PackedScene" uid="uid://b27riekc87kn0" path="res://gamelogic/props/pines/pine_2.tscn" id="8_om8af"]
@@ -16,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://dwbunjtc84mc3" path="res://gamelogic/monster/ghost/ghost.tscn" id="11_b1tl3"]
 [ext_resource type="ArrayMesh" uid="uid://er8nljgvawhk" path="res://resources/model/world/GrassMesh.res" id="11_om8af"]
 [ext_resource type="Script" uid="uid://chqxm24x5s5t1" path="res://scene/ilya/grass_generation.gd" id="13_j7vhw"]
+[ext_resource type="Resource" path="res://gamelogic/environment/items/data/infrared_filter.tres" id="15_b1tl3"]
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 1
@@ -79,20 +78,7 @@ directional_shadow_max_distance = 30.0
 
 [node name="Player" parent="." unique_id=1732594493 instance=ExtResource("2_lntd3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
-speed = 2.5
-acceleration = 25.0
 jump_speed = 6.0
-turn_speed = 5.0
-coyote_seconds = 0.12
-fall_gravity_multiplier = 1.8
-fall_gravity_growth = 3.0
-max_fall_multiplier = 4.0
-released_jump_multiplier = 3.0
-max_jump_hold_seconds = 0.15
-dash_distance = 2.9
-dash_seconds = 0.9
-dash_cooldown_seconds = 0.4
-dash_curve = ExtResource("3_u8q8r")
 
 [node name="CameraRig" type="Node3D" parent="." unique_id=735580897 node_paths=PackedStringArray("target")]
 script = ExtResource("3_wemht")
@@ -209,3 +195,13 @@ display_name = "Тестовый предмет"
 material_override = SubResource("ShaderMaterial_j7vhw")
 multimesh = SubResource("MultiMesh_4d73h")
 script = ExtResource("13_j7vhw")
+
+[node name="infrared_filter" parent="." unique_id=300033391 instance=ExtResource("8_rwcgb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.764977, 0.630491, -0.37222505)
+inventory_item = ExtResource("15_b1tl3")
+
+[node name="Label" type="Label3D" parent="infrared_filter" unique_id=1048141536]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+pixel_size = 0.008
+billboard = 1
+text = "ИК-фильтр"
