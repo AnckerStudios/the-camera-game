@@ -76,7 +76,7 @@ func _update_weapon_pose(delta: float) -> void:
 	var weapon: Weapon = _weapon if is_instance_valid(_weapon) else null
 	var weight := 1.0 - exp(-pose_blend_speed * delta)
 	_pistol_pose = lerpf(_pistol_pose, 1.0 if weapon is Firearm and weapon.one_handed else 0.0, weight)
-	_axe_pose = lerpf(_axe_pose, 1.0 if weapon is MeleeWeapon else 0.0, weight)
+	_axe_pose = lerpf(_axe_pose, 1.0 if (weapon is MeleeWeapon || weapon == null) else 0.0, weight)
 	_tree.set(&"parameters/PistolFactor/blend_amount", _pistol_pose)
 	_tree.set(&"parameters/AxeFactor/blend_amount", _axe_pose)
 

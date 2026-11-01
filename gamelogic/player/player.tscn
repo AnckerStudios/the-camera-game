@@ -6,8 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://gmto2netdfsk" path="res://gamelogic/player/model/player_model_v2.tscn" id="3_6mbak"]
 [ext_resource type="PackedScene" uid="uid://cquasyawaifv" path="res://gamelogic/player/cone/view_cone.tscn" id="7_cone"]
 [ext_resource type="Script" uid="uid://gltw66fqtyyp" path="res://gamelogic/player/camera/wall_cutout.gd" id="20_cutout"]
-
-[ext_resource type="Script" path="res://gamelogic/player/footstep_audio.gd" id="footstep_script"]
+[ext_resource type="Script" uid="uid://c8v2pcbiw5e0k" path="res://gamelogic/player/footstep_audio.gd" id="footstep_script"]
 
 [sub_resource type="CapsuleShape3D" id="Shape"]
 radius = 0.35
@@ -39,10 +38,10 @@ target = NodePath("..")
 [node name="WallCutout" type="Node" parent="." unique_id=1395136778]
 script = ExtResource("20_cutout")
 
-[node name="FootstepAudio" type="AudioStreamPlayer3D" parent="."]
-bus = &"SFX"
+[node name="FootstepAudio" type="AudioStreamPlayer3D" parent="." unique_id=1090000677]
 volume_db = -16.0
-max_db = -16.0
 unit_size = 4.0
+max_db = -16.0
 max_distance = 20.0
+bus = &"SFX"
 script = ExtResource("footstep_script")
