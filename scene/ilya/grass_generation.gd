@@ -7,11 +7,8 @@ extends MultiMeshInstance3D
 ## Доля травы в браузере: WebGL заметно медленнее на большом числе вершин.
 @export_range(0.05, 1.0, 0.05) var web_density := 0.5
 ## Сторона чанка в метрах. Меньше - точнее отсечение, но больше вызовов отрисовки.
-@export_range(1.0, 30.0, 0.5) var chunk_size := 5.0
+@export_range(1.0, 30.0, 0.5) var chunk_size := 3.0
 @export var random_seed := 42
-
-## Число float на экземпляр в буфере MultiMesh для TRANSFORM_3D.
-const FLOATS_PER_INSTANCE := 12
 
 
 func _ready() -> void:
@@ -38,36 +35,18 @@ func _ready() -> void:
 
 
 func _create_chunk(center: Vector3, extent: Vector2, count: int, rng: RandomNumberGenerator) -> MultiMeshInstance3D:
-	# Буфер заполняется целиком: это намного быстрее, чем set_instance_transform на каждый куст.
-	var buffer := PackedFloat32Array()
-	buffer.resize(count * FLOATS_PER_INSTANCE)
+	var chunk_multimesh := MultiMesh.new()
+	chunk_multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	chunk_multimesh.mesh = multimesh.mesh
+	chunk_multimesh.instance_count = count
+	# Один вызов движка на куст быстрее, чем 12 записей в PackedFloat32Array из GDScript.
 	for i in count:
 		var x := rng.randf_range(-extent.x / 2.0, extent.x / 2.0)
 		var z := rng.randf_range(-extent.y / 2.0, extent.y / 2.0)
 		var angle := rng.randf_range(0.0, TAU)
 		var scale_factor := rng.randf_range(0.8, 1.2)
-		var c := cos(angle) * scale_factor
-		var s := sin(angle) * scale_factor
-		var offset := i * FLOATS_PER_INSTANCE
-		# Строки матрицы поворота вокруг Y с масштабом и смещением.
-		buffer[offset] = c
-		buffer[offset + 1] = 0.0
-		buffer[offset + 2] = s
-		buffer[offset + 3] = x
-		buffer[offset + 4] = 0.0
-		buffer[offset + 5] = scale_factor
-		buffer[offset + 6] = 0.0
-		buffer[offset + 7] = 0.0
-		buffer[offset + 8] = -s
-		buffer[offset + 9] = 0.0
-		buffer[offset + 10] = c
-		buffer[offset + 11] = z
-
-	var chunk_multimesh := MultiMesh.new()
-	chunk_multimesh.transform_format = MultiMesh.TRANSFORM_3D
-	chunk_multimesh.mesh = multimesh.mesh
-	chunk_multimesh.instance_count = count
-	chunk_multimesh.buffer = buffer
+		var basis := Basis(Vector3.UP, angle).scaled(Vector3.ONE * scale_factor)
+		chunk_multimesh.set_instance_transform(i, Transform3D(basis, Vector3(x, 0.0, z)))
 
 	var chunk := MultiMeshInstance3D.new()
 	chunk.name = &"GrassChunk"
