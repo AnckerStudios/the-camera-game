@@ -11,10 +11,10 @@ func _ready() -> void:
 	get_tree().node_added.connect(_on_collision_candidate_added)
 	for player in get_tree().get_nodes_in_group(&"players"):
 		_ignore_player_collision(player)
-	hp = 200.0
+	hp = 75.0
 	move_speed = 3.0
 	attack_damage = 15.0
-	resistance_physical = 0.3
+	resistance_physical = 1.0
 	resistance_energetic = 1.0
 
 ## Также поддерживает появление игрока после призрака.

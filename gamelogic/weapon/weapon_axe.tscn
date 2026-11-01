@@ -2,8 +2,10 @@
 
 [ext_resource type="Script" uid="uid://bjnx4gkjdrulk" path="res://gamelogic/weapon/melee_weapon.gd" id="1_melee"]
 [ext_resource type="PackedScene" uid="uid://clxtn48knmpue" path="res://resources/model/weapons/axe.glb" id="2_model"]
-[ext_resource type="AudioStream" uid="uid://bxobcvlynokkc" path="res://resources/music/удармясо.mp3" id="4_bhy5d"]
+[ext_resource type="AudioStream" path="res://resources/music/удар2.mp3" id="4_bhy5d"]
 [ext_resource type="AudioStream" uid="uid://ckbybv78sjecr" path="res://resources/music/удар5.mp3" id="miss_audio"]
+
+[ext_resource type="AudioStream" path="res://resources/music/удармясо.mp3" id="flesh_audio"]
 
 [node name="WeaponAxe" type="Node3D" unique_id=1736492483 node_paths=PackedStringArray("swing_pivot")]
 script = ExtResource("1_melee")
@@ -27,6 +29,14 @@ bus = &"SFX"
 [node name="MissSound" type="AudioStreamPlayer3D" parent="." unique_id=879812487]
 stream = ExtResource("miss_audio")
 volume_db = 40.0
+unit_size = 5.0
+max_db = -16.0
+max_distance = 25.0
+bus = &"SFX"
+
+[node name="FleshSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("flesh_audio")
+volume_db = -33.0
 unit_size = 5.0
 max_db = -16.0
 max_distance = 25.0

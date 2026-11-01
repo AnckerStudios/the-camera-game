@@ -2,7 +2,9 @@ class_name DamageDoor
 extends DamageableEnvironment
 ## Разрушаемая дверь — обычное окружение, видимое независимо от конуса игрока.
 @export var victory_on_destroy: bool = false
-@export_range(0.0, 400.0, 5.0) var target_lock_radius_pixels: float = 160.0
+@export_range(0.0, 400.0, 5.0) var target_lock_radius_pixels: float = 320.0
+var _melee_bounds := AABB()
+var _has_melee_bounds := false
 const VICTORY_SCENE = preload("res://ui/alive/alive.tscn")
 
 func _ready() -> void:
@@ -42,6 +44,10 @@ func _prepare_model_and_collision() -> void:
 	if faces.is_empty():
 		push_warning("Дверь не содержит геометрии для коллизии.")
 		return
+	_melee_bounds = AABB(faces[0], Vector3.ZERO)
+	for point in faces:
+		_melee_bounds = _melee_bounds.expand(point)
+	_has_melee_bounds = true
 	var collider := get_node_or_null("CollisionShape3D") as CollisionShape3D
 	if not collider:
 		collider = CollisionShape3D.new()
@@ -52,6 +58,14 @@ func _prepare_model_and_collision() -> void:
 	shape.set_faces(faces)
 	collider.transform = Transform3D.IDENTITY
 	collider.shape = shape
+
+## Ближайшая точка двери: pivot модели может лежать далеко от её полотна.
+func get_melee_contact_point(world_position: Vector3) -> Vector3:
+	if not _has_melee_bounds:
+		return damage_receiver.get_target_point()
+	var point := to_local(world_position)
+	point = point.clamp(_melee_bounds.position, _melee_bounds.end)
+	return to_global(point)
 
 func _on_destroyed(_source: Node) -> void:
 	if victory_on_destroy:
