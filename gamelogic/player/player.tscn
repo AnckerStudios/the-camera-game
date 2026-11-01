@@ -41,8 +41,8 @@ script = ExtResource("20_cutout")
 
 [node name="FootstepAudio" type="AudioStreamPlayer3D" parent="."]
 bus = &"SFX"
-volume_db = -22.0
-max_db = -22.0
+volume_db = -16.0
+max_db = -16.0
 unit_size = 4.0
 max_distance = 20.0
 script = ExtResource("footstep_script")

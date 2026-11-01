@@ -37,6 +37,7 @@ var _tween: Tween
 var _hit_shape := CylinderShape3D.new()
 
 @onready var _swing_sound: AudioStreamPlayer3D = get_node_or_null("SwingSound")
+@onready var _miss_sound: AudioStreamPlayer3D = get_node_or_null("MissSound")
 
 
 func _process(delta: float) -> void:
@@ -59,8 +60,6 @@ func swing() -> bool:
 	_cooldown = swing_interval
 	_hit_timer = maxf(hit_delay, 0.001)
 	_play_swing_animation()
-	if _swing_sound:
-		_swing_sound.play()
 	swung.emit()
 	return true
 
@@ -68,6 +67,8 @@ func swing() -> bool:
 func unequip() -> void:
 	if is_instance_valid(_swing_sound):
 		_swing_sound.stop()
+	if is_instance_valid(_miss_sound):
+		_miss_sound.stop()
 	_hit_timer = 0.0
 	_reset_animation()
 	super()
@@ -100,6 +101,10 @@ func _strike() -> void:
 			continue
 		hit_targets[target] = true
 		target.take_damage(damage, self)
+	# Звук выбирается после проверки попаданий, один раз на весь удар.
+	var sound := _miss_sound if hit_targets.is_empty() else _swing_sound
+	if is_instance_valid(sound):
+		sound.play()
 	if not hit_targets.is_empty():
 		struck.emit(hit_targets.size())
 
