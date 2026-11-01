@@ -22,6 +22,7 @@ func _ready() -> void:
 	VisionFilters.filter_changed.connect(_on_filter_changed)
 	VisionFilters.available_filters_changed.connect(_update_filter_status)
 	_update_filter_status()
+	
 	PlayerState.battery_changed.connect(set_battery)
 	set_battery(PlayerState.battery, PlayerState.BATTERY_MAX)
 

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://ts0skeb4frkc"]
+
+[ext_resource type="Script" uid="uid://qned3kybvfox" path="res://gamelogic/inventory/inventory_item.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://dx2lninm50wo4" path="res://gamelogic/environment/items/models/battery.tscn" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"battery"
+display_name = "Батарейка"
+description = "Восстанавливает 50 единиц заряда камеры"
+kind = 4
+model_scene = ExtResource("2")
+charging = 50.0
