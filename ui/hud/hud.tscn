@@ -267,7 +267,7 @@ theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_constants/line_spacing = 4
 theme_override_font_sizes/font_size = 16
-text = "WASD — движение\nShift — рывок\nЛКМ — стрелять\nQ — открыть инвентарь"
+text = "WASD — движение\nShift — рывок\nЛКМ — стрелять\nQ — открыть инвентарь\nКолесо / 1, 2 — сменить оружие"
 
 [node name="BottomRow" type="HBoxContainer" parent="Margin/Layout" unique_id=1145003786]
 layout_mode = 2

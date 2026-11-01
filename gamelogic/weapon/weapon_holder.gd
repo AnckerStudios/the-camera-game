@@ -42,10 +42,15 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	for slot in 2:
+		if event.is_action_pressed("weapon_slot_%d" % (slot + 1)):
+			_select_direct_slot(slot)
+			get_viewport().set_input_as_handled()
+			return
 	if event.is_action_pressed("weapon_next"):
 		select(_index + 1)
 	elif event.is_action_pressed("weapon_prev"):
-		select(_index - 1)
+		select(_index - 1 if current else -1)
 	elif not current:
 		return
 	elif event.is_action_pressed("fire"):
@@ -55,6 +60,25 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("reload"):
 		current.reload()
 
+
+## Клавиши соответствуют ячейкам инвентаря, даже если первая ячейка пустая.
+func _select_direct_slot(slot: int) -> void:
+	if _inventory_managed:
+		var node := get_parent()
+		while node:
+			if node.has_method(&"get_inventory"):
+				var inventory: PlayerInventory = node.get_inventory()
+				if slot < inventory.weapons.size():
+					var entry := inventory.weapons[slot]
+					if entry and is_instance_valid(entry.weapon):
+						activate_inventory_weapon(entry.weapon)
+				return
+			node = node.get_parent()
+	else:
+		# Прямой выбор оружия в тестовых сценах без PlayerInventory.
+		var weapons := get_weapons()
+		if slot < weapons.size():
+			select(slot)
 
 func get_weapons() -> Array[Weapon]:
 	if _inventory_managed:
