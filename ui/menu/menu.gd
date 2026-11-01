@@ -5,7 +5,7 @@ func _ready():
 	MenuState.state = true
 
 func _on_play_button_pressed() -> void:
-	TransitionTort.change_scene("res://scene/ilya/ilya_v1_doma.tscn")
+	TrToPlay.start_loading("res://scene/levels/forest_base/forest_base.tscn")
 
 func _on_options_button_pressed() -> void:
 	var scene =  scene_setting.instantiate()

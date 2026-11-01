@@ -13,7 +13,7 @@ point_count = 2
 
 [sub_resource type="Gradient" id="Gradient_wtxek"]
 interpolation_mode = 2
-colors = PackedColorArray(1, 1, 1, 0, 1, 0.2627451, 0.63529414, 0.69803923)
+colors = PackedColorArray(1, 1, 1, 0, 0.35257247, 4.4220127e-07, 1.4439226e-07, 0.99607843)
 
 [node name="Menu" type="Control" unique_id=1931055831]
 layout_mode = 3
@@ -42,7 +42,7 @@ size_flags_vertical = 4
 layout_mode = 2
 theme_type_variation = &"RichTextLabelTitle"
 bbcode_enabled = true
-text = "[wave]Название игры"
+text = "[wave]потерянный"
 fit_content = true
 autowrap_mode = 0
 
@@ -96,7 +96,7 @@ text = "By Маги в джеме"
 
 [node name="TailCursor" type="Line2D" parent="." unique_id=1699455466]
 width_curve = SubResource("Curve_pjjyy")
-default_color = Color(1, 0.27450982, 0.43529412, 0.69411767)
+default_color = Color(1, 0.27450982, 0.16862746, 0.69411767)
 gradient = SubResource("Gradient_wtxek")
 begin_cap_mode = 2
 script = ExtResource("7_pjjyy")

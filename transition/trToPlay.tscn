@@ -1,0 +1,145 @@
+[gd_scene format=3 uid="uid://cyxryoqu6fhe"]
+
+[ext_resource type="Script" uid="uid://birumo4k82yuy" path="res://transition/tr_to_play.gd" id="1_4mxhn"]
+[ext_resource type="Texture2D" uid="uid://c7ncshdb7uwaj" path="res://resources/asset/Magi v jame png (2).png" id="2_4opno"]
+[ext_resource type="FontFile" uid="uid://f6pajsoy2ud2" path="res://resources/font/Univermag-Regular.otf" id="3_qd62q"]
+
+[sub_resource type="Animation" id="Animation_x13xl"]
+resource_name = "RESET"
+length = 0.00999999999999999
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dissolbe_rect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ProgressBar:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TextureRect:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_q5fnr"]
+resource_name = "dissolve"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dissolbe_rect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.76666665),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ProgressBar:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TextureRect:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_00r5q"]
+_data = {
+&"RESET": SubResource("Animation_x13xl"),
+&"dissolve": SubResource("Animation_q5fnr")
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ae7mu"]
+bg_color = Color(1, 1, 1, 0.25882354)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bag0u"]
+bg_color = Color(1, 1, 1, 0.7529412)
+
+[node name="TrToPlay" type="CanvasLayer" unique_id=1339943463]
+script = ExtResource("1_4mxhn")
+
+[node name="dissolbe_rect" type="ColorRect" parent="." unique_id=1135742894]
+process_mode = 3
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.19215687, 0, 0, 1)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=971828742]
+process_mode = 3
+libraries/ = SubResource("AnimationLibrary_00r5q")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=143528050]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 44.0
+offset_bottom = -147.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_4opno")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=263110368]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = 199.5
+offset_right = 200.0
+offset_bottom = 226.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_qd62q")
+theme_override_styles/background = SubResource("StyleBoxFlat_ae7mu")
+theme_override_styles/fill = SubResource("StyleBoxFlat_bag0u")
