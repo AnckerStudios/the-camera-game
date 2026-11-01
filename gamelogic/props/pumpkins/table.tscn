@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://hlsp6codfxqa"]
+
+[ext_resource type="PackedScene" uid="uid://cush36jhlwnst" path="res://resources/model/modules/props/table.glb" id="1_0ael6"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7xobg"]
+size = Vector3(0.6960144, 0.31445313, 1.6123657)
+
+[node name="Pumpkin1" type="StaticBody3D" unique_id=1795698653]
+
+[node name="table" parent="." unique_id=1277890097 instance=ExtResource("1_0ael6")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=990197667]
+transform = Transform3D(1.7131411, 0, 0, 0, 2.0325744, 0, 0, 0, 1.5813036, 0.012573563, 0.31758976, -0.090193376)
+shape = SubResource("BoxShape3D_7xobg")
+
+[editable path="table"]

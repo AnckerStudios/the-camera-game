@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dsbs1b8mypnd3"]
+
+[ext_resource type="PackedScene" uid="uid://defjyl136rhyk" path="res://resources/model/modules/fence/fence_T.glb" id="1_i8xj1"]
+
+[sub_resource type="BoxShape3D" id="Shape"]
+size = Vector3(4, 6.7781, 2.5117939)
+
+[node name="Fence3" type="StaticBody3D" unique_id=1852519532]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2029047941]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 1.554, -0.395)
+shape = SubResource("Shape")
+
+[node name="Model" parent="." unique_id=1978208855 instance=ExtResource("1_i8xj1")]
+
+[node name="Cube_010" parent="Model" index="0" unique_id=908147036]
+transform = Transform3D(2, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3.8146973e-06, 0, 0)
+
+[editable path="Model"]
