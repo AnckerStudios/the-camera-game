@@ -10,6 +10,8 @@ var _owner_ref: WeakRef
 ## Необязательный Marker3D/Node3D для точного задания точки прицеливания.
 var aim_point: Node3D
 var _local_aim_center: Vector3 = Vector3.ZERO
+## Индивидуальный радиус захвата курсором; 0 использует настройку оружия.
+var target_lock_radius_pixels: float = 0.0
 var enabled: bool = true
 var health: float = 100.0
 

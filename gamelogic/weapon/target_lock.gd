@@ -27,7 +27,7 @@ func acquire(origin: Vector3, max_distance: float, excluded: Array[RID], shooter
 	var camera := get_viewport().get_camera_3d()
 	if enabled and camera:
 		var mouse := get_viewport().get_mouse_position()
-		var closest := capture_radius_pixels * capture_radius_pixels
+		var closest := INF
 		for enemy in get_tree().get_nodes_in_group(DamageReceiver.TARGET_GROUP):
 			if not enemy is Node3D or enemy.is_queued_for_deletion() or not enemy.is_visible_in_tree():
 				continue
@@ -40,6 +40,12 @@ func acquire(origin: Vector3, max_distance: float, excluded: Array[RID], shooter
 			if not get_viewport().get_visible_rect().has_point(screen):
 				continue
 			var distance_squared := mouse.distance_squared_to(screen)
+			var receiver := DamageReceiver.get_receiver(enemy)
+			var radius := capture_radius_pixels
+			if receiver and receiver.target_lock_radius_pixels > 0.0:
+				radius = receiver.target_lock_radius_pixels
+			if distance_squared > radius * radius:
+				continue
 			if distance_squared > closest or not _in_view(enemy, shooter):
 				continue
 			if not _has_clear_path(origin, point, enemy, excluded):

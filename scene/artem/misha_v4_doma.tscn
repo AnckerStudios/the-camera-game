@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://by6ubidcpixtr" path="res://gamelogic/environment/items/pickup_item.tscn" id="7_pickup_item"]
 [ext_resource type="PackedScene" uid="uid://c2g4ugy8n7yeu" path="res://resources/model/world/barrel.glb" id="8_barrel"]
 [ext_resource type="PackedScene" uid="uid://h5fklgq5qxte" path="res://gamelogic/props/fences/fence_1.tscn" id="17_1i3nq"]
-[ext_resource type="PackedScene" uid="uid://bufgh3hbdradk" path="res://gamelogic/props/house/house_door_frame.tscn" id="palette_house_door_frame"]
+[ext_resource type="PackedScene" path="res://gamelogic/environment/doors/door.tscn" id="exit_door"]
 [ext_resource type="Resource" uid="uid://b604orb8qne8v" path="res://gamelogic/environment/items/data/axe.tres" id="pickup_axe"]
 [ext_resource type="Resource" uid="uid://ts0skeb4frkc" path="res://gamelogic/environment/items/data/battery.tres" id="pickup_battery"]
 [ext_resource type="Resource" path="res://gamelogic/environment/items/data/infrared_filter.tres" id="pickup_infrared_filter"]
@@ -82,8 +82,9 @@ size = 9.0
 
 [node name="HUD" parent="." unique_id=1458729086 instance=ExtResource("4_s1bv7")]
 
-[node name="HouseDoorFrame" parent="." unique_id=1306532664 instance=ExtResource("palette_house_door_frame")]
+[node name="ExitDoor" parent="." unique_id=1306532664 instance=ExtResource("exit_door")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7966423, 1.5545037, 5.013932)
+victory_on_destroy = true
 
 [node name="Dummy1" type="StaticBody3D" parent="." unique_id=1316338027]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -5)
