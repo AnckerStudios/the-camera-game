@@ -12,25 +12,38 @@ extends MultiMeshInstance3D
 
 
 func _ready() -> void:
-	var ground := get_node(ground_mesh_path) as MeshInstance3D
-	var area := ground.mesh.get_aabb().size
-	var count := grass_count
+	var ground := get_node_or_null(ground_mesh_path) as MeshInstance3D
+	if not ground or not ground.mesh or not multimesh or not multimesh.mesh:
+		push_warning("Grass needs a ground mesh and a MultiMesh template mesh.")
+		return
+	var bounds := ground.mesh.get_aabb()
+	var area := bounds.size
+	var ground_to_grass := global_transform.affine_inverse() * ground.global_transform
+	var count := maxi(grass_count, 0)
 	if OS.has_feature("web"):
 		count = int(count * web_density)
 	var columns := maxi(1, ceili(area.x / chunk_size))
 	var rows := maxi(1, ceili(area.z / chunk_size))
 	var chunk_extent := Vector2(area.x / columns, area.z / rows)
 	var per_chunk := count / (columns * rows)
+	var remainder := count % (columns * rows)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = random_seed
 	for column in columns:
 		for row in rows:
 			var center := Vector3(
-				-area.x / 2.0 + (column + 0.5) * chunk_extent.x,
-				0.0,
-				-area.z / 2.0 + (row + 0.5) * chunk_extent.y)
-			add_child(_create_chunk(center, chunk_extent, per_chunk, rng))
+				bounds.position.x + (column + 0.5) * chunk_extent.x,
+				bounds.end.y + 0.01,
+				bounds.position.z + (row + 0.5) * chunk_extent.y)
+			var index := column * rows + row
+			var amount := per_chunk + (1 if index < remainder else 0)
+			if amount == 0:
+				continue
+			var chunk := _create_chunk(center, chunk_extent, amount, rng)
+			chunk.transform = ground_to_grass * chunk.transform
+			add_child(chunk)
 	# Сам шаблон ничего не рисует.
+	multimesh = multimesh.duplicate() as MultiMesh
 	multimesh.instance_count = 0
 
 

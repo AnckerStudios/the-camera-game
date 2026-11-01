@@ -20,6 +20,7 @@ var _flash_tween: Tween
 @onready var mvj: Label = $Margin/Layout/Mvj
 
 func _ready() -> void:
+	options.visibility_changed.connect(_update_pickup_hint_visibility)
 	PlayerState.pickup_available_changed.connect(_set_pickup_hint)
 	_set_pickup_hint(PlayerState.pickup_available)
 	VisionFilters.filter_changed.connect(_on_filter_changed)
@@ -62,7 +63,11 @@ func _update_filter_status() -> void:
 
 ## Подсказка связана с выбранным доступным предметом, без дополнительного поиска.
 func _set_pickup_hint(available: bool) -> void:
-	_pickup_hint.visible = available
+	_pickup_hint.visible = available and not options.visible
+
+## Настройки могут открываться и закрываться, пока доступность предмета не меняется.
+func _update_pickup_hint_visibility() -> void:
+	_set_pickup_hint(PlayerState.pickup_available)
 
 func set_health(value: float, max_value: float) -> void:
 	%HealthBar.max_value = max_value

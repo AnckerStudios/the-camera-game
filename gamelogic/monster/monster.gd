@@ -13,7 +13,7 @@ var monster_state : MonsterState
 var rotation_speed := 10.0
 
 ## За пределами радиуса враг не обнаруживает и не преследует игрока.
-@export_range(0.0, 100.0, 0.5) var detection_radius: float = 12.0
+@export_range(0.0, 100.0, 0.5) var detection_radius: float = 8.0
 var _detected_player: Node3D
 var _has_target_in_range := false
 var _next_path_update_ms: int = 0

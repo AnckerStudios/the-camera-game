@@ -1,14 +1,14 @@
 shader_type spatial;
 render_mode cull_disabled, diffuse_toon, specular_schlick_ggx;
 
-uniform vec3 top_color: source_color;
-uniform vec3 bottom_color: source_color;
+uniform vec3 top_color: source_color = vec3(0.25, 0.4, 0.12);
+uniform vec3 bottom_color: source_color = vec3(0.08, 0.15, 0.04);
 uniform float ambient_occlusion_factor: hint_range(0.0, 1.0, 0.01) = 0.3;
 uniform float specular_strength: hint_range(0.0, 1.0, 0.01) = 0.4;
 uniform float player_displacement_strength: hint_range(0.0, 1.0, 0.01) = 0.2;
 uniform float player_displacement_size: hint_range(0.0, 2.0, 0.01) = 0.1;
 
-uniform vec3 wind_direction; // Use a negative y component to give it an extra touch (For displacement effect and noise scroll direction)
+uniform vec3 wind_direction = vec3(-0.5, -0.15, -0.7); // Use a negative y component to give it an extra touch (For displacement effect and noise scroll direction)
 uniform float wind_strength: hint_range(0.0, 1.0, 0.01) = 0.3;
 uniform sampler2D wind_noise; // Periln FBM Noise looks Best
 uniform float wind_noise_size: hint_range(0.0, 1.0, 0.001) = 0.05; // high values dont work well
@@ -20,14 +20,20 @@ global uniform vec3 grass_player_position;
 void vertex() {
 	vec3 world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	
-	vec3 wind_texture = texture(wind_noise, world_position.xz * wind_noise_size + normalize(-wind_direction.xz) * (TIME + UV.y / 2.5) * wind_noise_speed).rgb;
-	vec3 wind_vector = (vec4(wind_texture * normalize(wind_direction) * wind_strength, 0.0) * MODEL_MATRIX).xyz;
+	float wind_length = length(wind_direction);
+	vec3 wind_axis = wind_length > 0.0001 ? wind_direction / wind_length : vec3(0.0);
+	float horizontal_length = length(wind_direction.xz);
+	vec2 wind_scroll = horizontal_length > 0.0001 ? -wind_direction.xz / horizontal_length : vec2(0.0);
+	vec3 wind_texture = texture(wind_noise, world_position.xz * wind_noise_size + wind_scroll * (TIME + UV.y / 2.5) * wind_noise_speed).rgb;
+	vec3 wind_vector = (vec4(wind_texture * wind_axis * wind_strength, 0.0) * MODEL_MATRIX).xyz;
 	
-	float player_height = smoothstep(1.0, 0.0, length(grass_player_position.y - world_position.y) + 0.1);
+	float player_height = (1.0 - smoothstep(0.0, 1.0, abs(grass_player_position.y - world_position.y) + 0.1));
 	vec3 push_direction = vec3(world_position - grass_player_position) * vec3(1.2, -0.8, 1.2);
-	float player_position_factor = 2.0 * smoothstep(player_displacement_size, 0.0, length(push_direction));
+	float player_position_factor = 2.0 * (1.0 - smoothstep(0.0, max(player_displacement_size, 0.001), length(push_direction)));
 	
-	vec3 player_push_vector = (vec4(normalize(push_direction), 0.0) * MODEL_MATRIX).xyz;
+	float push_length = length(push_direction);
+	vec3 push_axis = push_length > 0.0001 ? push_direction / push_length : vec3(0.0);
+	vec3 player_push_vector = (vec4(push_axis, 0.0) * MODEL_MATRIX).xyz;
 	
 	// Apply Player Position displacement
 	VERTEX += player_push_vector * (1.0 - UV.y) * player_position_factor * player_displacement_strength * player_height;
