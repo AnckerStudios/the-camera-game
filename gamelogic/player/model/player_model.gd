@@ -17,6 +17,10 @@ extends Node3D
 @export var face_back_speed := 6.0
 ## Скорость смены позы рук при смене оружия.
 @export var pose_blend_speed := 10.0
+## Время, за которое поворот корпуса к цели гаснет перед кувырком и возвращается после него, сек.
+@export var look_fade_time := 0.5
+## Пауза после рывка перед возвратом доворота: кувырок ещё затухает (fadeout у Roll - 0.3 с).
+@export var look_resume_delay := 0.5
 
 const ROLL_ANIMATION := &"move/roll"
 const AXE_ATTACK_ANIMATION := &"move/axe_attack"
@@ -30,8 +34,12 @@ var _roll_yaw := 0.0
 var _pistol_pose := 0.0
 var _axe_pose := 0.0
 var _weapon: Weapon
+## Сколько ещё длится рывок, во время которого корпус не доворачивается к цели.
+var _look_suppressed_remaining := 0.0
 
 @onready var _tree: AnimationTree = $AnimationTree
+## Доворот корпуса к цели борется с анимацией кувырка, поэтому на время рывка он гаснет.
+@onready var _look_at: SkeletonModifier3D = find_child("LookAtModifier3D", true, false) as SkeletonModifier3D
 @onready var _holder: WeaponHolder = find_child("WeaponHolder", true, false) as WeaponHolder
 
 
@@ -47,6 +55,7 @@ func _physics_process(delta: float) -> void:
 	if not body:
 		return
 	_update_facing(delta)
+	_update_look_at(delta)
 
 	var velocity := body.velocity
 	velocity.y = 0.0
@@ -128,6 +137,18 @@ func _on_body_dashed(direction: Vector3, duration: float) -> void:
 	_tree.set(&"parameters/Roll/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	_roll_remaining = duration
 	_roll_yaw = atan2(-direction.x, -direction.z)
+	_look_suppressed_remaining = duration + look_resume_delay
+
+
+## Влияние модификатора меняется плавно: резкое выключение дёргало бы корпус в начале и конце рывка.
+func _update_look_at(delta: float) -> void:
+	if not _look_at:
+		return
+	_look_suppressed_remaining = maxf(_look_suppressed_remaining - delta, 0.0)
+	var target := 0.0 if _look_suppressed_remaining > 0.0 else 1.0
+	_look_at.influence = move_toward(_look_at.influence, target, delta / maxf(look_fade_time, 0.001))
+	# Погасший модификатор не считается вовсе.
+	_look_at.active = _look_at.influence > 0.0
 
 
 ## Во время кувырка модель смотрит туда, куда катится, а не на курсор;
