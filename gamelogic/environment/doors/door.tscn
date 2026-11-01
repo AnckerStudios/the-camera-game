@@ -1,16 +1,16 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://d3etue2elx7dt"]
 
-[ext_resource type="Script" path="res://gamelogic/environment/damage_door.gd" id="1_h00up"]
+[ext_resource type="Script" uid="uid://bqu6dwfhpskjj" path="res://gamelogic/environment/damage_door.gd" id="1_h00up"]
 [ext_resource type="PackedScene" uid="uid://u6oshodsilad" path="res://resources/model/modules/fence/door_broken.glb" id="2_model"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_58w5l"]
-size = Vector3(2.5482788, 5.2460938, 0.3791504)
+size = Vector3(2.5482788, 5.2460938, 0.38946533)
 
 [node name="Door" type="StaticBody3D" unique_id=2140503315]
 script = ExtResource("1_h00up")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1702916990]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.5327726, 1.0901293, 0)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.5327726, 1.0901293, -0.0025787354)
 shape = SubResource("BoxShape3D_58w5l")
 
 [node name="Model" parent="." unique_id=222738564 instance=ExtResource("2_model")]

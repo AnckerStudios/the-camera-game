@@ -38,6 +38,7 @@ var _hit_shape := CylinderShape3D.new()
 
 @onready var _swing_sound: AudioStreamPlayer3D = get_node_or_null("SwingSound")
 @onready var _miss_sound: AudioStreamPlayer3D = get_node_or_null("MissSound")
+@onready var _flesh_sound: AudioStreamPlayer3D = get_node_or_null("FleshSound")
 
 
 func _process(delta: float) -> void:
@@ -69,6 +70,8 @@ func unequip() -> void:
 		_swing_sound.stop()
 	if is_instance_valid(_miss_sound):
 		_miss_sound.stop()
+	if is_instance_valid(_flesh_sound):
+		_flesh_sound.stop()
 	_hit_timer = 0.0
 	_reset_animation()
 	super()
@@ -91,6 +94,8 @@ func _strike() -> void:
 
 	var half := deg_to_rad(arc_degrees) / 2.0
 	var hit_targets := {}
+	var hit_monster := false
+	var hit_door := false
 	for hit in get_world_3d().direct_space_state.intersect_shape(query, 32):
 		var target: Object = hit.collider
 		if hit_targets.has(target) or not target.has_method("take_damage"):
@@ -100,9 +105,14 @@ func _strike() -> void:
 		if to_target.length_squared() > 0.0001 and forward.angle_to(to_target) > half:
 			continue
 		hit_targets[target] = true
+		hit_monster = hit_monster or target is Monster
+		hit_door = hit_door or target is DamageDoor
 		target.take_damage(damage, self)
 	# Звук выбирается после проверки попаданий, один раз на весь удар.
 	var sound := _miss_sound if hit_targets.is_empty() else _swing_sound
+	# Дверь сохраняет прежний звук; монстры используют отдельный звук FleshSound.
+	if hit_monster and not hit_door and is_instance_valid(_flesh_sound):
+		sound = _flesh_sound
 	if is_instance_valid(sound):
 		sound.play()
 	if not hit_targets.is_empty():
