@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bjnx4gkjdrulk" path="res://gamelogic/weapon/melee_weapon.gd" id="1_melee"]
 [ext_resource type="PackedScene" uid="uid://clxtn48knmpue" path="res://resources/model/weapons/axe.glb" id="2_model"]
+[ext_resource type="AudioStream" uid="uid://662guyp3qyc5" path="res://resources/music/удар_мясо.mp3" id="3_bhy5d"]
 [ext_resource type="AudioStream" uid="uid://ckbybv78sjecr" path="res://resources/music/удар5.mp3" id="miss_audio"]
-[ext_resource type="AudioStream" uid="uid://cmvol5li7uu3v" path="res://resources/music/удар2.mp3" id="swing_audio"]
 
 [node name="WeaponAxe" type="Node3D" unique_id=1736492483 node_paths=PackedStringArray("swing_pivot")]
 script = ExtResource("1_melee")
@@ -17,8 +17,8 @@ one_handed = true
 transform = Transform3D(-0.13334419, 0.10630103, -0.057614416, 0.11790332, 0.13332672, -0.026884815, 0.0267981, -0.057654798, -0.16839771, 0.12483503, 0.22586022, -0.19164214)
 
 [node name="SwingSound" type="AudioStreamPlayer3D" parent="." unique_id=1920838150]
-stream = ExtResource("swing_audio")
-volume_db = -10.0
+stream = ExtResource("3_bhy5d")
+volume_db = -33.714
 unit_size = 5.0
 max_db = -16.0
 max_distance = 25.0

@@ -18,7 +18,7 @@ point_count = 2
 
 [sub_resource type="Gradient" id="Gradient_7srqt"]
 interpolation_mode = 2
-colors = PackedColorArray(1, 1, 1, 0, 1, 0.2627451, 0.63529414, 0.69803923)
+colors = PackedColorArray(1, 1, 1, 0, 0.35257247, 4.4220127e-07, 1.4439226e-07, 0.99607843)
 
 [node name="Options" type="Control" unique_id=575043248]
 process_mode = 3

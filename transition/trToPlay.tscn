@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://birumo4k82yuy" path="res://transition/tr_to_play.gd" id="1_4mxhn"]
 [ext_resource type="Texture2D" uid="uid://c7ncshdb7uwaj" path="res://resources/asset/Magi v jame png (2).png" id="2_4opno"]
+[ext_resource type="FontFile" uid="uid://drsccfv7x7f2b" path="res://resources/font/OpenSans-SemiBold.ttf" id="3_idjxt"]
 [ext_resource type="FontFile" uid="uid://f6pajsoy2ud2" path="res://resources/font/Univermag-Regular.otf" id="3_qd62q"]
 
 [sub_resource type="Animation" id="Animation_x13xl"]
@@ -127,6 +128,24 @@ texture = ExtResource("2_4opno")
 expand_mode = 2
 stretch_mode = 5
 
+[node name="Label" type="Label" parent="TextureRect" unique_id=639640235]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -249.5
+offset_top = 214.5
+offset_right = 250.5
+offset_bottom = 253.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_qd62q")
+text = "Может быть долгая загрузка 
+дождитесь, пожалуйста "
+horizontal_alignment = 1
+
 [node name="ProgressBar" type="ProgressBar" parent="." unique_id=263110368]
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 8
@@ -140,6 +159,6 @@ offset_right = 200.0
 offset_bottom = 226.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/font = ExtResource("3_qd62q")
+theme_override_fonts/font = ExtResource("3_idjxt")
 theme_override_styles/background = SubResource("StyleBoxFlat_ae7mu")
 theme_override_styles/fill = SubResource("StyleBoxFlat_bag0u")
