@@ -50,6 +50,7 @@ var _inspection
 var _selected_pickup: PickupItem
 var _item_after_inspection: InventoryEntry
 var _auto_equipped_after_inspection := false
+var _picked_item_name_after_inspection: String = ""
 
 var _aim_lock_target: Node3D
 
@@ -271,6 +272,7 @@ func _on_interaction_requested() -> void:
 	_inspection.prepare(_selected_pickup)
 	var previous_entries := _inventory.entries.duplicate()
 	if _selected_pickup.try_pick_up(self):
+		_picked_item_name_after_inspection = _selected_pickup.display_name
 		_item_after_inspection = null
 		_auto_equipped_after_inspection = false
 		for entry in _inventory.entries:
@@ -360,9 +362,14 @@ func _on_inspection_closed() -> void:
 	_item_after_inspection = null
 	var auto_equipped := _auto_equipped_after_inspection
 	_auto_equipped_after_inspection = false
+	var item_name := _picked_item_name_after_inspection
+	_picked_item_name_after_inspection = ""
 	if entry and auto_equipped:
 		PlayerState.equipment_notification.emit("%s — экипирован" % entry.item.display_name)
-	elif entry:
+	elif not item_name.is_empty():
+		# Имя сохраняется до удаления предмета, в том числе при пополнении существующей стопки.
+		PlayerState.equipment_notification.emit("%s — добавлен в инвентарь" % item_name)
+	if entry and not auto_equipped:
 		_open_inventory_after_pickup.call_deferred(entry)
 
 func _open_inventory_after_pickup(entry: InventoryEntry) -> void:

@@ -70,6 +70,7 @@ func _set_pickup_hint(available: bool) -> void:
 
 ## Настройки могут открываться и закрываться, пока доступность предмета не меняется.
 func _update_pickup_hint_visibility() -> void:
+	%ControlHints.visible = not options.visible
 	_set_pickup_hint(PlayerState.pickup_available)
 
 func _show_equipment_notice(text: String) -> void:
