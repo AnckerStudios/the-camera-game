@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="4_hud"]
 [ext_resource type="PackedScene" uid="uid://rqmbvxty2xlu" path="res://gamelogic/props/pumpkins/car.tscn" id="13_gd7ta"]
 [ext_resource type="Script" uid="uid://bqu6dwfhpskjj" path="res://gamelogic/environment/damage_door.gd" id="19_41x3w"]
-[ext_resource type="PackedScene" path="res://gamelogic/environment/doors/door.tscn" id="20_67xu2"]
+[ext_resource type="PackedScene" uid="uid://d3etue2elx7dt" path="res://gamelogic/environment/doors/door.tscn" id="20_67xu2"]
 [ext_resource type="Script" uid="uid://cj0kaua4ww26t" path="res://gamelogic/environment/explosive_barrel.gd" id="20_rqeag"]
 [ext_resource type="PackedScene" uid="uid://c2g4ugy8n7yeu" path="res://resources/model/world/barrel.glb" id="21_m64h5"]
 [ext_resource type="PackedScene" uid="uid://dsbs1b8mypnd3" path="res://gamelogic/props/fences/fence_T.tscn" id="39_2i123"]
@@ -1181,7 +1181,7 @@ visible = false
 [node name="Preview" parent="Pickups/RevolverAmmo/Model" parent_id_path=PackedInt32Array(584738064, 908028977) index="1" unique_id=2059583942 instance=ExtResource("palette_visual_revolver_ammo")]
 
 [node name="RevolverAmmo3" parent="Pickups" unique_id=1497600315 instance=ExtResource("palette_pickup")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7406445, 0.6810319, 2.0972476)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6005726, 0.6810319, 3.793684)
 inventory_item = ExtResource("palette_item_revolver_ammo")
 quantity = 24
 
