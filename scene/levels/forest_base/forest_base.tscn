@@ -5,6 +5,8 @@
 [ext_resource type="Script" uid="uid://depwexin4lwf1" path="res://gamelogic/player/camera/isometric_camera.gd" id="3_camera"]
 [ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="4_hud"]
 [ext_resource type="PackedScene" uid="uid://rqmbvxty2xlu" path="res://gamelogic/props/pumpkins/car.tscn" id="13_gd7ta"]
+[ext_resource type="Script" uid="uid://cj0kaua4ww26t" path="res://gamelogic/environment/explosive_barrel.gd" id="20_rqeag"]
+[ext_resource type="PackedScene" uid="uid://c2g4ugy8n7yeu" path="res://resources/model/world/barrel.glb" id="21_m64h5"]
 [ext_resource type="PackedScene" uid="uid://dsbs1b8mypnd3" path="res://gamelogic/props/fences/fence_T.tscn" id="39_2i123"]
 [ext_resource type="PackedScene" uid="uid://bo7mdh4tq5ad8" path="res://gamelogic/props/fences/fence_door_frame.tscn" id="40_swsex"]
 [ext_resource type="PackedScene" uid="uid://hlsp6codfxqa" path="res://gamelogic/props/pumpkins/table.tscn" id="41_swsex"]
@@ -62,14 +64,18 @@ polygons = [PackedInt32Array(0, 3, 1), PackedInt32Array(1, 3, 2), PackedInt32Arr
 geometry_parsed_geometry_type = 1
 
 [sub_resource type="StandardMaterial3D" id="Material_ground"]
-albedo_color = Color(0.19, 0.25, 0.15, 1)
+albedo_color = Color(0.036267594, 0.17458192, 0.23456433, 1)
 
 [sub_resource type="BoxMesh" id="Mesh_ground"]
 material = SubResource("Material_ground")
-size = Vector3(60, 0.5, 60)
+size = Vector3(70, 0.5, 70)
 
 [sub_resource type="BoxShape3D" id="Shape_ground"]
 size = Vector3(60, 0.5, 60)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_kjef2"]
+height = 1.0
+radius = 0.275
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_grass_wind"]
 frequency = 0.03
@@ -83,8 +89,8 @@ seamless = true
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8nov2"]
 render_priority = 0
 shader = ExtResource("42_7a6qf")
-shader_parameter/top_color = Color(0.25, 0.4, 0.12, 1)
-shader_parameter/bottom_color = Color(0.08, 0.15, 0.04, 1)
+shader_parameter/top_color = Color(0.13823342, 0.30117056, 0.30374038, 1)
+shader_parameter/bottom_color = Color(0.031215457, 0.14132744, 0.20200047, 1)
 shader_parameter/ambient_occlusion_factor = 0.3
 shader_parameter/specular_strength = 0.4
 shader_parameter/player_displacement_strength = 0.2
@@ -105,11 +111,93 @@ script = ExtResource("1_pebyq")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1841988733]
 environment = SubResource("Environment_forest")
 
-[node name="MoonLight" type="DirectionalLight3D" parent="." unique_id=1953791346]
+[node name="Lights" type="Node3D" parent="." unique_id=129811569]
+
+[node name="MoonLight" type="DirectionalLight3D" parent="Lights" unique_id=1953791346]
 transform = Transform3D(0.8660254, 0.40957603, -0.28678823, 0, 0.57357645, 0.81915206, 0.5, -0.7094065, 0.49673176, 0, 0, 0)
 light_color = Color(0.42, 0.55, 0.85, 1)
 light_energy = 0.18
 shadow_enabled = true
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Lights" unique_id=356757735]
+transform = Transform3D(0.68575555, 0.5644987, 0.45943505, -0.5721043, 0.02784974, 0.819708, 0.4499289, -0.82496405, 0.34205025, -17.085197, 3.226313, 8.895893)
+light_color = Color(1, 0.28865868, 0.21234462, 1)
+spot_range = 6.363
+spot_attenuation = -2.11
+spot_angle = 45.76
+spot_angle_attenuation = 2.9281716
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="Lights" unique_id=1452075341]
+transform = Transform3D(0.5518166, -0.72632915, 0.4098102, -0.57210433, 0.027849788, 0.81970793, -0.60679096, -0.6867824, -0.40016803, -6.7707806, 4.066716, 11.175124)
+light_color = Color(1, 0.28865868, 0.21234462, 1)
+spot_range = 6.363
+spot_attenuation = -2.11
+spot_angle = 45.76
+spot_angle_attenuation = 2.9281716
+
+[node name="SpotLight3D8" type="SpotLight3D" parent="Lights" unique_id=585386462]
+transform = Transform3D(0.5518165, -0.7263292, 0.40981025, -0.5721043, 0.027849743, 0.819708, -0.6067909, -0.6867826, -0.4001681, -9.417664, 4.066716, 6.6264057)
+light_color = Color(1, 0.28865868, 0.21234462, 1)
+spot_range = 6.363
+spot_attenuation = -2.11
+spot_angle = 45.76
+spot_angle_attenuation = 2.9281716
+
+[node name="SpotLight3D3" type="SpotLight3D" parent="Lights" unique_id=1253191728]
+transform = Transform3D(0.8106615, -0.13262671, 0.5702966, -0.57210433, 0.027849767, 0.81970793, -0.12459779, -0.99077475, -0.05329958, 6.9710703, 4.066716, 17.099844)
+light_color = Color(1, 0.28865868, 0.21234462, 1)
+spot_range = 6.363
+spot_attenuation = -2.11
+spot_angle = 45.76
+spot_angle_attenuation = 2.9281716
+
+[node name="SpotLight3D4" type="SpotLight3D" parent="Lights" unique_id=679245895]
+transform = Transform3D(0.7941936, 0.2683976, 0.5451781, -0.57210433, 0.027849764, 0.81970793, 0.20482454, -0.96290547, 0.17566954, 20.323612, 4.066716, 1.7179651)
+light_color = Color(1, 0.28865868, 0.21234462, 1)
+spot_range = 6.363
+spot_attenuation = -2.11
+spot_angle = 45.76
+spot_angle_attenuation = 2.9281716
+
+[node name="SpotLight3D6" type="SpotLight3D" parent="Lights" unique_id=2054708467]
+transform = Transform3D(0.7941936, 0.2683976, 0.5451782, -0.57210433, 0.027849784, 0.81970793, 0.20482454, -0.9629056, 0.17566955, 18.877466, 4.066716, -6.4533443)
+light_color = Color(1, 0.28865868, 0.21234462, 1)
+spot_range = 6.363
+spot_attenuation = -2.11
+spot_angle = 45.76
+spot_angle_attenuation = 2.9281716
+
+[node name="SpotLight3D9" type="SpotLight3D" parent="Lights" unique_id=594653261]
+transform = Transform3D(0.6846105, 0.5665924, 0.45856476, -0.5721044, 0.027849786, 0.8197079, 0.4516693, -0.8235275, 0.34321624, 20.136536, 4.4431057, -20.010979)
+light_color = Color(1, 0.28865868, 0.21234462, 1)
+spot_range = 6.363
+spot_attenuation = -2.11
+spot_angle = 45.76
+spot_angle_attenuation = 2.9281716
+
+[node name="SpotLight3D10" type="SpotLight3D" parent="Lights" unique_id=1173922182]
+transform = Transform3D(-0.3937365, 0.8674037, -0.3042736, -0.57210445, 0.027849855, 0.8197079, 0.7194916, 0.49682516, 0.48528, 5.532671, 4.4431057, -19.191216)
+light_color = Color(1, 0.28865868, 0.21234462, 1)
+spot_range = 6.363
+spot_attenuation = -2.11
+spot_angle = 45.76
+spot_angle_attenuation = 2.9281716
+
+[node name="SpotLight3D7" type="SpotLight3D" parent="Lights" unique_id=110677618]
+transform = Transform3D(0.7941936, 0.2683976, 0.5451782, -0.57210433, 0.027849784, 0.81970793, 0.20482454, -0.9629056, 0.17566955, -12.64081, 4.066716, -9.623438)
+light_color = Color(1, 0.28865868, 0.21234462, 1)
+spot_range = 6.363
+spot_attenuation = -2.11
+spot_angle = 45.76
+spot_angle_attenuation = 2.9281716
+
+[node name="SpotLight3D5" type="SpotLight3D" parent="Lights" unique_id=360021389]
+transform = Transform3D(-0.8195298, 0.020403575, -0.5726734, -0.57210445, 0.027849773, 0.8197079, 0.032673795, 0.9994039, -0.011150741, 17.995798, 4.066716, 6.081411)
+light_color = Color(1, 0.28865868, 0.21234462, 1)
+spot_range = 6.363
+spot_attenuation = -2.11
+spot_angle = 45.76
+spot_angle_attenuation = 2.9281716
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=237102468]
 navigation_mesh = SubResource("NavigationMesh_forest")
@@ -119,6 +207,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
 collision_mask = 0
 
 [node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/Ground" unique_id=1139690345]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.020339012, -0.011376381, 0.020406723)
 mesh = SubResource("Mesh_ground")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Ground" unique_id=1255871792]
@@ -417,6 +506,33 @@ transform = Transform3D(0.98795, 0.1547733, 0, -0.1547733, 0.98795, 0, 0, 0, 1, 
 [node name="Pumpkin5" parent="NavigationRegion3D/Props/Pumpkins" unique_id=1300046578 instance=ExtResource("palette_pumpkin_2")]
 transform = Transform3D(0.9814157, -0.18595192, 0.047382228, 0.1918937, 0.9510272, -0.24233033, 0, 0.24691916, 0.9690361, -17, 0, 7)
 
+[node name="Pumpkin8" parent="NavigationRegion3D/Props/Pumpkins" unique_id=241647849 instance=ExtResource("palette_pumpkin_2")]
+transform = Transform3D(0.9814157, -0.18595192, 0.047382228, 0.1918937, 0.9510272, -0.24233033, 0, 0.24691916, 0.9690361, 7.182235, 0, 7)
+
+[node name="Pumpkin9" parent="NavigationRegion3D/Props/Pumpkins" unique_id=1033909903 instance=ExtResource("palette_pumpkin_2")]
+transform = Transform3D(0.9814157, -0.18595192, 0.047382228, 0.1918937, 0.9510272, -0.24233033, 0, 0.24691916, 0.9690361, 3.6161137, 0, 3.4173775)
+
+[node name="Pumpkin10" parent="NavigationRegion3D/Props/Pumpkins" unique_id=1919073818 instance=ExtResource("palette_pumpkin_2")]
+transform = Transform3D(0.9814157, -0.18595192, 0.047382228, 0.1918937, 0.9510272, -0.24233033, 0, 0.24691916, 0.9690361, -1.1217012, 0, 4.6092887)
+
+[node name="Pumpkin11" parent="NavigationRegion3D/Props/Pumpkins" unique_id=1447625731 instance=ExtResource("palette_pumpkin_2")]
+transform = Transform3D(0.9814157, -0.18595192, 0.047382228, 0.1918937, 0.9510272, -0.24233033, 0, 0.24691916, 0.9690361, -4.323702, 0, 20.524862)
+
+[node name="Pumpkin12" parent="NavigationRegion3D/Props/Pumpkins" unique_id=636374138 instance=ExtResource("palette_pumpkin_2")]
+transform = Transform3D(0.9814157, -0.18595192, 0.047382228, 0.1918937, 0.9510272, -0.24233033, 0, 0.24691916, 0.9690361, 6.640719, 0, 17.850363)
+
+[node name="Pumpkin13" parent="NavigationRegion3D/Props/Pumpkins" unique_id=116591359 instance=ExtResource("palette_pumpkin_2")]
+transform = Transform3D(0.9814157, -0.18595192, 0.047382228, 0.1918937, 0.9510272, -0.24233033, 0, 0.24691916, 0.9690361, 3.1351638, 0, 17.850363)
+
+[node name="Pumpkin14" parent="NavigationRegion3D/Props/Pumpkins" unique_id=890905343 instance=ExtResource("palette_pumpkin_2")]
+transform = Transform3D(0.9814157, -0.18595192, 0.047382228, 0.1918937, 0.9510272, -0.24233033, 0, 0.24691916, 0.9690361, 17.280432, 0, 17.850363)
+
+[node name="Pumpkin15" parent="NavigationRegion3D/Props/Pumpkins" unique_id=1313644952 instance=ExtResource("palette_pumpkin_2")]
+transform = Transform3D(0.9814157, -0.18595192, 0.047382228, 0.1918937, 0.9510272, -0.24233033, 0, 0.24691916, 0.9690361, 21.455273, 0, 4.8545504)
+
+[node name="Pumpkin16" parent="NavigationRegion3D/Props/Pumpkins" unique_id=1775308453 instance=ExtResource("palette_pumpkin_2")]
+transform = Transform3D(0.950488, 0.30113885, -0.07673291, -0.29171884, 0.9497238, 0.11368659, 0.10711053, -0.08567333, 0.99054897, 16.188965, 0, 3.7306628)
+
 [node name="Pumpkin6" parent="NavigationRegion3D/Props/Pumpkins" unique_id=68725787 instance=ExtResource("palette_pumpkin_2")]
 transform = Transform3D(0.94420236, -0.3293659, 0, 0.2952471, 0.84639305, -0.44322452, 0.14598304, 0.41849363, 0.89641064, -15, 0, 8)
 
@@ -594,13 +710,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -11)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -11)
 
 [node name="Fence145" parent="NavigationRegion3D/Props/Fences" unique_id=497065667 instance=ExtResource("palette_fence_1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, -11)
+transform = Transform3D(0.91554207, 0.25310183, -0.31260562, -0.17515184, 0.9505124, 0.25660926, 0.36208373, -0.18018314, 0.9145653, -12, 0, -11)
 
 [node name="Fence146" parent="NavigationRegion3D/Props/Fences" unique_id=1221541845 instance=ExtResource("palette_fence_2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -11)
 
 [node name="Fence149" parent="NavigationRegion3D/Props/Fences" unique_id=990452305 instance=ExtResource("palette_fence_1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, -11)
+transform = Transform3D(0.9138531, 0, 0.4060449, -0.10324133, 0.96713567, 0.23235708, -0.3927005, -0.25426087, 0.88381994, -20, 0, -11)
 
 [node name="Fence151" parent="NavigationRegion3D/Props/Fences" unique_id=924031254 instance=ExtResource("palette_fence_2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -11)
@@ -930,11 +1046,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.989174, 0, -22.969263)
 [node name="Pumpkin1" parent="NavigationRegion3D/Props" unique_id=1447024531 instance=ExtResource("41_swsex")]
 transform = Transform3D(0.258819, 0, 0.9659258, 0, 1, 0, -0.9659258, 0, 0.258819, 4.9440465, 0.047785815, 18.375425)
 
+[node name="Pumpkin3" parent="NavigationRegion3D/Props" unique_id=263187297 instance=ExtResource("41_swsex")]
+transform = Transform3D(0.258819, 0, 0.9659258, 0, 1, 0, -0.9659258, 0, 0.258819, 20.93973, 0.047785815, 6.6473064)
+
 [node name="Pumpkin2" parent="NavigationRegion3D/Props" unique_id=8237610 instance=ExtResource("41_swsex")]
 transform = Transform3D(0.9772676, 0, -0.21200964, 0, 1, 0, 0.21200964, 0, 0.9772676, 16.49805, 0.047785815, 2.2846355)
 
+[node name="Pumpkin4" parent="NavigationRegion3D/Props" unique_id=1518526000 instance=ExtResource("41_swsex")]
+transform = Transform3D(-0.056875154, 0, -0.9983813, 0, 1, 0, 0.9983813, 0, -0.056875154, 16.49805, 0.047785815, -6.7983913)
+
+[node name="Dummy1" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=43764451]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 7.260372, 0.5, -20.236065)
+script = ExtResource("20_rqeag")
+
+[node name="Shape" type="CollisionShape3D" parent="NavigationRegion3D/Props/Dummy1" unique_id=1069444780]
+shape = SubResource("CylinderShape3D_kjef2")
+
+[node name="Mesh" parent="NavigationRegion3D/Props/Dummy1" unique_id=588460847 instance=ExtResource("21_m64h5")]
+transform = Transform3D(0.27, 0, 0, 0, 0.27, 0, 0, 0, 0.27, 0, -0.0171, 0)
+
 [node name="Player" parent="." unique_id=968802661 instance=ExtResource("2_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0.1, 18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.91784, 0.1, 20.555273)
 
 [node name="CameraRig" type="Node3D" parent="." unique_id=1106128340 node_paths=PackedStringArray("target")]
 script = ExtResource("3_camera")
@@ -969,7 +1101,7 @@ visible = false
 [node name="Preview" parent="Pickups/Revolver/Model" parent_id_path=PackedInt32Array(839104526, 908028977) index="1" unique_id=659686050 instance=ExtResource("palette_visual_revolver")]
 
 [node name="Shotgun" parent="Pickups" unique_id=1063115624 instance=ExtResource("palette_pickup")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0.05, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.816023, 0.52205163, -6.6993647)
 inventory_item = ExtResource("palette_item_shotgun")
 
 [node name="Mesh" parent="Pickups/Shotgun/Model" parent_id_path=PackedInt32Array(1063115624, 908028977) index="0" unique_id=1214776343]
@@ -978,7 +1110,7 @@ visible = false
 [node name="Preview" parent="Pickups/Shotgun/Model" parent_id_path=PackedInt32Array(1063115624, 908028977) index="1" unique_id=715898923 instance=ExtResource("palette_visual_shotgun")]
 
 [node name="Medkit" parent="Pickups" unique_id=1608154381 instance=ExtResource("palette_pickup")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 0.05, 6)
+transform = Transform3D(0.89398146, 0, 0.448104, 0, 1, 0, -0.448104, 0, 0.89398146, 19.981703, 0.6830607, 6.5114055)
 inventory_item = ExtResource("palette_item_medkit")
 
 [node name="Mesh" parent="Pickups/Medkit/Model" parent_id_path=PackedInt32Array(1608154381, 908028977) index="0" unique_id=1214776343]
@@ -987,13 +1119,22 @@ visible = false
 [node name="Preview" parent="Pickups/Medkit/Model" parent_id_path=PackedInt32Array(1608154381, 908028977) index="1" unique_id=1422188394 instance=ExtResource("palette_visual_medkit")]
 
 [node name="Medkit2" parent="Pickups" unique_id=300033391 instance=ExtResource("palette_pickup")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 0.05, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.869585, 0.05, -8.768535)
 inventory_item = ExtResource("palette_item_medkit")
 
 [node name="Mesh" parent="Pickups/Medkit2/Model" parent_id_path=PackedInt32Array(300033391, 908028977) index="0" unique_id=1214776343]
 visible = false
 
 [node name="Preview" parent="Pickups/Medkit2/Model" parent_id_path=PackedInt32Array(300033391, 908028977) index="1" unique_id=707446699 instance=ExtResource("palette_visual_medkit")]
+
+[node name="Medkit3" parent="Pickups" unique_id=355479378 instance=ExtResource("palette_pickup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.626694, 0.05, -21.526527)
+inventory_item = ExtResource("palette_item_medkit")
+
+[node name="Mesh" parent="Pickups/Medkit3/Model" parent_id_path=PackedInt32Array(355479378, 908028977) index="0" unique_id=1214776343]
+visible = false
+
+[node name="Preview" parent="Pickups/Medkit3/Model" parent_id_path=PackedInt32Array(355479378, 908028977) index="1" unique_id=1167023404 instance=ExtResource("palette_visual_medkit")]
 
 [node name="RevolverAmmo" parent="Pickups" unique_id=584738064 instance=ExtResource("palette_pickup")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9395542, 0.6810319, 18.287687)
@@ -1005,8 +1146,18 @@ visible = false
 
 [node name="Preview" parent="Pickups/RevolverAmmo/Model" parent_id_path=PackedInt32Array(584738064, 908028977) index="1" unique_id=2059583942 instance=ExtResource("palette_visual_revolver_ammo")]
 
+[node name="RevolverAmmo2" parent="Pickups" unique_id=1108759066 instance=ExtResource("palette_pickup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.840584, 0.18870372, -9.568647)
+inventory_item = ExtResource("palette_item_revolver_ammo")
+quantity = 24
+
+[node name="Mesh" parent="Pickups/RevolverAmmo2/Model" parent_id_path=PackedInt32Array(1108759066, 908028977) index="0" unique_id=1214776343]
+visible = false
+
+[node name="Preview" parent="Pickups/RevolverAmmo2/Model" parent_id_path=PackedInt32Array(1108759066, 908028977) index="1" unique_id=1998788012 instance=ExtResource("palette_visual_revolver_ammo")]
+
 [node name="ShotgunAmmo" parent="Pickups" unique_id=412440481 instance=ExtResource("palette_pickup")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0.05, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.428375, 0.7479597, -6.7573037)
 inventory_item = ExtResource("palette_item_shotgun_ammo")
 quantity = 8
 
@@ -1014,6 +1165,26 @@ quantity = 8
 visible = false
 
 [node name="Preview" parent="Pickups/ShotgunAmmo/Model" parent_id_path=PackedInt32Array(412440481, 908028977) index="1" unique_id=716920421 instance=ExtResource("palette_visual_shotgun_ammo")]
+
+[node name="ShotgunAmmo2" parent="Pickups" unique_id=431558512 instance=ExtResource("palette_pickup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.710659, 0.20470387, 9.320873)
+inventory_item = ExtResource("palette_item_shotgun_ammo")
+quantity = 8
+
+[node name="Mesh" parent="Pickups/ShotgunAmmo2/Model" parent_id_path=PackedInt32Array(431558512, 908028977) index="0" unique_id=1214776343]
+visible = false
+
+[node name="Preview" parent="Pickups/ShotgunAmmo2/Model" parent_id_path=PackedInt32Array(431558512, 908028977) index="1" unique_id=501261417 instance=ExtResource("palette_visual_shotgun_ammo")]
+
+[node name="ShotgunAmmo3" parent="Pickups" unique_id=1605976287 instance=ExtResource("palette_pickup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.300096, 0.20470387, -1.3780208)
+inventory_item = ExtResource("palette_item_shotgun_ammo")
+quantity = 8
+
+[node name="Mesh" parent="Pickups/ShotgunAmmo3/Model" parent_id_path=PackedInt32Array(1605976287, 908028977) index="0" unique_id=1214776343]
+visible = false
+
+[node name="Preview" parent="Pickups/ShotgunAmmo3/Model" parent_id_path=PackedInt32Array(1605976287, 908028977) index="1" unique_id=1683898645 instance=ExtResource("palette_visual_shotgun_ammo")]
 
 [node name="InfraredFilter" parent="Pickups" unique_id=1474556206 instance=ExtResource("palette_pickup")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.75056, 0.593057, 2)
@@ -1025,7 +1196,7 @@ visible = false
 [node name="Preview" parent="Pickups/InfraredFilter/Model" parent_id_path=PackedInt32Array(1474556206, 908028977) index="1" unique_id=1900393102 instance=ExtResource("palette_visual_infrared_filter")]
 
 [node name="UltravioletFilter" parent="Pickups" unique_id=1883148980 instance=ExtResource("palette_pickup")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0.05, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.395733, 0.4927016, -7.169419)
 inventory_item = ExtResource("palette_item_ultraviolet_filter")
 
 [node name="Mesh" parent="Pickups/UltravioletFilter/Model" parent_id_path=PackedInt32Array(1883148980, 908028977) index="0" unique_id=1214776343]
@@ -1034,7 +1205,7 @@ visible = false
 [node name="Preview" parent="Pickups/UltravioletFilter/Model" parent_id_path=PackedInt32Array(1883148980, 908028977) index="1" unique_id=218249113 instance=ExtResource("palette_visual_ultraviolet_filter")]
 
 [node name="Battery" parent="Pickups" unique_id=1925673464 instance=ExtResource("palette_pickup")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.05, -8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.010874, 0.05, -9.422816)
 inventory_item = ExtResource("palette_item_battery")
 
 [node name="Mesh" parent="Pickups/Battery/Model" parent_id_path=PackedInt32Array(1925673464, 908028977) index="0" unique_id=1214776343]
@@ -1042,10 +1213,19 @@ visible = false
 
 [node name="Preview" parent="Pickups/Battery/Model" parent_id_path=PackedInt32Array(1925673464, 908028977) index="1" unique_id=2127615550 instance=ExtResource("palette_visual_battery")]
 
+[node name="Battery2" parent="Pickups" unique_id=1228920123 instance=ExtResource("palette_pickup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7066851, 0.05, -22.214947)
+inventory_item = ExtResource("palette_item_battery")
+
+[node name="Mesh" parent="Pickups/Battery2/Model" parent_id_path=PackedInt32Array(1228920123, 908028977) index="0" unique_id=1214776343]
+visible = false
+
+[node name="Preview" parent="Pickups/Battery2/Model" parent_id_path=PackedInt32Array(1228920123, 908028977) index="1" unique_id=1227278586 instance=ExtResource("palette_visual_battery")]
+
 [node name="Enemies" type="Node3D" parent="." unique_id=1878346874]
 
 [node name="Ghoul" parent="Enemies" unique_id=80836083 instance=ExtResource("enemy_ghoul")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1, 11)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.111753, 1, 9.965682)
 
 [node name="Ghoul2" parent="Enemies" unique_id=396955178 instance=ExtResource("enemy_ghoul")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 1, 3)
@@ -1150,8 +1330,13 @@ bus = &"Music"
 [editable path="Pickups/Shotgun"]
 [editable path="Pickups/Medkit"]
 [editable path="Pickups/Medkit2"]
+[editable path="Pickups/Medkit3"]
 [editable path="Pickups/RevolverAmmo"]
+[editable path="Pickups/RevolverAmmo2"]
 [editable path="Pickups/ShotgunAmmo"]
+[editable path="Pickups/ShotgunAmmo2"]
+[editable path="Pickups/ShotgunAmmo3"]
 [editable path="Pickups/InfraredFilter"]
 [editable path="Pickups/UltravioletFilter"]
 [editable path="Pickups/Battery"]
+[editable path="Pickups/Battery2"]

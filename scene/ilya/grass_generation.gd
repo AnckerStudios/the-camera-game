@@ -3,7 +3,7 @@ extends MultiMeshInstance3D
 ## Узел служит шаблоном: берёт меш из своего MultiMesh и материал из material_override.
 
 @export var ground_mesh_path: NodePath = ^"../NavigationRegion3D/Ground/Mesh"
-@export var grass_count := 100000
+@export var grass_count := 150000
 ## Доля травы в браузере: WebGL заметно медленнее на большом числе вершин.
 @export_range(0.05, 1.0, 0.05) var web_density := 0.5
 ## Сторона чанка в метрах. Меньше - точнее отсечение, но больше вызовов отрисовки.

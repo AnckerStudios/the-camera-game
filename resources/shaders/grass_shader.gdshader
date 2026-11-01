@@ -15,7 +15,7 @@ uniform float wind_noise_size: hint_range(0.0, 1.0, 0.001) = 0.05; // high value
 uniform float wind_noise_speed: hint_range(0.0, 1.0, 0.001) = 0.1;
 
 // Позиция игрока общая для всех чанков травы; её выставляет player.gd каждый физический тик.
-global uniform vec3 grass_player_position;
+instance uniform vec3 grass_player_position;
 
 void vertex() {
 	vec3 world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
