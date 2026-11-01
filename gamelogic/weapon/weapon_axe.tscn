@@ -5,6 +5,8 @@
 
 [ext_resource type="AudioStream" path="res://resources/music/удар2.mp3" id="swing_audio"]
 
+[ext_resource type="AudioStream" path="res://resources/music/удар5.mp3" id="miss_audio"]
+
 [node name="WeaponAxe" type="Node3D" unique_id=1736492483 node_paths=PackedStringArray("swing_pivot")]
 script = ExtResource("1_melee")
 swing_pivot = NodePath("Pivot")
@@ -18,6 +20,14 @@ transform = Transform3D(-0.13334419, 0.10630103, -0.057614416, 0.11790332, 0.133
 
 [node name="SwingSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("swing_audio")
+bus = &"SFX"
+volume_db = -16.0
+max_db = -16.0
+unit_size = 5.0
+max_distance = 25.0
+
+[node name="MissSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("miss_audio")
 bus = &"SFX"
 volume_db = -16.0
 max_db = -16.0

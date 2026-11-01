@@ -13,6 +13,8 @@
 [ext_resource type="Script" uid="uid://chqxm24x5s5t1" path="res://scene/ilya/grass_generation.gd" id="44_pebyq"]
 [ext_resource type="PackedScene" uid="uid://dwbunjtc84mc3" path="res://gamelogic/monster/ghost/ghost.tscn" id="enemy_ghost"]
 [ext_resource type="PackedScene" uid="uid://w3p8l3qnm13a" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="enemy_ghoul"]
+[ext_resource type="AudioStream" uid="uid://dosgjnl301ydi" path="res://resources/music/music_forest.mp3" id="music_forest"]
+[ext_resource type="AudioStream" uid="uid://b3jbeqxmrdx8" path="res://resources/music/music_forest_beat.mp3" id="music_forest_beat"]
 [ext_resource type="PackedScene" uid="uid://h5fklgq5qxte" path="res://gamelogic/props/fences/fence_1.tscn" id="palette_fence_1"]
 [ext_resource type="PackedScene" uid="uid://dj0jwd3c5wusr" path="res://gamelogic/props/fences/fence_2.tscn" id="palette_fence_2"]
 [ext_resource type="PackedScene" uid="uid://bbin8xbkjkx0r" path="res://gamelogic/props/fences/fence_3.tscn" id="palette_fence_3"]
@@ -1130,6 +1132,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1, -17)
 material_override = SubResource("ShaderMaterial_8nov2")
 multimesh = SubResource("MultiMesh_rqeag")
 script = ExtResource("44_pebyq")
+
+[node name="ForestMusic" type="AudioStreamPlayer" parent="." unique_id=436635859]
+process_mode = 3
+stream = ExtResource("music_forest")
+volume_db = -20.0
+bus = &"Music"
+
+[node name="ForestBeatMusic" type="AudioStreamPlayer" parent="." unique_id=136475644]
+process_mode = 3
+stream = ExtResource("music_forest_beat")
+volume_db = -80.0
+bus = &"Music"
 
 [editable path="Pickups/Axe"]
 [editable path="Pickups/Revolver"]
