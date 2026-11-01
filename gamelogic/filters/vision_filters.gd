@@ -7,6 +7,10 @@ var mode: VisionProfile.Filter = VisionProfile.Filter.NORMAL
 ## Звук интерфейса не зависит от положения персонажа или камеры.
 @export var switch_sound: AudioStream = preload("res://resources/music/caseta3.wav")
 @export_range(-40.0, 6.0, 0.5) var switch_volume_db: float = -8.0
+## Расход заряда батарейки камеры, пока включён фильтр, единиц в секунду (полный заряд - 100).
+@export_range(0.0, 50.0, 0.1) var battery_drain_per_second: float = 2.0
+## При таком заряде (в процентах, как в HUD) фильтр выключается и не включается снова.
+@export_range(0, 100, 1) var min_battery_percent: int = 1
 const TURN_ON_SOUND: AudioStream = preload("res://resources/music/turn_on.wav")
 const TURN_OFF_SOUND: AudioStream = preload("res://resources/music/turn_off.wav")
 var _switch_audio: AudioStreamPlayer
@@ -31,6 +35,18 @@ func _ready() -> void:
 	add_child(_ultraviolet)
 	_update_overlays()
 
+## Фильтр питается от батарейки камеры; на паузе (инвентарь, меню) заряд не тратится.
+func _process(delta: float) -> void:
+	if mode == Mode.NORMAL:
+		return
+	PlayerState.battery -= battery_drain_per_second * delta
+	if _is_battery_low():
+		set_mode(Mode.NORMAL)
+
+## Округление то же, что в HUD: фильтр гаснет, когда на экране появляется порог.
+func _is_battery_low() -> bool:
+	return roundi(PlayerState.battery / PlayerState.BATTERY_MAX * 100.0) <= min_battery_percent
+
 ## Tab включает только фильтры из экипированного набора.
 func cycle_filter() -> void:
 	var index := _available_modes.find(int(mode))
@@ -54,6 +70,9 @@ func get_equipped_filter_mode() -> int:
 
 func set_mode(value: VisionProfile.Filter, play_sound: bool = true) -> void:
 	if mode == value:
+		return
+	# Разряженная камера не включает фильтр; выключить его можно всегда.
+	if value != Mode.NORMAL and _is_battery_low():
 		return
 	mode = value
 	_update_overlays()
