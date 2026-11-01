@@ -9,7 +9,7 @@ const MouseInput = preload("res://gamelogic/input/mouse_tracker.gd")
 @export_range(0.05, 1.0, 0.01) var text_fade_seconds: float = 0.15
 
 ## Доля доступного кадра, занимаемая моделью. Больше — крупнее предмет.
-@export_range(0.2, 0.95, 0.01) var preview_fill: float = 0.65
+@export_range(0.2, 0.95, 0.01) var preview_fill: float = 0.8
 var _model_radius: float = 0.9
 var _entrance_tween: Tween
 var _entering: bool = false
