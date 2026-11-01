@@ -178,6 +178,14 @@ spot_attenuation = -2.11
 spot_angle = 45.76
 spot_angle_attenuation = 2.9281716
 
+[node name="SpotLight3D12" type="SpotLight3D" parent="Lights" unique_id=999022432]
+transform = Transform3D(0.46491116, -0.5144623, -0.7205457, 0.40274835, -0.601875, 0.68959427, -0.7884487, -0.6107987, -0.07261958, 15.44055, 4.066716, -13.81977)
+light_color = Color(1, 0.28865868, 0.21234462, 1)
+spot_range = 6.363
+spot_attenuation = -2.11
+spot_angle = 45.76
+spot_angle_attenuation = 2.9281716
+
 [node name="SpotLight3D9" type="SpotLight3D" parent="Lights" unique_id=594653261]
 transform = Transform3D(0.6846105, 0.5665924, 0.45856476, -0.5721044, 0.027849786, 0.8197079, 0.4516693, -0.8235275, 0.34321624, 20.136536, 4.4431057, -20.010979)
 light_color = Color(1, 0.28865868, 0.21234462, 1)
@@ -1080,6 +1088,9 @@ shape = SubResource("CylinderShape3D_kjef2")
 
 [node name="Mesh" parent="NavigationRegion3D/Props/Dummy1" unique_id=588460847 instance=ExtResource("21_m64h5")]
 transform = Transform3D(0.27, 0, 0, 0, 0.27, 0, 0, 0, 0.27, 0, -0.0171, 0)
+
+[node name="Mesh2" parent="NavigationRegion3D/Props/Dummy1" unique_id=2060782063 instance=ExtResource("21_m64h5")]
+transform = Transform3D(0.27, 0, 0, 0, 0.27, 0, 0, 0, 0.27, 4.883814, -0.017100006, 3.5790153)
 
 [node name="Door3" parent="." unique_id=1102716129 instance=ExtResource("20_67xu2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, 0)
