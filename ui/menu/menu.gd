@@ -2,6 +2,7 @@ extends Control
 var scene_setting = preload("res://ui/options/options.tscn")
 
 func _ready():
+	get_tree().paused = false
 	MenuState.state = true
 
 func _on_play_button_pressed() -> void:

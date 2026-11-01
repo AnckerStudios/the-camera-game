@@ -2,7 +2,7 @@ extends Control
 
 func _on_back_pressed() -> void:
 	TransitionTort.change_scene("res://ui/menu/menu.tscn")
-	get_tree().paused = false
+	
 	
 	
 #код для вызова из метода умирания:
