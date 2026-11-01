@@ -49,6 +49,7 @@ var _inspection
 
 var _selected_pickup: PickupItem
 var _item_after_inspection: InventoryEntry
+var _auto_equipped_after_inspection := false
 
 var _aim_lock_target: Node3D
 
@@ -58,6 +59,7 @@ var _has_mouse_target: bool = false
 
 @onready var controls = $PlayerInput
 @onready var visual: Node3D = $Visual
+@onready var _footstep_audio = $FootstepAudio
 
 
 func _ready() -> void:
@@ -88,6 +90,7 @@ func _physics_process(delta: float) -> void:
 	_apply_gravity_and_jump(delta)
 
 	move_and_slide()
+	_update_footsteps()
 	_update_shader_parametrs()
 	_update_mouse_facing(delta)
 	_reset_if_fallen()
@@ -97,6 +100,13 @@ func _physics_process(delta: float) -> void:
 
 ## Переводит ввод в направление на плоскости земли относительно активной камеры.
 ## Если камеры нет, использует мировые оси.
+## Проверяем фактическое движение: упор в стену не воспроизводит шаги.
+func _update_footsteps() -> void:
+	var motion := get_real_velocity()
+	var horizontal_speed := Vector2(motion.x, motion.z).length()
+	var walking := is_on_floor() and _dash_remaining <= 0.0 and horizontal_speed > 0.15 and PlayerState.hp > 0.0
+	_footstep_audio.update_movement(walking, horizontal_speed / maxf(speed, 0.01))
+
 func _get_movement_direction() -> Vector3:
 	var input: Vector2 = controls.get_movement()
 	var camera := get_viewport().get_camera_3d()
@@ -262,9 +272,11 @@ func _on_interaction_requested() -> void:
 	var previous_entries := _inventory.entries.duplicate()
 	if _selected_pickup.try_pick_up(self):
 		_item_after_inspection = null
+		_auto_equipped_after_inspection = false
 		for entry in _inventory.entries:
 			if entry.item.kind in [InventoryItem.Kind.WEAPON, InventoryItem.Kind.FILTER] and not previous_entries.has(entry):
 				_item_after_inspection = entry
+				_auto_equipped_after_inspection = _inventory.try_auto_equip(entry)
 				break
 		_set_selected_pickup(null)
 		velocity = Vector3.ZERO
@@ -346,7 +358,11 @@ func _on_inventory_toggle() -> void:
 func _on_inspection_closed() -> void:
 	var entry := _item_after_inspection
 	_item_after_inspection = null
-	if entry:
+	var auto_equipped := _auto_equipped_after_inspection
+	_auto_equipped_after_inspection = false
+	if entry and auto_equipped:
+		PlayerState.equipment_notification.emit("%s — экипирован" % entry.item.display_name)
+	elif entry:
 		_open_inventory_after_pickup.call_deferred(entry)
 
 func _open_inventory_after_pickup(entry: InventoryEntry) -> void:

@@ -35,6 +35,7 @@ var weapon_name := "":
 		weapon_changed.emit(weapon_name)
 
 
+signal equipment_notification(text: String)
 signal pickup_available_changed(available: bool)
 var pickup_available: bool = false:
 	set(value):

@@ -48,6 +48,7 @@ var _ammo_inventory: WeakRef
 var _ammo_id: StringName
 ## Время полной перезарядки или одного патрона, если reload_per_round.
 @export var reload_time := 1.5
+@export var reload_sound: AudioStream = preload("res://resources/music/reload.mp3")
 ## Заряжать по одному патрону; выстрел прерывает перезарядку.
 @export var reload_per_round := false
 
@@ -57,6 +58,7 @@ var _ammo_id: StringName
 ## Анимация под reload_time. потом в методе растягиваем анимацию
 @export var reload_animation: StringName
 
+var _reload_audio: AudioStreamPlayer3D
 var loaded := 0
 var is_reloading := false
 
@@ -70,6 +72,14 @@ var _reload_timer := 0.0
 
 
 func _ready() -> void:
+	_reload_audio = AudioStreamPlayer3D.new()
+	_reload_audio.name = &"ReloadSound"
+	_reload_audio.bus = &"SFX"
+	_reload_audio.volume_db = -18.0
+	_reload_audio.max_db = -18.0
+	_reload_audio.unit_size = 4.0
+	_reload_audio.max_distance = 20.0
+	add_child(_reload_audio)
 	loaded = capacity
 	if _flash_light:
 		_flash_light.visible = false
@@ -86,10 +96,13 @@ func _process(delta: float) -> void:
 		_load_rounds(1)
 		if loaded < capacity and reserve_ammo > 0:
 			_reload_timer += reload_time
+			if not _reload_audio.playing:
+				_play_reload_sound()
 			return
 	else:
 		_load_rounds(capacity - loaded)
 	is_reloading = false
+	_stop_reload_sound()
 	reload_finished.emit()
 
 
@@ -108,11 +121,13 @@ func reload() -> void:
 	is_reloading = true
 	_reload_timer = reload_time
 	_play_reload_animation()
+	_play_reload_sound()
 	reload_started.emit()
 
 
 func unequip() -> void:
 	is_reloading = false
+	_stop_reload_sound()
 	_reset_animation()
 	super()
 
@@ -129,6 +144,7 @@ func shoot(rounds := 1) -> bool:
 		if not reload_per_round:
 			return false
 		is_reloading = false
+		_stop_reload_sound()
 		_reset_animation()
 
 	rounds = clampi(rounds, 1, loaded)
@@ -255,6 +271,15 @@ func get_shot_exclusions() -> Array[RID]:
 	return excluded
 
 ## метод для растягивания анимации оружия под reload 
+func _play_reload_sound() -> void:
+	if is_instance_valid(_reload_audio) and reload_sound:
+		_reload_audio.stream = reload_sound
+		_reload_audio.play()
+
+func _stop_reload_sound() -> void:
+	if is_instance_valid(_reload_audio):
+		_reload_audio.stop()
+
 func _play_reload_animation() -> void:
 	if not animator or not animator.has_animation(reload_animation):
 		return
