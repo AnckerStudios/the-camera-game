@@ -7,6 +7,8 @@ const FLASH_DURATION := 0.4
 
 var _rec_time := 0.0
 var _flash_tween: Tween
+@onready var _equipment_notice: Label = %EquipmentNotice
+@onready var _equipment_notice_timer: Timer = $EquipmentNoticeTimer
 @onready var _pickup_hint: Label = %PickupHint
 @onready var _filter_status: Label = %FilterStatus
 @onready var rec_dot: Label = %RecDot
@@ -20,6 +22,8 @@ var _flash_tween: Tween
 @onready var mvj: Label = $Margin/Layout/Mvj
 
 func _ready() -> void:
+	PlayerState.equipment_notification.connect(_show_equipment_notice)
+	_equipment_notice_timer.timeout.connect(_equipment_notice.hide)
 	options.visibility_changed.connect(_update_pickup_hint_visibility)
 	PlayerState.pickup_available_changed.connect(_set_pickup_hint)
 	_set_pickup_hint(PlayerState.pickup_available)
@@ -34,8 +38,7 @@ func _ready() -> void:
 	set_health(PlayerState.hp, PlayerState.HP_MAX)
 
 	PlayerState.weapon_changed.connect(set_weapon)
-	if PlayerState.weapon_name:
-		set_weapon(PlayerState.weapon_name)
+	set_weapon(PlayerState.weapon_name)
 	PlayerState.ammo_changed.connect(set_ammo)
 	set_ammo(PlayerState.ammo_loaded, PlayerState.ammo_capacity, PlayerState.ammo_reserve)
 
@@ -69,6 +72,11 @@ func _set_pickup_hint(available: bool) -> void:
 func _update_pickup_hint_visibility() -> void:
 	_set_pickup_hint(PlayerState.pickup_available)
 
+func _show_equipment_notice(text: String) -> void:
+	_equipment_notice.text = text
+	_equipment_notice.show()
+	_equipment_notice_timer.start()
+
 func set_health(value: float, max_value: float) -> void:
 	%HealthBar.max_value = max_value
 	%HealthBar.value = value
@@ -86,6 +94,7 @@ func set_nodes(activated: int, total: int) -> void:
 
 func set_weapon(weapon_name: String) -> void:
 	%WeaponLabel.text = weapon_name.to_upper()
+	%WeaponLabel.visible = not weapon_name.is_empty()
 
 
 func set_ammo(loaded: int, capacity: int, reserve: int) -> void:

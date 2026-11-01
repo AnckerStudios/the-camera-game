@@ -43,6 +43,20 @@ func add_item(item: InventoryItem, quantity: int = 1) -> bool:
 	changed.emit()
 	return true
 
+## При подборе занимаем только свободный слот, не заменяя имеющееся снаряжение.
+func try_auto_equip(entry: InventoryEntry) -> bool:
+	if not entries.has(entry) or is_equipped(entry):
+		return false
+	match entry.item.kind:
+		InventoryItem.Kind.WEAPON:
+			for slot in weapons.size():
+				if not weapons[slot]:
+					return equip_weapon(entry, slot)
+		InventoryItem.Kind.FILTER:
+			if not filter_slot:
+				return equip_filter(entry)
+	return false
+
 func equip_weapon(entry: InventoryEntry, slot: int) -> bool:
 	if not entries.has(entry) or slot < 0 or slot > 1 or entry.item.kind != InventoryItem.Kind.WEAPON or not is_instance_valid(_holder):
 		return false

@@ -1,4 +1,4 @@
-﻿class_name MeleeWeapon
+class_name MeleeWeapon
 extends Weapon
 
 ## Оружие ближнего боя: удар задевает всех в секторе перед персонажем.
@@ -66,6 +66,8 @@ func swing() -> bool:
 
 
 func unequip() -> void:
+	if is_instance_valid(_swing_sound):
+		_swing_sound.stop()
 	_hit_timer = 0.0
 	_reset_animation()
 	super()
