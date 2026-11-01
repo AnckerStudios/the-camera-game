@@ -98,6 +98,12 @@ func use_item(entry: InventoryEntry) -> bool:
 		PlayerState.hp += entry.item.healing
 		_consume(entry, 1)
 		return true
+	if entry.item.kind == InventoryItem.Kind.BATTERY:
+		if PlayerState.battery >= PlayerState.BATTERY_MAX or entry.item.charging <= 0.0:
+			return false
+		PlayerState.battery += entry.item.charging
+		_consume(entry, 1)
+		return true
 	if entry.item.kind == InventoryItem.Kind.AMMO:
 		# «Применить» запускает перезарядку совместимого оружия в руках.
 		if is_instance_valid(_holder) and _holder.current is Firearm:
