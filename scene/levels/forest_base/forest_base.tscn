@@ -12,7 +12,7 @@
 [ext_resource type="ArrayMesh" uid="uid://er8nljgvawhk" path="res://resources/model/world/GrassMesh.res" id="43_gd7ta"]
 [ext_resource type="Script" uid="uid://chqxm24x5s5t1" path="res://scene/ilya/grass_generation.gd" id="44_pebyq"]
 [ext_resource type="PackedScene" uid="uid://dwbunjtc84mc3" path="res://gamelogic/monster/ghost/ghost.tscn" id="enemy_ghost"]
-[ext_resource type="PackedScene" uid="uid://cjuq8g0mbb8h8" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="enemy_ghoul"]
+[ext_resource type="PackedScene" uid="uid://w3p8l3qnm13a" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="enemy_ghoul"]
 [ext_resource type="PackedScene" uid="uid://h5fklgq5qxte" path="res://gamelogic/props/fences/fence_1.tscn" id="palette_fence_1"]
 [ext_resource type="PackedScene" uid="uid://dj0jwd3c5wusr" path="res://gamelogic/props/fences/fence_2.tscn" id="palette_fence_2"]
 [ext_resource type="PackedScene" uid="uid://bbin8xbkjkx0r" path="res://gamelogic/props/fences/fence_3.tscn" id="palette_fence_3"]
