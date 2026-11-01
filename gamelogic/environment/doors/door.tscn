@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://gamelogic/environment/damage_door.gd" id="1_h00up"]
+[ext_resource type="PackedScene" uid="uid://u6oshodsilad" path="res://resources/model/modules/fence/door_broken.glb" id="2_model"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_58w5l"]
+size = Vector3(2.5482788, 5.2460938, 0.3791504)
+
+[node name="Door" type="StaticBody3D" unique_id=2140503315]
+script = ExtResource("1_h00up")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1702916990]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.5327726, 1.0901293, 0)
+shape = SubResource("BoxShape3D_58w5l")
+
+[node name="Model" parent="." unique_id=222738564 instance=ExtResource("2_model")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="Cube_008" parent="Model" index="0" unique_id=717912364]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[editable path="Model"]

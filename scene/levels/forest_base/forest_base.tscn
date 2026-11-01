@@ -5,6 +5,8 @@
 [ext_resource type="Script" uid="uid://depwexin4lwf1" path="res://gamelogic/player/camera/isometric_camera.gd" id="3_camera"]
 [ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="4_hud"]
 [ext_resource type="PackedScene" uid="uid://rqmbvxty2xlu" path="res://gamelogic/props/pumpkins/car.tscn" id="13_gd7ta"]
+[ext_resource type="Script" uid="uid://bqu6dwfhpskjj" path="res://gamelogic/environment/damage_door.gd" id="19_41x3w"]
+[ext_resource type="PackedScene" path="res://gamelogic/environment/doors/door.tscn" id="20_67xu2"]
 [ext_resource type="Script" uid="uid://cj0kaua4ww26t" path="res://gamelogic/environment/explosive_barrel.gd" id="20_rqeag"]
 [ext_resource type="PackedScene" uid="uid://c2g4ugy8n7yeu" path="res://resources/model/world/barrel.glb" id="21_m64h5"]
 [ext_resource type="PackedScene" uid="uid://dsbs1b8mypnd3" path="res://gamelogic/props/fences/fence_T.tscn" id="39_2i123"]
@@ -14,7 +16,7 @@
 [ext_resource type="ArrayMesh" uid="uid://er8nljgvawhk" path="res://resources/model/world/GrassMesh.res" id="43_gd7ta"]
 [ext_resource type="Script" uid="uid://chqxm24x5s5t1" path="res://scene/ilya/grass_generation.gd" id="44_pebyq"]
 [ext_resource type="PackedScene" uid="uid://dwbunjtc84mc3" path="res://gamelogic/monster/ghost/ghost.tscn" id="enemy_ghost"]
-[ext_resource type="PackedScene" uid="uid://w3p8l3qnm13a" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="enemy_ghoul"]
+[ext_resource type="PackedScene" uid="uid://cjuq8g0mbb8h8" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="enemy_ghoul"]
 [ext_resource type="AudioStream" uid="uid://dosgjnl301ydi" path="res://resources/music/music_forest.mp3" id="music_forest"]
 [ext_resource type="AudioStream" uid="uid://b3jbeqxmrdx8" path="res://resources/music/music_forest_beat.mp3" id="music_forest_beat"]
 [ext_resource type="PackedScene" uid="uid://h5fklgq5qxte" path="res://gamelogic/props/fences/fence_1.tscn" id="palette_fence_1"]
@@ -1042,6 +1044,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, -23)
 
 [node name="HouseDoorFrame" parent="NavigationRegion3D/Props/House" unique_id=1306532664 instance=ExtResource("palette_house_door_frame")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.989174, 0, -22.969263)
+script = ExtResource("19_41x3w")
+
+[node name="Door" parent="NavigationRegion3D/Props/House" unique_id=2140503315 instance=ExtResource("20_67xu2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, -23)
+victory_on_destroy = true
 
 [node name="Pumpkin1" parent="NavigationRegion3D/Props" unique_id=1447024531 instance=ExtResource("41_swsex")]
 transform = Transform3D(0.258819, 0, 0.9659258, 0, 1, 0, -0.9659258, 0, 0.258819, 4.9440465, 0.047785815, 18.375425)
@@ -1064,6 +1071,12 @@ shape = SubResource("CylinderShape3D_kjef2")
 
 [node name="Mesh" parent="NavigationRegion3D/Props/Dummy1" unique_id=588460847 instance=ExtResource("21_m64h5")]
 transform = Transform3D(0.27, 0, 0, 0, 0.27, 0, 0, 0, 0.27, 0, -0.0171, 0)
+
+[node name="Door3" parent="." unique_id=1102716129 instance=ExtResource("20_67xu2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, 0)
+
+[node name="Door2" parent="." unique_id=1496543453 instance=ExtResource("20_67xu2")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -8, 0, 14.5)
 
 [node name="Player" parent="." unique_id=968802661 instance=ExtResource("2_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.91784, 0.1, 20.555273)

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://nvkg3wrb6vt7"]
 
 [ext_resource type="Theme" uid="uid://cmv6w0rmt8n1v" path="res://resources/theme/option_theme.tres" id="1_yppaw"]
-[ext_resource type="Script" uid="uid://bihq8c51q83fw" path="res://ui/dead/dead.gd" id="2_b11fv"]
+[ext_resource type="Script" path="res://ui/alive/alive.gd" id="2_b11fv"]
 [ext_resource type="PackedScene" uid="uid://dm1q2hktewkrd" path="res://ui/buttons/play_button.tscn" id="3_4jruv"]
 
 [sub_resource type="Theme" id="Theme_bag0u"]
@@ -45,7 +45,7 @@ theme_override_constants/separation = 60
 layout_mode = 2
 theme_type_variation = &"RichTextLabelTitle"
 bbcode_enabled = true
-text = "[wave]ты выжил"
+text = "[wave]Победа!"
 fit_content = true
 autowrap_mode = 0
 
