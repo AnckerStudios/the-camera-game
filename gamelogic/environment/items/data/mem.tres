@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://colyc0vefafcg"]
+
+[ext_resource type="PackedScene" uid="uid://di2ioh767c35" path="res://gamelogic/environment/items/models/mem.tscn" id="1_ui500"]
+[ext_resource type="Script" uid="uid://qned3kybvfox" path="res://gamelogic/inventory/inventory_item.gd" id="2_jqm1s"]
+
+[resource]
+script = ExtResource("2_jqm1s")
+id = &"mem_Mage"
+display_name = "Маг"
+description = "Пока еще не в джеме"
+model_scene = ExtResource("1_ui500")
+inspection_rotation_degrees = Vector3(50, -90, -1)
+max_stack = 1
+weapon_id = &"Mage"

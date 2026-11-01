@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://di2ioh767c35"]
+
+[ext_resource type="PackedScene" uid="uid://uw08mlyxldxg" path="res://resources/model/mem.glb" id="1_00mqk"]
+
+[node name="ItemModel" type="Node3D" unique_id=1314062365]
+
+[node name="Model" parent="." unique_id=117425569 instance=ExtResource("1_00mqk")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+
+[editable path="Model"]

@@ -15,6 +15,7 @@
 [ext_resource type="Shader" uid="uid://c8ynwk6s5k2sa" path="res://resources/shaders/grass_shader.gdshader" id="42_7a6qf"]
 [ext_resource type="ArrayMesh" uid="uid://er8nljgvawhk" path="res://resources/model/world/GrassMesh.res" id="43_gd7ta"]
 [ext_resource type="Script" uid="uid://chqxm24x5s5t1" path="res://scene/ilya/grass_generation.gd" id="44_pebyq"]
+[ext_resource type="Resource" uid="uid://colyc0vefafcg" path="res://gamelogic/environment/items/data/mem.tres" id="51_0obrb"]
 [ext_resource type="PackedScene" uid="uid://dwbunjtc84mc3" path="res://gamelogic/monster/ghost/ghost.tscn" id="enemy_ghost"]
 [ext_resource type="PackedScene" uid="uid://cjuq8g0mbb8h8" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="enemy_ghoul"]
 [ext_resource type="AudioStream" uid="uid://dosgjnl301ydi" path="res://resources/music/music_forest.mp3" id="music_forest"]
@@ -29,7 +30,7 @@
 [ext_resource type="Resource" uid="uid://b604orb8qne8v" path="res://gamelogic/environment/items/data/axe.tres" id="palette_item_axe"]
 [ext_resource type="Resource" uid="uid://ts0skeb4frkc" path="res://gamelogic/environment/items/data/battery.tres" id="palette_item_battery"]
 [ext_resource type="Resource" path="res://gamelogic/environment/items/data/infrared_filter.tres" id="palette_item_infrared_filter"]
-[ext_resource type="Resource" path="res://gamelogic/environment/items/data/medkit.tres" id="palette_item_medkit"]
+[ext_resource type="Resource" uid="uid://gdefeks8bjts" path="res://gamelogic/environment/items/data/medkit.tres" id="palette_item_medkit"]
 [ext_resource type="Resource" uid="uid://peoe6fjaatkj" path="res://gamelogic/environment/items/data/revolver.tres" id="palette_item_revolver"]
 [ext_resource type="Resource" uid="uid://x51nt8i2gp2a" path="res://gamelogic/environment/items/data/revolver_ammo.tres" id="palette_item_revolver_ammo"]
 [ext_resource type="Resource" uid="uid://bsran2hycn4fd" path="res://gamelogic/environment/items/data/shotgun.tres" id="palette_item_shotgun"]
@@ -127,6 +128,14 @@ light_color = Color(1, 0.28865868, 0.21234462, 1)
 spot_range = 6.363
 spot_attenuation = -2.11
 spot_angle = 45.76
+spot_angle_attenuation = 2.9281716
+
+[node name="SpotLight3D11" type="SpotLight3D" parent="Lights" unique_id=682519039]
+transform = Transform3D(-0.44963765, 0.5539792, 0.7006662, -0.8455733, -0.51675326, -0.13405955, 0.28780535, -0.6527428, 0.7007817, -21.066647, -0.19782114, 23.292385)
+light_color = Color(0.9277393, 0.80942076, 0.72655976, 1)
+spot_range = 5.057
+spot_attenuation = -2.77
+spot_angle = 28.85
 spot_angle_attenuation = 2.9281716
 
 [node name="SpotLight3D2" type="SpotLight3D" parent="Lights" unique_id=1452075341]
@@ -280,7 +289,7 @@ transform = Transform3D(-0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, -0.
 transform = Transform3D(-0.8660254, 0, -0.50000006, 0, 1, 0, 0.50000006, 0, -0.8660254, -19.01795, 0, -19.799038)
 
 [node name="Pine62" parent="NavigationRegion3D/Props/Pines" unique_id=1253097913 instance=ExtResource("palette_pine_2")]
-transform = Transform3D(0.9659258, 0, -0.25881898, 0, 1, 0, 0.25881898, 0, 0.9659258, -21.64097, 0, -14.342243)
+transform = Transform3D(0.9659258, 0, -0.25881898, 0, 1, 0, 0.25881898, 0, 0.9659258, -20.264286, 0, -14.342243)
 
 [node name="Pine67" parent="NavigationRegion3D/Props/Pines" unique_id=585355076 instance=ExtResource("palette_pine_2")]
 transform = Transform3D(0.9659258, 0, -0.25881898, 0, 1, 0, 0.25881898, 0, 0.9659258, -21.64097, 0, -4.342243)
@@ -471,10 +480,10 @@ transform = Transform3D(0.8725007, 0, 0.4886127, 0, 1, 0, -0.4886127, 0, 0.87250
 transform = Transform3D(0.8725007, 0, 0.4886127, 0, 1, 0, -0.4886127, 0, 0.8725007, 9.895979, 0.30538082, -22.452667)
 
 [node name="Rock12" parent="NavigationRegion3D/Props/Rocks" unique_id=1292004030 instance=ExtResource("palette_rock_3")]
-transform = Transform3D(0.2714498, 0, 0.9624526, 0, 1, 0, -0.9624526, 0, 0.2714498, -19.351063, 0, -13.828438)
+transform = Transform3D(0.2714498, 0, 0.9624526, 0, 1, 0, -0.9624526, 0, 0.2714498, -19.351063, 0, -12.93589)
 
 [node name="Rock13" parent="NavigationRegion3D/Props/Rocks" unique_id=1177409383 instance=ExtResource("palette_rock_2")]
-transform = Transform3D(0.8725007, 0, 0.4886127, 0, 1, 0, -0.4886127, 0, 0.8725007, -22.086594, 0, -15.453503)
+transform = Transform3D(0.8725007, 0, 0.4886127, 0, 1, 0, -0.4886127, 0, 0.8725007, -20.1328, 0, -15.453503)
 
 [node name="Rock6" parent="NavigationRegion3D/Props/Rocks" unique_id=847384950 instance=ExtResource("palette_rock_3")]
 transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, -26.764297, 0, -12.730796)
@@ -1159,6 +1168,16 @@ visible = false
 
 [node name="Preview" parent="Pickups/RevolverAmmo/Model" parent_id_path=PackedInt32Array(584738064, 908028977) index="1" unique_id=2059583942 instance=ExtResource("palette_visual_revolver_ammo")]
 
+[node name="RevolverAmmo3" parent="Pickups" unique_id=1497600315 instance=ExtResource("palette_pickup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7406445, 0.6810319, 2.0972476)
+inventory_item = ExtResource("palette_item_revolver_ammo")
+quantity = 24
+
+[node name="Mesh" parent="Pickups/RevolverAmmo3/Model" parent_id_path=PackedInt32Array(1497600315, 908028977) index="0" unique_id=1214776343]
+visible = false
+
+[node name="Preview" parent="Pickups/RevolverAmmo3/Model" parent_id_path=PackedInt32Array(1497600315, 908028977) index="1" unique_id=759121389 instance=ExtResource("palette_visual_revolver_ammo")]
+
 [node name="RevolverAmmo2" parent="Pickups" unique_id=1108759066 instance=ExtResource("palette_pickup")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.840584, 0.18870372, -9.568647)
 inventory_item = ExtResource("palette_item_revolver_ammo")
@@ -1291,6 +1310,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 1, -2)
 [node name="Ghoul19" parent="Enemies" unique_id=773093559 instance=ExtResource("enemy_ghoul")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 1, 2)
 
+[node name="Ghoul26" parent="Enemies" unique_id=1017570416 instance=ExtResource("enemy_ghoul")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.548618, 1, 2)
+
 [node name="Ghoul9" parent="Enemies" unique_id=532706880 instance=ExtResource("enemy_ghoul")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1, -4)
 
@@ -1338,6 +1360,10 @@ stream = ExtResource("music_forest_beat")
 volume_db = -80.0
 bus = &"Music"
 
+[node name="PickupItem" parent="." unique_id=202155137 instance=ExtResource("palette_pickup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.713013, 0, -12.608557)
+inventory_item = ExtResource("51_0obrb")
+
 [editable path="Pickups/Axe"]
 [editable path="Pickups/Revolver"]
 [editable path="Pickups/Shotgun"]
@@ -1345,6 +1371,7 @@ bus = &"Music"
 [editable path="Pickups/Medkit2"]
 [editable path="Pickups/Medkit3"]
 [editable path="Pickups/RevolverAmmo"]
+[editable path="Pickups/RevolverAmmo3"]
 [editable path="Pickups/RevolverAmmo2"]
 [editable path="Pickups/ShotgunAmmo"]
 [editable path="Pickups/ShotgunAmmo2"]
