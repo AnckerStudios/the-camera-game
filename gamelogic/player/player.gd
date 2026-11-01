@@ -292,11 +292,13 @@ func _set_selected_pickup(item: PickupItem) -> void:
 	if is_instance_valid(_selected_pickup):
 		_selected_pickup.set_pickup_selected(false)
 	_selected_pickup = item
+	PlayerState.pickup_available = is_instance_valid(item)
 	if is_instance_valid(_selected_pickup):
 		_selected_pickup.set_pickup_selected(true)
 
 
 func _exit_tree() -> void:
+	PlayerState.pickup_available = false
 	if is_instance_valid(_selected_pickup):
 		_selected_pickup.set_pickup_selected(false)
 
@@ -306,6 +308,7 @@ func _update_shader_parametrs() -> void:
 
 func _on_hp_changed(value: float, max_value: float) -> void:
 	if value <= 0.0:
+		PlayerState.pickup_available = false
 		var scene_setting = preload("res://ui/dead/dead.tscn")
 		var scene =  scene_setting.instantiate()
 		add_child(scene)

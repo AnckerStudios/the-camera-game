@@ -35,6 +35,14 @@ var weapon_name := "":
 		weapon_changed.emit(weapon_name)
 
 
+signal pickup_available_changed(available: bool)
+var pickup_available: bool = false:
+	set(value):
+		if pickup_available == value:
+			return
+		pickup_available = value
+		pickup_available_changed.emit(value)
+
 var ammo_loaded := 0
 var ammo_capacity := 0
 var ammo_reserve := 0
@@ -47,5 +55,6 @@ func set_ammo(loaded: int, capacity: int, reserve: int) -> void:
 	ammo_changed.emit(loaded, capacity, reserve)
 
 func reset() -> void:
+	pickup_available = false
 	battery = BATTERY_MAX
 	hp = HP_MAX
