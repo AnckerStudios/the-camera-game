@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://c8yj4ijc5fqba"]
+
+[ext_resource type="PackedScene" uid="uid://cam1qk1grexsr" path="res://resources/model/modules/props/pump1.glb" id="1_model"]
+
+[sub_resource type="SphereShape3D" id="Shape"]
+radius = 1.0
+
+[node name="Pumpkin1" type="StaticBody3D" unique_id=1795698653]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=990197667]
+transform = Transform3D(1.7131411, 0, 0, 0, 2.0325744, 0, 0, 0, 1.5813036, 0, 0, 0)
+shape = SubResource("Shape")
+
+[node name="Model" parent="." unique_id=1112894114 instance=ExtResource("1_model")]
+
+[node name="Пустышка" parent="Model" index="0" unique_id=1283012195]
+transform = Transform3D(-4.371139e-08, 1, -4.371139e-08, 0, -4.371139e-08, -1, -1, -4.371139e-08, 1.9106855e-15, 0, 0, 0)
+
+[node name="Цилиндр" parent="Model" index="1" unique_id=605599442]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2220726, 0)
+
+[editable path="Model"]

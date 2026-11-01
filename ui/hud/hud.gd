@@ -7,6 +7,7 @@ const FLASH_DURATION := 0.4
 
 var _rec_time := 0.0
 var _flash_tween: Tween
+@onready var _pickup_hint: Label = %PickupHint
 @onready var _filter_status: Label = %FilterStatus
 @onready var rec_dot: Label = %RecDot
 @onready var rec_text: Label = $Margin/Layout/TopRow/Rec/RecText
@@ -19,6 +20,8 @@ var _flash_tween: Tween
 @onready var mvj: Label = $Margin/Layout/Mvj
 
 func _ready() -> void:
+	PlayerState.pickup_available_changed.connect(_set_pickup_hint)
+	_set_pickup_hint(PlayerState.pickup_available)
 	VisionFilters.filter_changed.connect(_on_filter_changed)
 	VisionFilters.available_filters_changed.connect(_update_filter_status)
 	_update_filter_status()
@@ -56,6 +59,10 @@ func _update_filter_status() -> void:
 	var title := "Инфракрасный" if equipped == VisionProfile.Filter.INFRARED else "Ультрафиолетовый"
 	var active: bool = int(VisionFilters.mode) == equipped
 	_filter_status.text = "%s фильтр: %s [Tab]" % [title, "включён" if active else "выключен"]
+
+## Подсказка связана с выбранным доступным предметом, без дополнительного поиска.
+func _set_pickup_hint(available: bool) -> void:
+	_pickup_hint.visible = available
 
 func set_health(value: float, max_value: float) -> void:
 	%HealthBar.max_value = max_value

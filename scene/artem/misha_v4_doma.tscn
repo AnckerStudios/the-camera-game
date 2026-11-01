@@ -4,12 +4,14 @@
 [ext_resource type="PackedScene" uid="uid://kmwuw8pmi1bl" path="res://gamelogic/player/player.tscn" id="2_p72od"]
 [ext_resource type="Script" uid="uid://depwexin4lwf1" path="res://gamelogic/player/camera/isometric_camera.gd" id="3_kbvua"]
 [ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="4_s1bv7"]
-[ext_resource type="PackedScene" uid="uid://cjuq8g0mbb8h8" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="6_4ackd"]
+[ext_resource type="PackedScene" uid="uid://w3p8l3qnm13a" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="6_4ackd"]
 [ext_resource type="Script" uid="uid://cj0kaua4ww26t" path="res://gamelogic/environment/explosive_barrel.gd" id="6_8n1ek"]
+[ext_resource type="PackedScene" uid="uid://dhn6j3uin8x8b" path="res://gamelogic/props/pines/pine_1.tscn" id="7_8n1ek"]
 [ext_resource type="PackedScene" uid="uid://by6ubidcpixtr" path="res://gamelogic/environment/items/pickup_item.tscn" id="7_pickup_item"]
 [ext_resource type="PackedScene" uid="uid://c2g4ugy8n7yeu" path="res://resources/model/world/barrel.glb" id="8_barrel"]
+[ext_resource type="PackedScene" uid="uid://h5fklgq5qxte" path="res://gamelogic/props/fences/fence_1.tscn" id="17_1i3nq"]
 [ext_resource type="Resource" path="res://gamelogic/environment/items/data/axe.tres" id="pickup_axe"]
-[ext_resource type="Resource" path="res://gamelogic/environment/items/data/battery.tres" id="pickup_battery"]
+[ext_resource type="Resource" uid="uid://ts0skeb4frkc" path="res://gamelogic/environment/items/data/battery.tres" id="pickup_battery"]
 [ext_resource type="Resource" path="res://gamelogic/environment/items/data/infrared_filter.tres" id="pickup_infrared_filter"]
 [ext_resource type="Resource" path="res://gamelogic/environment/items/data/medkit.tres" id="pickup_medkit"]
 [ext_resource type="Resource" path="res://gamelogic/environment/items/data/revolver.tres" id="pickup_revolver"]
@@ -310,6 +312,9 @@ shape = SubResource("FloorShape")
 material_override = SubResource("FloorMaterial")
 mesh = SubResource("FloorMesh")
 
+[node name="Pine1" parent="NavigationRegion3D" unique_id=491419211 instance=ExtResource("7_8n1ek")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.899826, 0, -3.1171885)
+
 [node name="Ghoul" parent="." unique_id=13065505 instance=ExtResource("6_4ackd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.731076, 0.8862281, 6.9136066)
 
@@ -411,3 +416,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 pixel_size = 0.008
 billboard = 1
 text = "УФ-фильтр"
+
+[node name="Fence1" parent="PickupShowcase/ultraviolet_filter" unique_id=528579031 instance=ExtResource("17_1i3nq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0257235, 0.5255375, -4.697848)

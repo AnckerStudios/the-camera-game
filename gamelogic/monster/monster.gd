@@ -12,6 +12,13 @@ var monster_state : MonsterState
 
 var rotation_speed := 10.0
 
+## За пределами радиуса враг не обнаруживает и не преследует игрока.
+@export_range(0.0, 100.0, 0.5) var detection_radius: float = 12.0
+var _detected_player: Node3D
+var _has_target_in_range := false
+var _next_path_update_ms: int = 0
+var _path_target_initialized := false
+
 @export var vision_profile: VisionProfile = VisionProfile.new()
 ## Необязательная точка прицеливания; без неё используется центр коллизии/модели.
 @export var aim_point: Node3D
@@ -42,6 +49,10 @@ func _ready() -> void:
 	add_to_group(MONSTER_GROUP)
 
 func _physics_process(delta: float) -> void:
+	_update_player_detection()
+	if not _has_target_in_range:
+		_idle_movement(delta)
+		return
 	if(monster_state != null):
 		if monster_state.is_dead:
 			velocity = Vector3.ZERO
@@ -72,8 +83,41 @@ func _physics_process(delta: float) -> void:
 		var target_angle = atan2(-horizontal_velocity.x, -horizontal_velocity.z)
 		rotation.y = lerp_angle(rotation.y, target_angle, delta * rotation_speed)
 
+## Сцены со старым контроллером уровня также проходят проверку радиуса.
 func update_target_location(target_location: Vector3) -> void:
-	nav_agent.target_position = target_location
+	_has_target_in_range = detection_radius > 0.0 and global_position.distance_squared_to(target_location) <= detection_radius * detection_radius
+	if monster_state and monster_state.is_dead:
+		_has_target_in_range = false
+	if not _has_target_in_range:
+		return
+	var now := Time.get_ticks_msec()
+	if now < _next_path_update_ms:
+		return
+	_next_path_update_ms = now + 200
+	if not _path_target_initialized or not nav_agent.target_position.is_equal_approx(target_location):
+		_path_target_initialized = true
+		nav_agent.target_position = target_location
+
+## Работает и в сценах без test_level_dima_script.gd, например forest_base.
+func _update_player_detection() -> void:
+	if not is_instance_valid(_detected_player):
+		_detected_player = get_tree().get_first_node_in_group(&"players") as Node3D
+	if not is_instance_valid(_detected_player) or _detected_player.is_queued_for_deletion() or PlayerState.hp <= 0.0:
+		_has_target_in_range = false
+		return
+	update_target_location(_detected_player.global_position)
+
+## Ожидание сохраняет гравитацию, но не позволяет avoidance толкать врага по старому пути.
+func _idle_movement(delta: float) -> void:
+	nav_agent.velocity = Vector3.ZERO
+	velocity.x = 0.0
+	velocity.z = 0.0
+	if monster_state and monster_state.is_dead:
+		velocity = Vector3.ZERO
+		return
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+	move_and_slide()
 
 ## Монстры переопределяют множитель или сам метод, сохраняя общий расчёт здоровья.
 func take_damage(amount: float, source: Node) -> void:
@@ -110,6 +154,8 @@ func _on_state_finished_for_death(state_name: StringName):
 
 # Пересчёт движения для навигации в дочерних объектах
 func recalculate_velocity(safe_velocity: Vector3) -> void:
+	if not _has_target_in_range:
+		return
 	if(monster_state != null):
 		if monster_state.is_already_attack():
 			velocity = Vector3.ZERO
@@ -137,4 +183,5 @@ func _on_state_finished_for_attack(state_name: StringName) -> void:
 			playback.state_finished.connect(_on_state_finished_for_attack, CONNECT_ONE_SHOT)
 
 func do_damage() -> void:
-	PlayerState.hp -= attack_damage
+	if _has_target_in_range:
+		PlayerState.hp -= attack_damage
