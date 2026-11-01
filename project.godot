@@ -14,7 +14,6 @@ config/name="TheCameraGame"
 run/main_scene="uid://dkfij74x60580"
 config/features=PackedStringArray("4.7", "Forward Plus")
 boot_splash/bg_color=Color(0.23763523, 0.008154525, 0.0020405212, 1)
-boot_splash/show_image=false
 boot_splash/use_filter=false
 boot_splash/image="uid://c7ncshdb7uwaj"
 config/icon="res://resources/texture/icon.svg"
@@ -29,6 +28,7 @@ PlayerState="*res://gamelogic/player/player_state.gd"
 TransitionTort="*uid://efpb6pdti1f2"
 MenuState="*uid://cxwniokfg1wut"
 VisionFilters="*res://gamelogic/filters/vision_filters.gd"
+TrToPlay="*uid://cyxryoqu6fhe"
 
 [display]
 
@@ -149,6 +149,7 @@ inventory={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+renderer/rendering_method="gl_compatibility"
 lights_and_shadows/directional_shadow/size.web=2048
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality.web=0
 lights_and_shadows/positional_shadow/soft_shadow_filter_quality.web=0

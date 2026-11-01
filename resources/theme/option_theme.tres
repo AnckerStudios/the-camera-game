@@ -14,7 +14,7 @@ border_width_bottom = 4
 border_color = Color(1, 1, 1, 0.99607843)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u5fl6"]
-bg_color = Color(0.7294118, 0.23137255, 0.4, 0.99607843)
+bg_color = Color(0.35257247, 4.4220127e-07, 1.4439226e-07, 0.99607843)
 border_width_left = 4
 border_width_top = 4
 border_width_right = 4
@@ -22,7 +22,7 @@ border_width_bottom = 4
 border_color = Color(1, 1, 1, 0.99607843)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_77h3e"]
-bg_color = Color(1, 0.5764706, 0.3882353, 0.99607843)
+bg_color = Color(1, 1, 1, 0.99607843)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m4e3p"]
 
