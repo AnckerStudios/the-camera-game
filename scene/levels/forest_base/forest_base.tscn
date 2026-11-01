@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://ci53m7anlyw2m"]
 
+[ext_resource type="Script" uid="uid://cbqh1c84o44eg" path="res://scene/levels/forest_base/forest_base.gd" id="1_pebyq"]
 [ext_resource type="PackedScene" uid="uid://kmwuw8pmi1bl" path="res://gamelogic/player/player.tscn" id="2_player"]
 [ext_resource type="Script" uid="uid://depwexin4lwf1" path="res://gamelogic/player/camera/isometric_camera.gd" id="3_camera"]
 [ext_resource type="PackedScene" uid="uid://chrnas5w2mwst" path="res://ui/hud/hud.tscn" id="4_hud"]
@@ -11,7 +12,7 @@
 [ext_resource type="ArrayMesh" uid="uid://er8nljgvawhk" path="res://resources/model/world/GrassMesh.res" id="43_gd7ta"]
 [ext_resource type="Script" uid="uid://chqxm24x5s5t1" path="res://scene/ilya/grass_generation.gd" id="44_pebyq"]
 [ext_resource type="PackedScene" uid="uid://dwbunjtc84mc3" path="res://gamelogic/monster/ghost/ghost.tscn" id="enemy_ghost"]
-[ext_resource type="PackedScene" uid="uid://w3p8l3qnm13a" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="enemy_ghoul"]
+[ext_resource type="PackedScene" uid="uid://cjuq8g0mbb8h8" path="res://gamelogic/monster/ghoul/ghoul.tscn" id="enemy_ghoul"]
 [ext_resource type="PackedScene" uid="uid://h5fklgq5qxte" path="res://gamelogic/props/fences/fence_1.tscn" id="palette_fence_1"]
 [ext_resource type="PackedScene" uid="uid://dj0jwd3c5wusr" path="res://gamelogic/props/fences/fence_2.tscn" id="palette_fence_2"]
 [ext_resource type="PackedScene" uid="uid://bbin8xbkjkx0r" path="res://gamelogic/props/fences/fence_3.tscn" id="palette_fence_3"]
@@ -71,12 +72,23 @@ size = Vector3(60, 0.5, 60)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8nov2"]
 render_priority = 0
 shader = ExtResource("42_7a6qf")
+shader_parameter/top_color = Color(0, 0, 0, 1)
+shader_parameter/bottom_color = Color(0, 0, 0, 1)
+shader_parameter/ambient_occlusion_factor = 0.3
+shader_parameter/specular_strength = 0.4
+shader_parameter/player_displacement_strength = 0.2
+shader_parameter/player_displacement_size = 0.1
+shader_parameter/wind_direction = Vector3(0, 0, 0)
+shader_parameter/wind_strength = 0.3
+shader_parameter/wind_noise_size = 0.05
+shader_parameter/wind_noise_speed = 0.1
 
 [sub_resource type="MultiMesh" id="MultiMesh_rqeag"]
 transform_format = 1
 mesh = ExtResource("43_gd7ta")
 
 [node name="ForestBase" type="Node3D" unique_id=571248831]
+script = ExtResource("1_pebyq")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1841988733]
 environment = SubResource("Environment_forest")
